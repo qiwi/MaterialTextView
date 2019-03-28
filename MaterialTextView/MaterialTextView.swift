@@ -87,7 +87,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		updateTextViewAttributedText(text: viewModel.text)
 	}
 	
-	convenience init(viewModel: MaterialTextViewModel) {
+	public convenience init(viewModel: MaterialTextViewModel) {
 		self.init(frame: CGRect.zero)
 		self.viewModel = viewModel
 		didSetViewModel(viewModel)
