@@ -79,8 +79,6 @@ public final class MaterialTextViewModel {
 			_placeholder = newValue
             self.view?.viewModelPlaceholderChanged(newPlaceholder: placeholder, isChanged: newValue != oldPlaceholder)
             self.delegate?.viewModelPlaceholderChanged(newPlaceholder: placeholder, isChanged: newValue != oldPlaceholder)
-//			view?.viewModelStateChanged(isActive: isActive, errorState: errorState)
-//			delegate?.viewModelStateChanged(isActive: isActive, errorState: errorState)
         }
     }
 

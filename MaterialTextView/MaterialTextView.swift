@@ -403,10 +403,7 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 			}
 		case .normal:
 			placeholderLayer.isHidden = !viewModel.text.isEmpty
-			
-//			if !CATransform3DEqualToTransform(placeholderLayer.transform, CATransform3DIdentity) {
-				placeholderLayer.animate(animationDuration: placeholderLayer.isHidden ? 0 : animationDuration, newFrame: placeholderStartFrame, animationType: .identity, newColor: state.placeholderColor.cgColor)
-//			}
+			placeholderLayer.animate(animationDuration: placeholderLayer.isHidden ? 0 : animationDuration, newFrame: placeholderStartFrame, animationType: .identity, newColor: state.placeholderColor.cgColor)
 		}
 		
 		UIView.animate(withDuration: animationDuration, animations: {
