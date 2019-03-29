@@ -85,8 +85,11 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		updateTextViewAttributedText(text: viewModel.text)
 	}
 	
-	public convenience init(viewModel: MaterialTextViewModel, style: Style = .defaultStyle) {
+	public convenience init(viewModel: MaterialTextViewModel, style: Style = .defaultStyle, useTintColorForActiveLine: Bool = true, useTintColorForActiveTitle: Bool = true) {
 		self.init(frame: CGRect.zero)
+		self.useTintColorForActiveLine = useTintColorForActiveLine
+		self.useTintColorForActiveTitle = useTintColorForActiveTitle
+		self.style = style
 		self.viewModel = viewModel
 		didSetViewModel(viewModel)
 	}
