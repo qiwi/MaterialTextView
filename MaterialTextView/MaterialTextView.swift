@@ -46,6 +46,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	public var style: Style! {
 		didSet {
 			guard let viewModel = viewModel else { return }
+			updateTintColor()
 			updateTextViewAttributedText(text: viewModel.text)
 			updateFont()
 			viewModelStateChanged(isActive: viewModel.isActive, errorState: viewModel.errorState)
@@ -54,15 +55,6 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	}
 	public var useTintColorForActiveLine = true
 	public var useTintColorForActiveTitle = true
-	
-	public var keyboardType: UIKeyboardType {
-		get {
-			return textView.keyboardType
-		}
-		set(value) {
-			textView.keyboardType = value
-		}
-	}
 	
 	private func updateTextViewAttributedText(text: String) {
 		textView.text = text
@@ -109,7 +101,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		textViewToRightConstraint.priority = .defaultHigh
 		let textViewBottom = textView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
 		textViewBottom.priority = .defaultHigh
-		textViewHeightConstraint = textView.heightAnchor.constraint(equalToConstant: 24)
+		textViewHeightConstraint = textView.heightAnchor.constraint(equalToConstant: 44)
 		textViewHeightConstraint.priority = .required
 		NSLayoutConstraint.activate([textView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
 									 textViewToRightConstraint,
@@ -169,7 +161,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		textView.delegate = self
 	}
 	
-	override public func tintColorDidChange() {
+	private func updateTintColor() {
 		var newStyle = style!
 		if useTintColorForActiveLine {
 			newStyle.normalActive.lineColor = tintColor
@@ -178,6 +170,11 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 			newStyle.normalActive.titleColor = tintColor
 		}
 		style = newStyle
+	}
+	
+	override public func tintColorDidChange() {
+		super.tintColorDidChange()
+		updateTintColor()
 	}
 	
 	private var placeholderStartFrame = CGRect.zero
@@ -433,10 +430,10 @@ extension MaterialTextView: UITextViewDelegate {
 extension MaterialTextView {
 	@IBInspectable public var keyboardTypeInt: Int {
 		get {
-			return self.keyboardType.rawValue
+			return self.textView.keyboardType.rawValue
 		}
 		set(value) {
-			self.keyboardType = UIKeyboardType(rawValue: value) ?? UIKeyboardType.default
+			self.textView.keyboardType = UIKeyboardType(rawValue: value) ?? UIKeyboardType.default
 		}
 	}
 }
