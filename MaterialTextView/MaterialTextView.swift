@@ -448,6 +448,14 @@ extension MaterialTextView {
 		public var placeholderColor: UIColor
 		public var lineColor: UIColor
 		public var lineHeight: CGFloat
+		
+		public init(helpAttributes: [NSAttributedString.Key: Any], titleColor: UIColor, placeholderColor: UIColor, lineColor: UIColor, lineHeight: CGFloat) {
+			self.helpAttributes = helpAttributes
+			self.titleColor = titleColor
+			self.placeholderColor = placeholderColor
+			self.lineColor = lineColor
+			self.lineHeight = lineHeight
+		}
 	}
 	
 	public struct Style {
@@ -457,6 +465,15 @@ extension MaterialTextView {
 		public var errorInactive: VisualState
 		public var textAttributes: [NSAttributedString.Key: Any]
 		public var titleFontSize: CGFloat
+		
+		public init(normalActive: VisualState, normalInactive: VisualState, errorActive: VisualState, errorInactive: VisualState, textAttributes: [NSAttributedString.Key: Any], titleFontSize: CGFloat) {
+			self.normalActive = normalActive
+			self.normalInactive = normalInactive
+			self.errorActive = errorActive
+			self.errorInactive = errorInactive
+			self.textAttributes = textAttributes
+			self.titleFontSize = titleFontSize
+		}
 		
 		public static var defaultStyle =
 			Style(normalActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
