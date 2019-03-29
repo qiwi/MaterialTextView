@@ -66,8 +66,8 @@ public final class MaterialTextViewModel {
     }
 
 	public struct Placeholder: Equatable {
-        var type: PlaceholderType
-        var text: String
+        public var type: PlaceholderType
+        public var text: String
 		
 		public init(type: PlaceholderType, text: String) {
 			self.type = type
