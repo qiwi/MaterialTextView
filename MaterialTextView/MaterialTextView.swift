@@ -14,12 +14,12 @@ import FormattableTextView
 public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	
 	public weak var delegate: MaterialTextViewDelegate?
+	public let textView = FormattableKernTextView(frame: .zero)
 	
 	private var helpLabel = UILabel()
 	private var line = UIView()
 	private var titleLabel = UILabel()
 	private var attributedPlaceholder: NSAttributedString!
-	private let textView = FormattableKernTextView(frame: .zero)
 	private var rightButton = UIButton(type: .system)
 	private var placeholderLayer = CATextLayer()
 	
@@ -87,7 +87,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		updateTextViewAttributedText(text: viewModel.text)
 	}
 	
-	public convenience init(viewModel: MaterialTextViewModel) {
+	public convenience init(viewModel: MaterialTextViewModel, style: Style = .defaultStyle) {
 		self.init(frame: CGRect.zero)
 		self.viewModel = viewModel
 		didSetViewModel(viewModel)
@@ -158,37 +158,10 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		makeLayout()
 		placeholderLayer.contentsScale = UIScreen.main.scale
 		layer.addSublayer(placeholderLayer)
-		
+		style = Style.defaultStyle
 		textView.formatSymbols = ["d": CharacterSet.decimalDigits,
 								  "w": CharacterSet.letters,
 								  "*": CharacterSet.init(charactersIn: "").inverted]
-		style = Style(normalActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
-																 .foregroundColor: UIColor.darkGray],
-												titleColor: UIColor.black,
-												placeholderColor: UIColor.lightGray,
-												lineColor: UIColor.blue,
-												lineHeight: 2),
-					  normalInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
-																   .foregroundColor: UIColor.darkGray],
-												  titleColor: UIColor.gray,
-												  placeholderColor: UIColor.lightGray,
-												  lineColor: UIColor.black,
-												  lineHeight: 1),
-					  errorActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
-																.foregroundColor: UIColor.red],
-											   titleColor: UIColor.red,
-											   placeholderColor: UIColor.lightGray,
-											   lineColor: UIColor.red,
-											   lineHeight: 2),
-					  errorInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
-																  .foregroundColor: UIColor.red],
-												 titleColor: UIColor.red,
-												 placeholderColor: UIColor.lightGray,
-												 lineColor: UIColor.red,
-												 lineHeight: 1),
-					  textAttributes: [.font: UIFont.systemFont(ofSize: 16),
-									   .foregroundColor: UIColor.black],
-					  titleFontSize: 10)
 		titleLabel.isHidden = true
 		titleLabel.attributedText = NSAttributedString(string: " ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10)])
 		textView.inputAttributes = style.textAttributes
@@ -484,6 +457,35 @@ extension MaterialTextView {
 		public var errorInactive: VisualState
 		public var textAttributes: [NSAttributedString.Key: Any]
 		public var titleFontSize: CGFloat
+		
+		public static var defaultStyle =
+			Style(normalActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
+														     .foregroundColor: UIColor.darkGray],
+											titleColor: UIColor.black,
+											placeholderColor: UIColor.lightGray,
+											lineColor: UIColor.blue,
+											lineHeight: 2),
+				  normalInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
+															 .foregroundColor: UIColor.darkGray],
+											  titleColor: UIColor.gray,
+											  placeholderColor: UIColor.lightGray,
+											  lineColor: UIColor.black,
+											  lineHeight: 1),
+				  errorActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
+														  .foregroundColor: UIColor.red],
+										   titleColor: UIColor.red,
+										   placeholderColor: UIColor.lightGray,
+										   lineColor: UIColor.red,
+										   lineHeight: 2),
+				  errorInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
+															.foregroundColor: UIColor.red],
+										   titleColor: UIColor.red,
+										   placeholderColor: UIColor.lightGray,
+										   lineColor: UIColor.red,
+										   lineHeight: 1),
+				  textAttributes: [.font: UIFont.systemFont(ofSize: 16),
+								 .foregroundColor: UIColor.black],
+				  titleFontSize: 10)
 	}
 }
 
