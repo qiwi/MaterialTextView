@@ -16,7 +16,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	var line = UIView()
 	var titleLabel = UILabel()
 	var titleFontSize: CGFloat = 10
-	weak var delegate: MaterialTextViewDelegate?
+	public weak var delegate: MaterialTextViewDelegate?
 	private var attributedPlaceholder: NSAttributedString!
 	
 	let textView = FormattableKernTextView(frame: .zero)
@@ -207,7 +207,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	}
 	
 	private var placeholderStartFrame = CGRect.zero
-	fileprivate func updateFont() {
+	private func updateFont() {
 		if let font = style.textAttributes[.font] as? UIFont {
 			if !(placeholderLayer.font is String) {
 				placeholderLayer.uiFont = font
@@ -457,7 +457,7 @@ extension MaterialTextView: UITextViewDelegate {
 }
 
 extension MaterialTextView {
-	@IBInspectable var keyboardTypeInt: Int {
+	@IBInspectable public var keyboardTypeInt: Int {
 		get {
 			return self.keyboardType.rawValue
 		}
@@ -492,7 +492,7 @@ public protocol MaterialTextViewDelegate: class {
 	func materialTextView(_ materialTextView: MaterialTextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> (String, Bool)
 }
 
-extension MaterialTextViewDelegate {
+public extension MaterialTextViewDelegate {
 	func materialTextViewDidChange(_ materialTextView: MaterialTextView) { }
 	func materialTextViewDidBeginEditing(_ materialTextView: MaterialTextView) { }
 	func materialTextViewDidEndEditing(_ materialTextView: MaterialTextView) { }

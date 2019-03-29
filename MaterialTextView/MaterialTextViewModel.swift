@@ -22,12 +22,12 @@ extension MaterialTextViewModelDelegate {
 	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, isChanged: Bool) {}
 }
 
-struct ButtonInfo {
+public struct ButtonInfo {
 
     let imageName: String
     let action: EmptyClosure?
 
-    init(imageName: String, action: EmptyClosure?) {
+    public init(imageName: String, action: (() -> Void)?) {
         self.imageName = imageName
         self.action = action
     }
@@ -46,7 +46,7 @@ extension MaterialTextViewProtocol {
 
 public final class MaterialTextViewModel {
 	
-	enum ErrorState: Equatable {
+	public enum ErrorState: Equatable {
 		case normal
 		case error(String)
 		
@@ -60,18 +60,23 @@ public final class MaterialTextViewModel {
 		}
 	}
 
-    enum PlaceholderType {
+    public enum PlaceholderType {
         case normal
         case animated
     }
 
-	struct Placeholder: Equatable {
+	public struct Placeholder: Equatable {
         var type: PlaceholderType
         var text: String
+		
+		public init(type: PlaceholderType, text: String) {
+			self.type = type
+			self.text = text
+		}
     }
 
 	private var _placeholder: Placeholder
-    var placeholder: Placeholder {
+    public var placeholder: Placeholder {
 		get { return _placeholder }
         set {
 			if _placeholder == newValue { return }
@@ -82,12 +87,12 @@ public final class MaterialTextViewModel {
         }
     }
 
-    enum LineMode {
+    public enum LineMode {
         case single
         case multiple
     }
 	
-	var isActive: Bool = false {
+	public var isActive: Bool = false {
 		didSet {
 			view?.viewModelStateChanged(isActive: isActive, errorState: errorState)
 			delegate?.viewModelStateChanged(isActive: isActive, errorState: errorState)
@@ -95,7 +100,7 @@ public final class MaterialTextViewModel {
 	}
 
 	private var _errorState: ErrorState = .normal
-    var errorState: ErrorState {
+    public var errorState: ErrorState {
 		get {
 			return _errorState
 		}
@@ -154,7 +159,7 @@ public final class MaterialTextViewModel {
     let rightButtonInfo: ButtonInfo?
     let format: String?
 
-    required init(text: String = "",
+    public required init(text: String = "",
 				  help: String = "",
 				  lineMode: LineMode = .single,
 				  placeholder: Placeholder = Placeholder(type: .normal, text: ""),
@@ -175,7 +180,7 @@ public final class MaterialTextViewModel {
 
 extension MaterialTextViewModel: Validatable {
     @discardableResult
-    func validate() -> Bool {
+	public func validate() -> Bool {
 		wasInputValid = validate(validator: actionValidator).isError
         return wasActionValid
     }

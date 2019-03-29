@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol Validatable {
+public protocol Validatable {
 	@discardableResult
 	func validate() -> Bool
 }
