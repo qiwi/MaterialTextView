@@ -43,10 +43,16 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		}
 	}
 	
+	private var _style: Style!
 	public var style: Style! {
-		didSet {
-			guard let viewModel = viewModel else { return }
+		get {
+			return _style
+		}
+		set {
+			if _style == newValue { return }
+			_style = newValue
 			updateTintColor()
+			guard let viewModel = viewModel else { return }
 			updateTextViewAttributedText(text: viewModel.text)
 			updateFont()
 			viewModelStateChanged(isActive: viewModel.isActive, errorState: viewModel.errorState)
@@ -162,19 +168,14 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	}
 	
 	private func updateTintColor() {
-		var newStyle = style!
+		var newStyle = _style!
 		if useTintColorForActiveLine {
 			newStyle.normalActive.lineColor = tintColor
 		}
 		if useTintColorForActiveTitle {
 			newStyle.normalActive.titleColor = tintColor
 		}
-		style = newStyle
-	}
-	
-	override public func tintColorDidChange() {
-		super.tintColorDidChange()
-		updateTintColor()
+		_style = newStyle
 	}
 	
 	private var placeholderStartFrame = CGRect.zero
@@ -439,7 +440,17 @@ extension MaterialTextView {
 }
 
 extension MaterialTextView {
-	public struct VisualState {
+	
+	public struct VisualState: Equatable {
+		
+		public static func == (lhs: MaterialTextView.VisualState, rhs: MaterialTextView.VisualState) -> Bool {
+			return  lhs.lineHeight == rhs.lineHeight &&
+					lhs.lineColor == rhs.lineColor &&
+					lhs.placeholderColor == rhs.placeholderColor &&
+					lhs.titleColor == rhs.titleColor &&
+			areAttributesEqual(lhs.helpAttributes, rhs.helpAttributes)
+		}
+		
 		public var helpAttributes: [NSAttributedString.Key: Any]
 		public var titleColor: UIColor
 		public var placeholderColor: UIColor
@@ -455,7 +466,17 @@ extension MaterialTextView {
 		}
 	}
 	
-	public struct Style {
+	public struct Style: Equatable {
+		
+		public static func == (lhs: MaterialTextView.Style, rhs: MaterialTextView.Style) -> Bool {
+			return lhs.normalActive == rhs.normalActive &&
+				lhs.normalInactive == rhs.normalInactive &&
+				lhs.errorActive == rhs.errorActive &&
+				lhs.errorInactive == rhs.errorInactive &&
+				lhs.titleFontSize == rhs.titleFontSize &&
+				areAttributesEqual(lhs.textAttributes, rhs.textAttributes)
+		}
+		
 		public var normalActive: VisualState
 		public var normalInactive: VisualState
 		public var errorActive: VisualState
@@ -515,4 +536,19 @@ public extension MaterialTextViewDelegate {
 	func materialTextViewDidBeginEditing(_ materialTextView: MaterialTextView) { }
 	func materialTextViewDidEndEditing(_ materialTextView: MaterialTextView) { }
 	func materialTextView(_ materialTextView: MaterialTextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> (String, Bool) { return (text, true) }
+}
+
+private func areAttributesEqual(_ left: [NSAttributedString.Key: Any], _ right: [NSAttributedString.Key: Any]) -> Bool {
+	let leftFont = left[NSAttributedString.Key.font] as? UIFont
+	let rightFont = right[NSAttributedString.Key.font] as? UIFont
+	let leftColor = left[NSAttributedString.Key.foregroundColor] as? UIColor
+	let rightColor = right[NSAttributedString.Key.foregroundColor] as? UIColor
+	let leftKern = left[NSAttributedString.Key.kern] as? NSNumber
+	let rightKern = right[NSAttributedString.Key.kern] as? NSNumber
+	let leftPara = left[NSAttributedString.Key.paragraphStyle] as? NSParagraphStyle
+	let rightPara = right[NSAttributedString.Key.paragraphStyle] as? NSParagraphStyle
+	return leftFont == rightFont &&
+		leftColor == rightColor &&
+		leftKern == rightKern &&
+		leftPara == rightPara
 }
