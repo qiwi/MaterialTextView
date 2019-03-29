@@ -12,26 +12,26 @@ import FormattableTextView
 
 @IBDesignable
 public final class MaterialTextView: UIView, MaterialTextViewProtocol {
-	var helpLabel = UILabel()
-	var line = UIView()
-	var titleLabel = UILabel()
-	var titleFontSize: CGFloat = 10
-	public weak var delegate: MaterialTextViewDelegate?
-	private var attributedPlaceholder: NSAttributedString!
 	
-	let textView = FormattableKernTextView(frame: .zero)
-	var rightButton = UIButton(type: .system)
+	public weak var delegate: MaterialTextViewDelegate?
+	
+	private var helpLabel = UILabel()
+	private var line = UIView()
+	private var titleLabel = UILabel()
+	private var attributedPlaceholder: NSAttributedString!
+	private let textView = FormattableKernTextView(frame: .zero)
+	private var rightButton = UIButton(type: .system)
 	private var placeholderLayer = CATextLayer()
 	
-	var helpLabelTopConstraint: NSLayoutConstraint!
-	var helpLabelBottomConstraint: NSLayoutConstraint!
-	var textViewHeightConstraint: NSLayoutConstraint!
-	var lineHeightConstraint: NSLayoutConstraint!
-	var textViewToRightButtonConstraint: NSLayoutConstraint!
-	var textViewToRightConstraint: NSLayoutConstraint!
+	private var helpLabelTopConstraint: NSLayoutConstraint!
+	private var helpLabelBottomConstraint: NSLayoutConstraint!
+	private var textViewHeightConstraint: NSLayoutConstraint!
+	private var lineHeightConstraint: NSLayoutConstraint!
+	private var textViewToRightButtonConstraint: NSLayoutConstraint!
+	private var textViewToRightConstraint: NSLayoutConstraint!
 	
-	@IBInspectable var maxNumberOfLinesWithoutScrolling: CGFloat = 3
-	@IBInspectable var animationDuration: Double = 0.1
+	@IBInspectable public var maxNumberOfLinesWithoutScrolling: CGFloat = 3
+	@IBInspectable public var animationDuration: Double = 0.1
 	
 	private func rightButtonAction(_ sender: UIButton) {
 		viewModel?.rightButtonInfo?.action?()
@@ -187,7 +187,8 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 												 lineColor: UIColor.red,
 												 lineHeight: 1),
 					  textAttributes: [.font: UIFont.systemFont(ofSize: 16),
-									   .foregroundColor: UIColor.black])
+									   .foregroundColor: UIColor.black],
+					  titleFontSize: 10)
 		titleLabel.isHidden = true
 		titleLabel.attributedText = NSAttributedString(string: " ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10)])
 		textView.inputAttributes = style.textAttributes
@@ -211,7 +212,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		if let font = style.textAttributes[.font] as? UIFont {
 			if !(placeholderLayer.font is String) {
 				placeholderLayer.uiFont = font
-				titleLabel.attributedText = NSAttributedString(string: (placeholderLayer.string as? String).nonEmpty, attributes: [NSAttributedString.Key.font: UIFont(descriptor: font.fontDescriptor, size: titleFontSize)])
+				titleLabel.attributedText = NSAttributedString(string: (placeholderLayer.string as? String).nonEmpty, attributes: [NSAttributedString.Key.font: UIFont(descriptor: font.fontDescriptor, size: style.titleFontSize)])
 			}
 		}
 	}
@@ -380,7 +381,7 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 						}
 						break
 					}
-					let scale = titleFontSize/textFont.pointSize
+					let scale = style.titleFontSize/textFont.pointSize
 					placeholderLayer.animate(animationDuration: animationDuration, newFrame: titleLabel.layer.frame, animationType: .scaleAndTranslate(scale: scale), newColor: colorStyle.titleColor.cgColor)
 				} else {
 					var newFrame: CGRect
@@ -393,7 +394,7 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 						color = colorStyle.placeholderColor.cgColor
 					} else {
 						newFrame = titleLabel.layer.frame
-						let scale = titleFontSize/textFont.pointSize
+						let scale = style.titleFontSize/textFont.pointSize
 						animationType = placeholderIsChanged ? .scaleAndTranslate(scale: scale) : .skip
 						color = colorStyle.titleColor.cgColor
 					}
@@ -482,6 +483,7 @@ extension MaterialTextView {
 		public var errorActive: VisualState
 		public var errorInactive: VisualState
 		public var textAttributes: [NSAttributedString.Key: Any]
+		public var titleFontSize: CGFloat
 	}
 }
 
