@@ -312,12 +312,20 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 		helpLabelTopConstraint.isActive = isActive
 	}
 	
-	
 	public override func layoutSubviews() {
 		super.layoutSubviews()
-		placeholderStartFrame = textView.frame
-		placeholderLayer.bounds = CGRect(origin: CGPoint.zero, size: placeholderStartFrame.size)
-		placeholderLayer.position = textView.layer.position
+		
+		if let font = style.textAttributes[.font] as? UIFont {
+			let numLines = (textView.contentSize.height / font.lineHeight)
+			if round(numLines) == 1 {
+				CATransaction.begin()
+				CATransaction.setDisableActions(true)
+				placeholderStartFrame = textView.frame
+				placeholderLayer.bounds = CGRect(origin: CGPoint.zero, size: placeholderStartFrame.size)
+				placeholderLayer.position = textView.layer.position
+				CATransaction.commit()
+			}
+		}
 	}
 	
 	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, isChanged: Bool) {
