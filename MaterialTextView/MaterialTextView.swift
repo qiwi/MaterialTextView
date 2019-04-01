@@ -168,6 +168,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		textView.inputAttributes = style.textAttributes
 		textView.maskAttributes = style.textAttributes
 		textView.delegate = self
+		textView.insetX = 0
 	}
 	
 	private func updateTintColor() {
@@ -187,6 +188,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 			if !(placeholderLayer.font is String) {
 				placeholderLayer.uiFont = font
 				titleLabel.attributedText = NSAttributedString(string: (placeholderLayer.string as? String).nonEmpty, attributes: [NSAttributedString.Key.font: UIFont(descriptor: font.fontDescriptor, size: style.titleFontSize)])
+				textView.maskAttributes = self.style.textAttributes
 			}
 		}
 	}
@@ -242,9 +244,8 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		let lineHeight = para.minimumLineHeight + para.lineSpacing
 		self.textViewHeightConstraint.constant = min(height, lineHeight * self.maxNumberOfLinesWithoutScrolling - lineHeight/6)
 		
-		UIView.animate(withDuration: animationDuration) {
-			self.superview?.layoutIfNeeded()
-		}
+		self.superview?.layoutIfNeeded()
+
 		if let selectedRange = textView.selectedTextRange {
 			let cursorPositionCurrent = textView.offset(from: textView.beginningOfDocument, to: selectedRange.start)
 			let cursorPositionEnd = textView.text.count
