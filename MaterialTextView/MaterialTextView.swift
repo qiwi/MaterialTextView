@@ -201,7 +201,8 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		
 		placeholderLayer.foregroundColor = style.normalInactive.titleColor.cgColor
 		self.line.backgroundColor = style.normalInactive.lineColor
-		self.layoutSubviews()
+		self.setNeedsLayout()
+		self.layoutIfNeeded()
 		
 		viewModelPlaceholderChanged(newPlaceholder: viewModel.placeholder, isChanged: false)
 		updateTextViewAttributedText(text: viewModel.text)
@@ -311,18 +312,16 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 		helpLabelTopConstraint.isActive = isActive
 	}
 	
+	
+	public override func layoutSubviews() {
+		super.layoutSubviews()
+		placeholderStartFrame = textView.frame
+		placeholderLayer.bounds = CGRect(origin: CGPoint.zero, size: placeholderStartFrame.size)
+		placeholderLayer.position = textView.layer.position
+	}
+	
 	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, isChanged: Bool) {
 		updateFont()
-		
-		if textView.frame.height == 0 {
-			self.setNeedsLayout()
-			self.layoutIfNeeded()
-			placeholderStartFrame = CGRect(x: textView.frame.origin.x,
-										   y: placeholderLayer.uiFont.pointSize,
-										   width: textView.frame.width,
-										   height: textView.frame.height)
-			placeholderLayer.frame = placeholderStartFrame
-		}
 		titleLabel.attributedText = NSAttributedString(string: newPlaceholder.text.nonEmpty,
 													   attributes: titleLabel.attributedText?.safeAttributes(at: 0, range: nil) ?? [:])
 		placeholderLayer.string = newPlaceholder.text
