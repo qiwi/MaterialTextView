@@ -199,6 +199,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 			textView.textContainer.lineBreakMode = .byTruncatingTail
 		case .multiple:
 			textView.textContainer.maximumNumberOfLines = 0
+			textView.textContainer.lineBreakMode = .byWordWrapping
 		}
 	}
 	
