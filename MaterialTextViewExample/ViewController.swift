@@ -39,6 +39,8 @@ class ViewController: UIViewController {
 		tv.viewModel?.placeholder = MaterialTextViewModel.Placeholder(type: .animated, text: titleField.text!)
 		tv.viewModel?.help = helpField.text!
 		tv.viewModel?.lineMode = .multiple
+		tv.useTintColorForActiveLine = false
+		tv.useTintColorForActiveTitle = false
 		updateInputValidator()
 		lineHeightLabels = [normalActiveLineHeightLabel, normalInactiveLineHeightLabel, errorActiveLineHeightLabel, errorInactiveLineHeightLabel]
 		applyTagForAllSubviews(view: stackNormalActive, tag: StyleTag.normalActive.rawValue)

@@ -298,7 +298,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 
 extension MaterialTextView: MaterialTextViewModelDelegate {
 	
-	func viewModelStateChanged(isActive: Bool, errorState: MaterialTextViewModel.ErrorState) {
+	public func viewModelStateChanged(isActive: Bool, errorState: MaterialTextViewModel.ErrorState) {
 		changeTextStates(placeholderIsChanged: false)
 		
 		if isActive && !textView.isFirstResponder {
@@ -310,12 +310,12 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 		checkBottomConstraint()
 	}
 	
-	func viewModelTextChanged(newText: String) {
+	public func viewModelTextChanged(newText: String) {
 		updateTextViewAttributedText(text: newText)
 		updateTextViewHeight()
 	}
 	
-	func viewModelHelpChanged(newHelp: String) {
+	public func viewModelHelpChanged(newHelp: String) {
 		if !(viewModel?.errorState.isError ?? true) {
 			viewModelHelpChangedInternal(newHelp: newHelp)
 		}
@@ -345,11 +345,11 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 		}
 	}
 	
-	func viewModelLineModeChanged(newLineMode: MaterialTextViewModel.LineMode) {
+	public func viewModelLineModeChanged(newLineMode: MaterialTextViewModel.LineMode) {
 		updateLineMode(lineMode: newLineMode)
 	}
 	
-	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, isChanged: Bool) {
+	public func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, isChanged: Bool) {
 		updateFont()
 		titleLabel.attributedText = NSAttributedString(string: newPlaceholder.text.nonEmpty,
 													   attributes: titleLabel.attributedText?.safeAttributes(at: 0, range: nil) ?? [:])

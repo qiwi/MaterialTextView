@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol MaterialTextViewModelDelegate: class {
+public protocol MaterialTextViewModelDelegate: class {
     func viewModelTextChanged(newText: String)
     func viewModelHelpChanged(newHelp: String)
 	func viewModelStateChanged(isActive: Bool, errorState: MaterialTextViewModel.ErrorState)
@@ -16,7 +16,7 @@ protocol MaterialTextViewModelDelegate: class {
 	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, isChanged: Bool)
 }
 
-extension MaterialTextViewModelDelegate {
+public extension MaterialTextViewModelDelegate {
 	func viewModelTextChanged(newText: String) {}
 	func viewModelHelpChanged(newHelp: String) {}
 	func viewModelStateChanged(isActive: Bool, errorState: MaterialTextViewModel.ErrorState) {}

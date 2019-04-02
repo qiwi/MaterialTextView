@@ -39,7 +39,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Some view below" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8yq-1r-Wot">
                                                         <rect key="frame" x="53.5" y="9" width="133" height="20.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -1216,7 +1216,7 @@
                         <outlet property="errorInactiveLineHeightLabel" destination="FMM-Nz-uZk" id="PrO-dF-2MI"/>
                         <outlet property="helpField" destination="xXB-SU-ByU" id="Aql-qI-SY0"/>
                         <outlet property="normalActiveLineHeightLabel" destination="zVT-qe-aER" id="0Zu-XL-hLs"/>
-                        <outlet property="normalInactiveLineHeightLabel" destination="Lir-Cp-z7v" id="04l-jN-FVN"/>
+                        <outlet property="normalInactiveLineHeightLabel" destination="ZIM-V0-tlq" id="03b-uD-rrV"/>
                         <outlet property="stackErrorActive" destination="5Eg-yR-TkB" id="EFW-tL-bhg"/>
                         <outlet property="stackErrorInactive" destination="GUE-oQ-Wgo" id="5Ah-6R-yPG"/>
                         <outlet property="stackNormalActive" destination="btk-6z-eIh" id="9dC-08-J8P"/>
