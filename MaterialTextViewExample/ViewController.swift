@@ -38,6 +38,7 @@ class ViewController: UIViewController {
 		super.viewDidLoad()
 		tv.viewModel?.placeholder = MaterialTextViewModel.Placeholder(type: .animated, text: titleField.text!)
 		tv.viewModel?.help = helpField.text!
+		tv.viewModel?.lineMode = .multiple
 		updateInputValidator()
 		lineHeightLabels = [normalActiveLineHeightLabel, normalInactiveLineHeightLabel, errorActiveLineHeightLabel, errorInactiveLineHeightLabel]
 		applyTagForAllSubviews(view: stackNormalActive, tag: StyleTag.normalActive.rawValue)
@@ -121,4 +122,3 @@ extension MaterialTextView.Style {
 		}
 	}
 }
-

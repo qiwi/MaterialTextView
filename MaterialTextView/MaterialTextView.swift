@@ -192,10 +192,21 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		}
 	}
 	
+	private func updateLineMode(lineMode: MaterialTextViewModel.LineMode) {
+		switch lineMode {
+		case .single:
+			textView.textContainer.maximumNumberOfLines = 1
+			textView.textContainer.lineBreakMode = .byTruncatingTail
+		case .multiple:
+			textView.textContainer.maximumNumberOfLines = 0
+		}
+	}
+	
 	private func didSetViewModel(_ viewModel: MaterialTextViewModel?) {
 		guard let viewModel = viewModel else { return }
 		self.setupViewModel()
 		textView.format = viewModel.format
+		updateLineMode(lineMode: viewModel.lineMode)
 		
 		viewModelTextChanged(newText: viewModel.text)
 		viewModelHelpChanged(newHelp: viewModel.help)
@@ -232,12 +243,17 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		return textView.becomeFirstResponder()
 	}
 	
-	private func updateTextViewHeight() {
+	private func getAttributedText() -> NSAttributedString {
 		var attributedText = textView.attributedText!
 		if textView.text.isEmpty {
 			attributedText = NSAttributedString(string: " ", attributes: style.textAttributes)
 		}
-		let size = attributedText.boundingRect(with: CGSize(width: textView.bounds.width, height: CGFloat.infinity), options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil)
+		return attributedText
+	}
+	
+	private func updateTextViewHeight() {
+		let attributedText = getAttributedText()
+		let size = attributedText.boundingRect(with: CGSize(width: textView.bounds.width, height: viewModel!.lineMode == .single ? textView.bounds.height : CGFloat.infinity), options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil)
 		let height = size.height
 		let para = style.textAttributes[.paragraphStyle] as? NSParagraphStyle ?? NSParagraphStyle.materialTextViewDefault
 		let lineHeight = para.minimumLineHeight + para.lineSpacing
@@ -326,6 +342,10 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 				CATransaction.commit()
 			}
 		}
+	}
+	
+	func viewModelLineModeChanged(newLineMode: MaterialTextViewModel.LineMode) {
+		updateLineMode(lineMode: newLineMode)
 	}
 	
 	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, isChanged: Bool) {

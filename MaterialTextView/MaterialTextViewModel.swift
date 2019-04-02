@@ -12,6 +12,7 @@ protocol MaterialTextViewModelDelegate: class {
     func viewModelTextChanged(newText: String)
     func viewModelHelpChanged(newHelp: String)
 	func viewModelStateChanged(isActive: Bool, errorState: MaterialTextViewModel.ErrorState)
+	func viewModelLineModeChanged(newLineMode: MaterialTextViewModel.LineMode)
 	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, isChanged: Bool)
 }
 
@@ -19,6 +20,7 @@ extension MaterialTextViewModelDelegate {
 	func viewModelTextChanged(newText: String) {}
 	func viewModelHelpChanged(newHelp: String) {}
 	func viewModelStateChanged(isActive: Bool, errorState: MaterialTextViewModel.ErrorState) {}
+	func viewModelLineModeChanged(newLineMode: MaterialTextViewModel.LineMode) {}
 	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, isChanged: Bool) {}
 }
 
@@ -155,7 +157,12 @@ public final class MaterialTextViewModel {
         }
     }
 
-    let lineMode: LineMode
+	public var lineMode: LineMode {
+		didSet {
+			self.view?.viewModelLineModeChanged(newLineMode: self.lineMode)
+			self.delegate?.viewModelLineModeChanged(newLineMode: self.lineMode)
+		}
+	}
     let rightButtonInfo: ButtonInfo?
     let format: String?
 
