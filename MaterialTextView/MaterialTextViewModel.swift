@@ -124,7 +124,7 @@ public final class MaterialTextViewModel {
     public var wasInputValid = true
 	public var wasActionValid = false
     fileprivate weak var view: MaterialTextViewModelDelegate?
-    weak var delegate: MaterialTextViewModelDelegate?
+    public weak var delegate: MaterialTextViewModelDelegate?
 
 	private var _text: String
     public var text: String {
