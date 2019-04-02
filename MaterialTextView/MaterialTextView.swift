@@ -57,6 +57,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 			updateFont()
 			viewModelStateChanged(isActive: viewModel.isActive, errorState: viewModel.errorState)
 			viewModelPlaceholderChanged(newPlaceholder: viewModel.placeholder, isChanged: true)
+			textView.maskAttributes = _style.textAttributes
 		}
 	}
 	public var useTintColorForActiveLine = true
@@ -65,7 +66,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	private func updateTextViewAttributedText(text: String) {
 		textView.text = text
 		textView.delegate?.textViewDidChange?(textView)
-		textView.typingAttributes = style.textAttributes
+		textView.inputAttributes = style.textAttributes
 	}
 	
 	override init(frame: CGRect) {
@@ -166,7 +167,6 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		titleLabel.isHidden = true
 		titleLabel.attributedText = NSAttributedString(string: " ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10)])
 		textView.inputAttributes = style.textAttributes
-		textView.maskAttributes = style.textAttributes
 		textView.delegate = self
 		textView.insetX = 0
 	}
@@ -188,7 +188,6 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 			if !(placeholderLayer.font is String) {
 				placeholderLayer.uiFont = font
 				titleLabel.attributedText = NSAttributedString(string: (placeholderLayer.string as? String).nonEmpty, attributes: [NSAttributedString.Key.font: UIFont(descriptor: font.fontDescriptor, size: style.titleFontSize)])
-				textView.maskAttributes = self.style.textAttributes
 			}
 		}
 	}
