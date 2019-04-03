@@ -125,7 +125,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		
 		addSubview(rightButton)
 		textViewToRightButtonConstraint = rightButton.leadingAnchor.constraint(equalTo: textView.trailingAnchor)
-		NSLayoutConstraint.activate([rightButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8),
+		NSLayoutConstraint.activate([rightButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 8),
 									 rightButton.widthAnchor.constraint(equalToConstant: 40),
 									 rightButton.heightAnchor.constraint(equalToConstant: 40),
 									 rightButton.centerYAnchor.constraint(equalTo: textView.centerYAnchor)])
