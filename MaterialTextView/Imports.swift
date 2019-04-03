@@ -7,3 +7,5 @@
 //
 
 import Foundation
+
+@_exported import MaterialTextView
