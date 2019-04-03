@@ -130,12 +130,9 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 									 rightButton.heightAnchor.constraint(equalToConstant: 40),
 									 rightButton.centerYAnchor.constraint(equalTo: textView.centerYAnchor)])
 		addSubview(line)
-		let lineBottomToSuperviewBottom = line.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-		lineBottomToSuperviewBottom.priority = .init(751)
 		lineHeightConstraint = line.heightAnchor.constraint(equalToConstant: 1)
 		NSLayoutConstraint.activate([line.leadingAnchor.constraint(equalTo: self.leadingAnchor),
 									 line.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-									 lineBottomToSuperviewBottom,
 									 lineHeightConstraint,
 									 line.bottomAnchor.constraint(equalTo: textView.bottomAnchor, constant: 6)])
 		addSubview(helpLabel)
@@ -143,7 +140,8 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		helpLabelBottomConstraint = helpLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
 		NSLayoutConstraint.activate([helpLabelTopConstraint,
 									 helpLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-									 helpLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor)])
+									 helpLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+									 helpLabelBottomConstraint])
 		helpLabel.setContentHuggingPriority(.init(251), for: .horizontal)
 		helpLabel.setContentHuggingPriority(.init(251), for: .vertical)
 		helpLabel.setContentCompressionResistancePriority(.required, for: .vertical)
@@ -271,20 +269,6 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		}
 	}
 	
-	private func checkBottomConstraint() {
-		guard let viewModel = viewModel else { return }
-		UIView.animate(withDuration: animationDuration) {
-			if !viewModel.help.isEmpty && !self.helpLabelTopConstraint.isActive {
-				self.helpLabelTopConstraint.isActive = true
-				self.helpLabelBottomConstraint.isActive = true
-			} else if viewModel.help.isEmpty && self.helpLabelTopConstraint.isActive {
-				self.helpLabelTopConstraint.isActive = false
-				self.helpLabelBottomConstraint.isActive = false
-			}
-			self.layoutIfNeeded()
-		}
-	}
-	
 	private func getVisualState() -> VisualState {
 		guard let viewModel = viewModel else { return style.normalInactive }
 		switch viewModel.errorState {
@@ -299,6 +283,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 extension MaterialTextView: MaterialTextViewModelDelegate {
 	
 	public func viewModelStateChanged(isActive: Bool, errorState: MaterialTextViewModel.ErrorState) {
+		updateTextViewHeight()
 		changeTextStates(placeholderIsChanged: false)
 		
 		if isActive && !textView.isFirstResponder {
@@ -306,8 +291,6 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 		} else if !isActive && textView.isFirstResponder {
 			textView.resignFirstResponder()
 		}
-		updateTextViewHeight()
-		checkBottomConstraint()
 	}
 	
 	public func viewModelTextChanged(newText: String) {
@@ -322,11 +305,9 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 	}
 	
 	private func viewModelHelpChangedInternal(newHelp: String) {
-		let isActive = !newHelp.isEmpty
 		let attributes = getVisualState().helpAttributes
 		helpLabel.attributedText = NSAttributedString(string: newHelp, attributes: attributes)
-		helpLabelBottomConstraint.isActive = isActive
-		helpLabelTopConstraint.isActive = isActive
+		self.layoutIfNeeded()
 	}
 	
 	public override func layoutSubviews() {
