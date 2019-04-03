@@ -96,7 +96,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	}
 	
 	private func makeLayout() {
-		[titleLabel, rightButton, line, helpLabel].forEach { view in
+		[self, titleLabel, rightButton, line, helpLabel].forEach { view in
 			view.translatesAutoresizingMaskIntoConstraints = false
 		}
 		addSubview(titleLabel)
