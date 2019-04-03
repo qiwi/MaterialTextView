@@ -15,7 +15,6 @@
 		7C211108222FFC8B00D74B90 /* MaterialTextViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C211102222FFC8B00D74B90 /* MaterialTextViewModel.swift */; };
 		7C211109222FFC8B00D74B90 /* MaterialTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C211103222FFC8B00D74B90 /* MaterialTextView.swift */; };
 		7C21110A222FFC8B00D74B90 /* CALayer+Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C211104222FFC8B00D74B90 /* CALayer+Extentions.swift */; };
-		7C21110C222FFC9400D74B90 /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 7C21110B222FFC9400D74B90 /* Cartfile */; };
 		7C21110F222FFD3D00D74B90 /* FormattableTextView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C21110E222FFD3C00D74B90 /* FormattableTextView.framework */; };
 		7C2111182230F01500D74B90 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2111172230F01500D74B90 /* AppDelegate.swift */; };
 		7C21111A2230F01500D74B90 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2111192230F01500D74B90 /* ViewController.swift */; };
@@ -221,7 +220,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C21110C222FFC9400D74B90 /* Cartfile in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
