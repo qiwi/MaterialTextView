@@ -33,7 +33,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	@IBInspectable public var maxNumberOfLinesWithoutScrolling: CGFloat = 3
 	@IBInspectable public var animationDuration: Double = 0.1
 	
-	private func rightButtonAction(_ sender: UIButton) {
+	@objc private func rightButtonAction(_ sender: UIButton) {
 		viewModel?.rightButtonInfo?.action?()
 	}
 	
@@ -167,6 +167,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		textView.inputAttributes = style.textAttributes
 		textView.delegate = self
 		textView.insetX = 0
+		rightButton.addTarget(self, action: #selector(rightButtonAction(_:)), for: .touchUpInside)
 	}
 	
 	private func updateTintColor() {
@@ -343,6 +344,7 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 		let state = getVisualState()
 		guard let viewModel = viewModel else { return }
 		var helpText = viewModel.help
+		
 		switch viewModel.errorState {
 		case .error(let text):
 			helpText = text

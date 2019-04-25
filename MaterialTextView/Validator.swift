@@ -15,7 +15,7 @@ public protocol Validatable {
 
 public enum ValidatorResult {
 	case valid
-	case invalid(text:String)
+	case invalid(text: String)
 }
 
 public typealias Validator<T> = (T?) -> ValidatorResult
