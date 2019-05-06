@@ -16,7 +16,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	public weak var delegate: MaterialTextViewDelegate?
 	public let textView = FormattableKernTextView(frame: .zero)
 	
-	private(set) var helpLabel = UILabel()
+	public var helpLabel = UILabel()
 	private var line = UIView()
 	private var titleLabel = UILabel()
 	private var attributedPlaceholder: NSAttributedString!
