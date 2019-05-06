@@ -189,7 +189,7 @@ extension MaterialTextViewModel: Validatable {
     @discardableResult
 	public func validate() -> Bool {
 		errorState = validate(validator: actionValidator)
-		wasInputValid = !errorState.isError
+		wasActionValid = !errorState.isError
 		view?.viewModelStateChanged(isActive: isActive, errorState: errorState)
 		delegate?.viewModelStateChanged(isActive: isActive, errorState: errorState)
         return wasActionValid
