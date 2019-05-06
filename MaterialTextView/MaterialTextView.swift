@@ -64,7 +64,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	public var useTintColorForActiveTitle = true
 	
 	private func updateTextViewAttributedText(text: String) {
-		textView.attributedText = NSAttributedString(string: text, attributes: style.textAttributes)
+		textView.text = text
 		textView.delegate?.textViewDidChange?(textView)
 		textView.inputAttributes = style.textAttributes
 	}
