@@ -14,9 +14,14 @@ import FormattableTextView
 public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	
 	public weak var delegate: MaterialTextViewDelegate?
-	public let textView = FormattableKernTextView(frame: .zero)
+	
+	private var textComponentInternal: (MaterialTextComponentInternal & UIView & UITextInput)!
+	public var textComponent: MaterialTextComponent & UIView & UITextInput {
+		return textComponentInternal
+	}
 	
 	public var helpLabel = UILabel()
+	private let textFieldHeightOffset: CGFloat = 1
 	private var line = UIView()
 	private var titleLabel = UILabel()
 	private var attributedPlaceholder: NSAttributedString!
@@ -30,8 +35,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	private var textViewToRightButtonConstraint: NSLayoutConstraint!
 	private var textViewToRightConstraint: NSLayoutConstraint!
 	
-	@IBInspectable public var maxNumberOfLinesWithoutScrolling: CGFloat = 3
-	@IBInspectable public var animationDuration: Double = 0.1
+	public var animationDuration: Double = 0.1
 	
 	@objc private func rightButtonAction(_ sender: UIButton) {
 		viewModel?.rightButtonInfo?.action?()
@@ -43,30 +47,11 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		}
 	}
 	
-	private var _style: Style!
-	public var style: Style! {
-		get {
-			return _style
-		}
-		set {
-			if _style == newValue { return }
-			_style = newValue
-			updateTintColor()
-			guard let viewModel = viewModel else { return }
-			updateTextViewAttributedText(text: viewModel.text)
-			updateFont()
-			viewModelStateChanged(isActive: viewModel.isActive, errorState: viewModel.errorState)
-			viewModelPlaceholderChanged(newPlaceholder: viewModel.placeholder, isChanged: true)
-			textView.maskAttributes = _style.textAttributes
-		}
-	}
-	public var useTintColorForActiveLine = true
-	public var useTintColorForActiveTitle = true
-	
-	private func updateTextViewAttributedText(text: String) {
-		textView.text = text
-		textView.delegate?.textViewDidChange?(textView)
-		textView.inputAttributes = style.textAttributes
+	private func updateTextViewAttributedText(_ viewModel: MaterialTextViewModel) {
+		textComponentInternal.inputText = viewModel.text
+		self.textComponentDidChange()
+		textComponentInternal.inputAttributes = viewModel.style.textAttributes
+		textComponentInternal.maskAttributes = textComponentInternal.inputAttributes
 	}
 	
 	override init(frame: CGRect) {
@@ -83,14 +68,11 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		customInit()
 		let viewModel = MaterialTextViewModel()
 		self.viewModel = viewModel
-		updateTextViewAttributedText(text: viewModel.text)
+		updateTextViewAttributedText(viewModel)
 	}
 	
-	public convenience init(viewModel: MaterialTextViewModel, style: Style = .defaultStyle, useTintColorForActiveLine: Bool = true, useTintColorForActiveTitle: Bool = true) {
+	public convenience init(viewModel: MaterialTextViewModel) {
 		self.init(frame: CGRect.zero)
-		self.useTintColorForActiveLine = useTintColorForActiveLine
-		self.useTintColorForActiveTitle = useTintColorForActiveTitle
-		self.style = style
 		self.viewModel = viewModel
 		didSetViewModel(viewModel)
 	}
@@ -106,35 +88,15 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		titleLabel.setContentHuggingPriority(.init(249), for: .horizontal)
 		titleLabel.setContentHuggingPriority(.init(249), for: .vertical)
 		
-		addSubview(textView)
-		textViewToRightConstraint = textView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-		textViewToRightConstraint.priority = .defaultHigh
-		let textViewBottom = textView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-		textViewBottom.priority = .defaultHigh
-		textViewHeightConstraint = textView.heightAnchor.constraint(equalToConstant: 44)
-		textViewHeightConstraint.priority = .required
-		NSLayoutConstraint.activate([textView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-									 textViewToRightConstraint,
-									 textViewBottom,
-									 textViewHeightConstraint,
-									 textView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3)])
-		textView.setContentHuggingPriority(.init(251), for: .horizontal)
-		textView.setContentHuggingPriority(.init(251), for: .vertical)
-		textView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-		textView.setContentCompressionResistancePriority(.required, for: .vertical)
-		
 		addSubview(rightButton)
-		textViewToRightButtonConstraint = rightButton.leadingAnchor.constraint(equalTo: textView.trailingAnchor)
 		NSLayoutConstraint.activate([rightButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 8),
 									 rightButton.widthAnchor.constraint(equalToConstant: 40),
-									 rightButton.heightAnchor.constraint(equalToConstant: 40),
-									 rightButton.centerYAnchor.constraint(equalTo: textView.centerYAnchor)])
+									 rightButton.heightAnchor.constraint(equalToConstant: 40)])
 		addSubview(line)
 		lineHeightConstraint = line.heightAnchor.constraint(equalToConstant: 1)
 		NSLayoutConstraint.activate([line.leadingAnchor.constraint(equalTo: self.leadingAnchor),
 									 line.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-									 lineHeightConstraint,
-									 line.bottomAnchor.constraint(equalTo: textView.bottomAnchor, constant: 6)])
+									 lineHeightConstraint])
 		addSubview(helpLabel)
 		helpLabelTopConstraint = helpLabel.topAnchor.constraint(equalTo: line.bottomAnchor, constant: 8)
 		helpLabelBottomConstraint = helpLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
@@ -147,43 +109,44 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		helpLabel.setContentCompressionResistancePriority(.required, for: .vertical)
 	}
 	
+	private func addTextComponent() {
+		textComponentInternal.translatesAutoresizingMaskIntoConstraints = false
+		insertSubview(textComponentInternal, at: 0)
+		textViewToRightConstraint = textComponentInternal.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+		textViewToRightConstraint.priority = .required
+		let textViewBottom = textComponentInternal.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+		textViewBottom.priority = .defaultHigh
+		textViewHeightConstraint = textComponentInternal.heightAnchor.constraint(equalToConstant: 44)
+
+		NSLayoutConstraint.activate([textComponentInternal.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+									 textViewToRightConstraint,
+									 textViewBottom,
+									 textViewHeightConstraint,
+									 textComponentInternal.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3)])
+		
+		textViewToRightButtonConstraint = rightButton.leadingAnchor.constraint(equalTo: textComponentInternal.trailingAnchor)
+		NSLayoutConstraint.activate([
+			rightButton.centerYAnchor.constraint(equalTo: textComponentInternal.centerYAnchor),
+			line.bottomAnchor.constraint(equalTo: textComponentInternal.bottomAnchor, constant: 6 - (textComponentInternal is UITextField ? textFieldHeightOffset : 0))
+		])
+	}
+	
 	private func customInit() {
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(becomeFirstResponder))
 		addGestureRecognizer(tapGesture)
 		
-		textView.translatesAutoresizingMaskIntoConstraints = true
-		textView.textContainerInset = UIEdgeInsets.zero
-		textView.textContainer.lineFragmentPadding = 0
-		textView.translatesAutoresizingMaskIntoConstraints = false
 		makeLayout()
 		placeholderLayer.contentsScale = UIScreen.main.scale
 		layer.addSublayer(placeholderLayer)
-		style = Style.defaultStyle
-		textView.formatSymbols = ["d": CharacterSet.decimalDigits,
-								  "w": CharacterSet.letters,
-								  "*": CharacterSet.init(charactersIn: "").inverted]
 		titleLabel.isHidden = true
 		titleLabel.attributedText = NSAttributedString(string: " ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10)])
-		textView.inputAttributes = style.textAttributes
-		textView.delegate = self
-		textView.insetX = 0
+		
 		rightButton.addTarget(self, action: #selector(rightButtonAction(_:)), for: .touchUpInside)
-	}
-	
-	private func updateTintColor() {
-		var newStyle = _style!
-		if useTintColorForActiveLine {
-			newStyle.normalActive.lineColor = tintColor
-		}
-		if useTintColorForActiveTitle {
-			newStyle.normalActive.titleColor = tintColor
-		}
-		_style = newStyle
 	}
 	
 	private var placeholderStartFrame = CGRect.zero
 	private func updateFont() {
-		if let font = style.textAttributes[.font] as? UIFont {
+		if let style = viewModel?.style, let font = style.textAttributes[.font] as? UIFont {
 			if !(placeholderLayer.font is String) {
 				placeholderLayer.uiFont = font
 				titleLabel.attributedText = NSAttributedString(string: (placeholderLayer.string as? String).nonEmpty, attributes: [NSAttributedString.Key.font: UIFont(descriptor: font.fontDescriptor, size: style.titleFontSize)])
@@ -191,33 +154,47 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		}
 	}
 	
-	private func updateLineMode(lineMode: MaterialTextViewModel.LineMode) {
-		switch lineMode {
-		case .single:
-			textView.textContainer.maximumNumberOfLines = 1
-			textView.textContainer.lineBreakMode = .byTruncatingTail
-		case .multiple:
-			textView.textContainer.maximumNumberOfLines = 0
-			textView.textContainer.lineBreakMode = .byWordWrapping
+	private func replaceTextComponent(_ viewModel: MaterialTextViewModel) {
+		if textComponentInternal != nil {
+			textComponentInternal.removeFromSuperview()
 		}
+		
+		switch viewModel.textComponentMode {
+		case .textField:
+			textComponentInternal = FormattableTextField()
+			if let tf = textComponentInternal as? UITextField {
+				tf.delegate = self
+				tf.addTarget(self, action: #selector(textComponentDidChange), for: .editingChanged)
+			}
+		case .textView:
+			textComponentInternal = FormattableKernTextView(frame: .zero)
+			if let tv = textComponentInternal as? UITextView {
+				tv.delegate = self
+				tv.textContainer.maximumNumberOfLines = 0
+				tv.textContainer.lineBreakMode = .byWordWrapping
+			}
+		}
+		textComponentInternal.insetX = 0
+		addTextComponent()
+		textComponentInternal.formatSymbols = viewModel.formatSymbols
+		textComponentInternal.format = viewModel.format
+		viewModelTextChanged(viewModel: viewModel)
+		viewModelHelpChanged(newHelp: viewModel.help)
 	}
 	
 	private func didSetViewModel(_ viewModel: MaterialTextViewModel?) {
 		guard let viewModel = viewModel else { return }
 		self.setupViewModel()
-		textView.format = viewModel.format
-		updateLineMode(lineMode: viewModel.lineMode)
 		
-		viewModelTextChanged(newText: viewModel.text)
-		viewModelHelpChanged(newHelp: viewModel.help)
+		replaceTextComponent(viewModel)
 		
-		placeholderLayer.foregroundColor = style.normalInactive.titleColor.cgColor
-		self.line.backgroundColor = style.normalInactive.lineColor
+		placeholderLayer.foregroundColor = viewModel.style.normalInactive.titleColor.cgColor
+		self.line.backgroundColor = viewModel.style.normalInactive.lineColor
 		self.setNeedsLayout()
 		self.layoutIfNeeded()
 		
-		viewModelPlaceholderChanged(newPlaceholder: viewModel.placeholder, isChanged: false)
-		updateTextViewAttributedText(text: viewModel.text)
+		viewModelPlaceholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: false)
+		updateTextViewAttributedText(viewModel)
 		
 		if let info = viewModel.rightButtonInfo {
 			rightButton.setImage(UIImage(named: info.imageName), for: .normal)
@@ -240,63 +217,73 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	}
 	
 	override public func becomeFirstResponder() -> Bool {
-		return textView.becomeFirstResponder()
+		return textComponentInternal.becomeFirstResponder()
 	}
 	
-	private func getAttributedText() -> NSAttributedString {
-		var attributedText = textView.attributedText!
-		if textView.text.isEmpty {
-			attributedText = NSAttributedString(string: " ", attributes: style.textAttributes)
+	private func getAttributedText(viewModel: MaterialTextViewModel) -> NSAttributedString {
+		var attributedText = textComponentInternal.inputAttributedText
+		if textComponentInternal.inputText.isEmpty {
+			attributedText = NSAttributedString(string: " ", attributes: viewModel.style.textAttributes)
 		}
 		return attributedText
 	}
 	
-	private func updateTextViewHeight() {
-		let attributedText = getAttributedText()
-		let size = attributedText.boundingRect(with: CGSize(width: textView.bounds.width, height: viewModel!.lineMode == .single ? textView.bounds.height : CGFloat.infinity), options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil)
-		let height = size.height
-		let para = style.textAttributes[.paragraphStyle] as? NSParagraphStyle ?? NSParagraphStyle.materialTextViewDefault
-		let lineHeight = para.minimumLineHeight + para.lineSpacing
-		self.textViewHeightConstraint.constant = min(height, lineHeight * self.maxNumberOfLinesWithoutScrolling - lineHeight/6)
+	private func updateTextViewHeight(viewModel: MaterialTextViewModel) {
 		
-		self.superview?.layoutIfNeeded()
+		let attributedText = getAttributedText(viewModel: viewModel)
+		let size = attributedText.boundingRect(with: CGSize(width: textComponent.bounds.width, height: viewModel.textComponentMode == .textField ? textComponentInternal.bounds.height : CGFloat.infinity), options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil)
+		let height = size.height
+		let para = viewModel.style.textAttributes[.paragraphStyle] as? NSParagraphStyle ?? NSParagraphStyle.materialTextViewDefault
+		let lineHeight = para.minimumLineHeight + para.lineSpacing
 
-		if let selectedRange = textView.selectedTextRange {
-			let cursorPositionCurrent = textView.offset(from: textView.beginningOfDocument, to: selectedRange.start)
-			let cursorPositionEnd = textView.text.count
-			if cursorPositionCurrent == cursorPositionEnd {
-				textView.scrollRangeToVisible(NSRange(location: textView.text.count-1, length: 1))
+		switch viewModel.textComponentMode {
+		case .textField:
+			self.textViewHeightConstraint.constant = height + textFieldHeightOffset
+		case .textView:
+			self.textViewHeightConstraint.constant = min(height, lineHeight * viewModel.maxNumberOfLinesWithoutScrolling - lineHeight/6)
+			
+			self.superview?.layoutIfNeeded()
+			
+			if let selectedRange = textComponentInternal.selectedTextRange {
+				let cursorPositionCurrent = textComponentInternal.offset(from: textComponentInternal.beginningOfDocument, to: selectedRange.start)
+				let cursorPositionEnd = textComponentInternal.inputText.count
+				if cursorPositionCurrent == cursorPositionEnd {
+					(textComponentInternal as? UITextView)?.scrollRangeToVisible(NSRange(location: textComponentInternal.inputText.count-1, length: 1))
+				}
 			}
 		}
-	}
-	
-	private func getVisualState() -> VisualState {
-		guard let viewModel = viewModel else { return style.normalInactive }
-		switch viewModel.errorState {
-		case .normal:
-			return viewModel.isActive ? style.normalActive : style.normalInactive
-		case .error(_):
-			return viewModel.isActive ? style.errorActive : style.errorInactive
-		}
+		
 	}
 }
 
 extension MaterialTextView: MaterialTextViewModelDelegate {
 	
-	public func viewModelStateChanged(isActive: Bool, errorState: MaterialTextViewModel.ErrorState) {
-		updateTextViewHeight()
-		changeTextStates(placeholderIsChanged: false)
+	public func viewModelStateChanged(viewModel: MaterialTextViewModel) {
+		updateTextViewHeight(viewModel: viewModel)
+		changeTextStates(placeholderTypeIsChanged: false)
 		
-		if isActive && !textView.isFirstResponder {
-			textView.becomeFirstResponder()
-		} else if !isActive && textView.isFirstResponder {
-			textView.resignFirstResponder()
+		if viewModel.isActive && !textComponentInternal.isFirstResponder {
+			textComponentInternal.becomeFirstResponder()
+		} else if !viewModel.isActive && textComponent.isFirstResponder {
+			textComponentInternal.resignFirstResponder()
 		}
 	}
 	
-	public func viewModelTextChanged(newText: String) {
-		updateTextViewAttributedText(text: newText)
-		updateTextViewHeight()
+	public func viewModelTextChanged(viewModel: MaterialTextViewModel) {
+		updateTextViewAttributedText(viewModel)
+		updateTextViewHeight(viewModel: viewModel)
+	}
+	
+	public func viewModelStyleChanged() {
+		guard let viewModel = viewModel else { return }
+		updateTextViewAttributedText(viewModel)
+		updateFont()
+		viewModelStateChanged(viewModel: viewModel)
+		viewModelPlaceholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: false)
+	}
+	
+	public func viewModelMaskAttributesChanged(newAttributes: [NSAttributedString.Key : Any]) {
+		self.textComponentInternal.maskAttributes = newAttributes
 	}
 	
 	public func viewModelHelpChanged(newHelp: String) {
@@ -305,8 +292,16 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 		}
 	}
 	
+	public func viewModelFormatSymbolsChanged(formatSymbols: [Character : CharacterSet]) {
+		self.textComponentInternal.formatSymbols = formatSymbols
+	}
+	
+	public func viewModelTextComponentModeChanged(viewModel: MaterialTextViewModel) {
+		replaceTextComponent(viewModel)
+	}
+	
 	private func viewModelHelpChangedInternal(newHelp: String) {
-		let attributes = getVisualState().helpAttributes
+		guard let attributes = viewModel?.visualState.helpAttributes else { return }
 		helpLabel.attributedText = NSAttributedString(string: newHelp, attributes: attributes)
 		self.layoutIfNeeded()
 	}
@@ -314,34 +309,26 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 	public override func layoutSubviews() {
 		super.layoutSubviews()
 		
-		if let font = style.textAttributes[.font] as? UIFont {
-			let numLines = (textView.contentSize.height / font.lineHeight)
-			if round(numLines) == 1 {
-				CATransaction.begin()
-				CATransaction.setDisableActions(true)
-				placeholderStartFrame = textView.frame
-				placeholderLayer.bounds = CGRect(origin: CGPoint.zero, size: placeholderStartFrame.size)
-				placeholderLayer.position = textView.layer.position
-				CATransaction.commit()
-			}
+		if let viewModel = viewModel, viewModel.textComponentMode == .textField {
+			CATransaction.begin()
+			CATransaction.setDisableActions(true)
+			placeholderStartFrame = textComponentInternal.frame
+			placeholderLayer.bounds = CGRect(origin: CGPoint.zero, size: placeholderStartFrame.size)
+			placeholderLayer.position = textComponentInternal.layer.position
+			CATransaction.commit()
 		}
 	}
 	
-	public func viewModelLineModeChanged(newLineMode: MaterialTextViewModel.LineMode) {
-		updateLineMode(lineMode: newLineMode)
-	}
-	
-	public func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, isChanged: Bool) {
+	public func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool) {
 		updateFont()
 		titleLabel.attributedText = NSAttributedString(string: newPlaceholder.text.nonEmpty,
 													   attributes: titleLabel.attributedText?.safeAttributes(at: 0, range: nil) ?? [:])
 		placeholderLayer.string = newPlaceholder.text
-		changeTextStates(placeholderIsChanged: isChanged)
+		changeTextStates(placeholderTypeIsChanged: typeIsChanged)
 	}
 	
 	
-	private func changeTextStates(placeholderIsChanged: Bool) {
-		let state = getVisualState()
+	private func changeTextStates(placeholderTypeIsChanged: Bool) {
 		guard let viewModel = viewModel else { return }
 		var helpText = viewModel.help
 		
@@ -357,30 +344,30 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 		switch viewModel.placeholder.type {
 		case .animated:
 			placeholderLayer.isHidden = false
-			if let textFont = style.textAttributes[.font] as? UIFont {
+			if let textFont = viewModel.style.textAttributes[.font] as? UIFont {
 				if viewModel.isActive {
-					let colorStyle = viewModel.errorState.isError ? style.errorActive : style.normalActive
+					let colorStyle = viewModel.errorState.isError ? viewModel.style.errorActive : viewModel.style.normalActive
 					guard CATransform3DEqualToTransform(placeholderLayer.transform, CATransform3DIdentity) else {
 						placeholderLayer.animate(duration: animationDuration) { layer in
 							layer.foregroundColor = colorStyle.titleColor.cgColor
 						}
 						break
 					}
-					let scale = style.titleFontSize/textFont.pointSize
+					let scale = viewModel.style.titleFontSize/textFont.pointSize
 					placeholderLayer.animate(animationDuration: animationDuration, newFrame: titleLabel.layer.frame, animationType: .scaleAndTranslate(scale: scale), newColor: colorStyle.titleColor.cgColor)
 				} else {
 					var newFrame: CGRect
 					var animationType: CATextLayer.ScaleAnimationType
 					var color: CGColor
-					let colorStyle = viewModel.errorState.isError ? style.errorInactive : style.normalInactive
+					let colorStyle = viewModel.errorState.isError ? viewModel.style.errorInactive : viewModel.style.normalInactive
 					if viewModel.text.isEmpty {
 						newFrame = placeholderStartFrame
 						animationType = .identity
 						color = colorStyle.placeholderColor.cgColor
 					} else {
 						newFrame = titleLabel.layer.frame
-						let scale = style.titleFontSize/textFont.pointSize
-						animationType = placeholderIsChanged ? .scaleAndTranslate(scale: scale) : .skip
+						let scale = viewModel.style.titleFontSize/textFont.pointSize
+						animationType = placeholderTypeIsChanged ? .scaleAndTranslate(scale: scale) : .skip
 						color = colorStyle.titleColor.cgColor
 					}
 					
@@ -389,152 +376,90 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 			}
 		case .normal:
 			placeholderLayer.isHidden = !viewModel.text.isEmpty
-			placeholderLayer.animate(animationDuration: placeholderLayer.isHidden ? 0 : animationDuration, newFrame: placeholderStartFrame, animationType: .identity, newColor: state.placeholderColor.cgColor)
+			placeholderLayer.animate(animationDuration: placeholderLayer.isHidden ? 0 : animationDuration, newFrame: placeholderStartFrame, animationType: .identity, newColor: viewModel.visualState.placeholderColor.cgColor)
 		}
 		
 		UIView.animate(withDuration: animationDuration, animations: {
-			self.line.backgroundColor = state.lineColor
-			self.lineHeightConstraint.constant = state.lineHeight
+			self.line.backgroundColor = viewModel.visualState.lineColor
+			self.lineHeightConstraint.constant = viewModel.visualState.lineHeight
 			self.layoutIfNeeded()
 		})
-		helpLabel.attributedText = NSAttributedString(string: helpText, attributes: state.helpAttributes)
+		helpLabel.attributedText = NSAttributedString(string: helpText, attributes: viewModel.visualState.helpAttributes)
+	}
+}
+
+extension MaterialTextView {
+	@objc func textComponentDidChange() {
+		guard let viewModel = viewModel else { return }
+		textComponentInternal.typingAttributesInternal = viewModel.style.textAttributes
+		if viewModel.text != textComponentInternal.inputText {
+			viewModel.text = textComponentInternal.inputText
+			delegate?.materialTextViewDidChange(self)
+		}
+	}
+	
+	func textComponent(shouldChangeCharactersIn range: NSRange, replacementText text: String) -> Bool {
+		if let delegate = delegate {
+			let result = delegate.materialTextView(self, shouldChangeTextIn: range, replacementText: text)
+			if !result { return false }
+		}
+		return true
+	}
+	
+	func textComponentDidEndEditing() {
+		viewModel?.isActive = false
+		delegate?.materialTextViewDidEndEditing(self)
+	}
+	
+	func textComponentDidBeginEditing() {
+		guard let viewModel = viewModel else { return }
+		viewModel.isActive = true
+		textComponentInternal.typingAttributesInternal = viewModel.style.textAttributes
+		delegate?.materialTextViewDidBeginEditing(self)
 	}
 }
 
 extension MaterialTextView: UITextViewDelegate {
 	
 	public func textViewDidChange(_ textView: UITextView) {
-		if viewModel?.text != textView.text {
-			viewModel?.text = textView.text
-			delegate?.materialTextViewDidChange(self)
-		}
+		textComponentDidChange()
 	}
 	
 	public func textViewDidBeginEditing(_ textView: UITextView) {
-		viewModel?.isActive = true
-		textView.typingAttributes = style.textAttributes
-		delegate?.materialTextViewDidBeginEditing(self)
+		textComponentDidBeginEditing()
 	}
 	
 	public func textViewDidEndEditing(_ textView: UITextView) {
-		viewModel?.isActive = false
-		delegate?.materialTextViewDidEndEditing(self)
+		textComponentDidEndEditing()
 	}
 	
 	public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-		var finalText = text
-		if let delegate = delegate {
-			let (newText, result) = delegate.materialTextView(self, shouldChangeTextIn: range, replacementText: text)
-			finalText = newText
-			if !result { return false }
-		}
-		if let vm = viewModel {
-			switch vm.lineMode {
-			case .multiple:
-				break
-			case .single:
-				if finalText.contains("\n") {
-					return false
-				}
-			}
-		}
-		return true
+		return textComponent(shouldChangeCharactersIn: range, replacementText: text)
+	}
+}
+
+extension MaterialTextView: UITextFieldDelegate {
+	public func textFieldDidBeginEditing(_ textField: UITextField) {
+		textComponentDidBeginEditing()
+	}
+	
+	public func textFieldDidEndEditing(_ textField: UITextField) {
+		textComponentDidEndEditing()
+	}
+	
+	public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+		return textComponent(shouldChangeCharactersIn: range, replacementText: string)
 	}
 }
 
 extension MaterialTextView {
 	@IBInspectable public var keyboardTypeInt: Int {
 		get {
-			return self.textView.keyboardType.rawValue
+			return self.textComponentInternal.keyboardType.rawValue
 		}
 		set(value) {
-			self.textView.keyboardType = UIKeyboardType(rawValue: value) ?? UIKeyboardType.default
+			self.textComponentInternal.keyboardType = UIKeyboardType(rawValue: value) ?? UIKeyboardType.default
 		}
-	}
-}
-
-extension MaterialTextView {
-	
-	public struct VisualState: Equatable {
-		
-		public static func == (lhs: MaterialTextView.VisualState, rhs: MaterialTextView.VisualState) -> Bool {
-			return  lhs.lineHeight == rhs.lineHeight &&
-					lhs.lineColor == rhs.lineColor &&
-					lhs.placeholderColor == rhs.placeholderColor &&
-					lhs.titleColor == rhs.titleColor &&
-			areAttributesEqual(lhs.helpAttributes, rhs.helpAttributes)
-		}
-		
-		public var helpAttributes: [NSAttributedString.Key: Any]
-		public var titleColor: UIColor
-		public var placeholderColor: UIColor
-		public var lineColor: UIColor
-		public var lineHeight: CGFloat
-		
-		public init(helpAttributes: [NSAttributedString.Key: Any], titleColor: UIColor, placeholderColor: UIColor, lineColor: UIColor, lineHeight: CGFloat) {
-			self.helpAttributes = helpAttributes
-			self.titleColor = titleColor
-			self.placeholderColor = placeholderColor
-			self.lineColor = lineColor
-			self.lineHeight = lineHeight
-		}
-	}
-	
-	public struct Style: Equatable {
-		
-		public static func == (lhs: MaterialTextView.Style, rhs: MaterialTextView.Style) -> Bool {
-			return lhs.normalActive == rhs.normalActive &&
-				lhs.normalInactive == rhs.normalInactive &&
-				lhs.errorActive == rhs.errorActive &&
-				lhs.errorInactive == rhs.errorInactive &&
-				lhs.titleFontSize == rhs.titleFontSize &&
-				areAttributesEqual(lhs.textAttributes, rhs.textAttributes)
-		}
-		
-		public var normalActive: VisualState
-		public var normalInactive: VisualState
-		public var errorActive: VisualState
-		public var errorInactive: VisualState
-		public var textAttributes: [NSAttributedString.Key: Any]
-		public var titleFontSize: CGFloat
-		
-		public init(normalActive: VisualState, normalInactive: VisualState, errorActive: VisualState, errorInactive: VisualState, textAttributes: [NSAttributedString.Key: Any], titleFontSize: CGFloat) {
-			self.normalActive = normalActive
-			self.normalInactive = normalInactive
-			self.errorActive = errorActive
-			self.errorInactive = errorInactive
-			self.textAttributes = textAttributes
-			self.titleFontSize = titleFontSize
-		}
-		
-		public static var defaultStyle =
-			Style(normalActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
-														     .foregroundColor: UIColor.darkGray],
-											titleColor: UIColor.black,
-											placeholderColor: UIColor.lightGray,
-											lineColor: UIColor.blue,
-											lineHeight: 2),
-				  normalInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
-															 .foregroundColor: UIColor.darkGray],
-											  titleColor: UIColor.gray,
-											  placeholderColor: UIColor.lightGray,
-											  lineColor: UIColor.black,
-											  lineHeight: 1),
-				  errorActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
-														  .foregroundColor: UIColor.red],
-										   titleColor: UIColor.red,
-										   placeholderColor: UIColor.lightGray,
-										   lineColor: UIColor.red,
-										   lineHeight: 2),
-				  errorInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
-															.foregroundColor: UIColor.red],
-										   titleColor: UIColor.red,
-										   placeholderColor: UIColor.lightGray,
-										   lineColor: UIColor.red,
-										   lineHeight: 1),
-				  textAttributes: [.font: UIFont.systemFont(ofSize: 16),
-								 .foregroundColor: UIColor.black],
-				  titleFontSize: 10)
 	}
 }
 
@@ -542,27 +467,12 @@ public protocol MaterialTextViewDelegate: class {
 	func materialTextViewDidChange(_ materialTextView: MaterialTextView)
 	func materialTextViewDidBeginEditing(_ materialTextView: MaterialTextView)
 	func materialTextViewDidEndEditing(_ materialTextView: MaterialTextView)
-	func materialTextView(_ materialTextView: MaterialTextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> (String, Bool)
+	func materialTextView(_ materialTextView: MaterialTextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool
 }
 
 public extension MaterialTextViewDelegate {
 	func materialTextViewDidChange(_ materialTextView: MaterialTextView) { }
 	func materialTextViewDidBeginEditing(_ materialTextView: MaterialTextView) { }
 	func materialTextViewDidEndEditing(_ materialTextView: MaterialTextView) { }
-	func materialTextView(_ materialTextView: MaterialTextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> (String, Bool) { return (text, true) }
-}
-
-private func areAttributesEqual(_ left: [NSAttributedString.Key: Any], _ right: [NSAttributedString.Key: Any]) -> Bool {
-	let leftFont = left[NSAttributedString.Key.font] as? UIFont
-	let rightFont = right[NSAttributedString.Key.font] as? UIFont
-	let leftColor = left[NSAttributedString.Key.foregroundColor] as? UIColor
-	let rightColor = right[NSAttributedString.Key.foregroundColor] as? UIColor
-	let leftKern = left[NSAttributedString.Key.kern] as? NSNumber
-	let rightKern = right[NSAttributedString.Key.kern] as? NSNumber
-	let leftPara = left[NSAttributedString.Key.paragraphStyle] as? NSParagraphStyle
-	let rightPara = right[NSAttributedString.Key.paragraphStyle] as? NSParagraphStyle
-	return leftFont == rightFont &&
-		leftColor == rightColor &&
-		leftKern == rightKern &&
-		leftPara == rightPara
+	func materialTextView(_ materialTextView: MaterialTextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool { return true }
 }

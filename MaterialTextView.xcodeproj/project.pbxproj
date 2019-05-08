@@ -26,6 +26,8 @@
 		7C2111302231405300D74B90 /* MaterialTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C211103222FFC8B00D74B90 /* MaterialTextView.swift */; };
 		7C2111312231405300D74B90 /* MaterialTextViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C211102222FFC8B00D74B90 /* MaterialTextViewModel.swift */; };
 		7C2111322231405300D74B90 /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2110FF222FFC8B00D74B90 /* Validator.swift */; };
+		7C7C07B52281762300E50181 /* MaterialTextComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7C07B42281762300E50181 /* MaterialTextComponent.swift */; };
+		7C7C07B62282B87300E50181 /* MaterialTextComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7C07B42281762300E50181 /* MaterialTextComponent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +50,7 @@
 		7C2111212230F01500D74B90 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7C2111232230F01500D74B90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C21112822311D5500D74B90 /* Imports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imports.swift; sourceTree = "<group>"; };
+		7C7C07B42281762300E50181 /* MaterialTextComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialTextComponent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +104,7 @@
 				7C2110F8222FFC5A00D74B90 /* Info.plist */,
 				7C21112822311D5500D74B90 /* Imports.swift */,
 				7C1003B7223955AA007C0D50 /* NSAttributedString+Extensions.swift */,
+				7C7C07B42281762300E50181 /* MaterialTextComponent.swift */,
 			);
 			path = MaterialTextView;
 			sourceTree = "<group>";
@@ -265,6 +269,7 @@
 				7C21110A222FFC8B00D74B90 /* CALayer+Extentions.swift in Sources */,
 				7C1003B8223955AA007C0D50 /* NSAttributedString+Extensions.swift in Sources */,
 				7C211109222FFC8B00D74B90 /* MaterialTextView.swift in Sources */,
+				7C7C07B52281762300E50181 /* MaterialTextComponent.swift in Sources */,
 				7C21112922311D5500D74B90 /* Imports.swift in Sources */,
 				7C211108222FFC8B00D74B90 /* MaterialTextViewModel.swift in Sources */,
 				7C211105222FFC8B00D74B90 /* Validator.swift in Sources */,
@@ -280,6 +285,7 @@
 				7C2111312231405300D74B90 /* MaterialTextViewModel.swift in Sources */,
 				7C1003B9223955B4007C0D50 /* NSAttributedString+Extensions.swift in Sources */,
 				7C21112F2231405300D74B90 /* CALayer+Extentions.swift in Sources */,
+				7C7C07B62282B87300E50181 /* MaterialTextComponent.swift in Sources */,
 				7C2111322231405300D74B90 /* Validator.swift in Sources */,
 				7C2111182230F01500D74B90 /* AppDelegate.swift in Sources */,
 			);
