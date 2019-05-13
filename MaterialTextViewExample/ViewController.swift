@@ -54,6 +54,9 @@ class ViewController: UIViewController {
 		textView.viewModel?.textComponentMode = mode
 		textView.viewModel?.useTintColorForActiveLine = false
 		textView.viewModel?.useTintColorForActiveTitle = false
+		textView.viewModel?.rightButtonInfo = ButtonInfo(imageName: "icon", action: {
+			print("Button was touched")
+		})
 	}
 	
 	private func applyTagForAllSubviews(view: UIView, tag: Int) {
@@ -69,6 +72,10 @@ class ViewController: UIViewController {
 		fields.forEach { $0.viewModel?.placeholder.type = sender.isOn ? .animated : .normal }
 	}
 	
+	@IBAction func rightButtonWasTapped(_ sender: UISwitch) {
+		fields.forEach { $0.viewModel?.rightButtonInfo = sender.isOn ? ButtonInfo(imageName: "icon", action: { print("Button was tapped") }) : nil }
+	}
+	
 	@IBAction func titleChanged(_ sender: UITextField) {
 		fields.forEach { $0.viewModel?.placeholder.text = sender.text! }
 	}
@@ -81,7 +88,7 @@ class ViewController: UIViewController {
 		fields.forEach {
 			$0.viewModel?.inputValidator = { text in
 				guard let text = text else { return .valid }
-				return text.count > 3 ? .invalid(text: "Your name is too long") : .valid
+				return text.count > 3 ? .invalid(text: "Text is too long") : .valid
 			}
 		}
 	}

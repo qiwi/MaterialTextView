@@ -17,6 +17,7 @@ public protocol MaterialTextViewModelDelegate: class {
 	func viewModelStyleChanged()
 	func viewModelFormatSymbolsChanged(formatSymbols: [Character: CharacterSet])
 	func viewModelTextComponentModeChanged(viewModel: MaterialTextViewModel)
+	func viewModelRightButtonChanged(viewModel: MaterialTextViewModel)
 }
 
 public extension MaterialTextViewModelDelegate {
@@ -27,6 +28,7 @@ public extension MaterialTextViewModelDelegate {
 	func viewModelStyleChanged() {}
 	func viewModelFormatSymbolsChanged(formatSymbols: [Character: CharacterSet]) {}
 	func viewModelTextComponentModeChanged(viewModel: MaterialTextViewModel) {}
+	func viewModelRightButtonChanged(viewModel: MaterialTextViewModel) {}
 }
 
 public struct ButtonInfo {
@@ -232,7 +234,12 @@ public final class MaterialTextViewModel {
 		}
 	}
 	
-    let rightButtonInfo: ButtonInfo?
+	var rightButtonInfo: ButtonInfo? {
+		didSet {
+			view?.viewModelRightButtonChanged(viewModel: self)
+			delegate?.viewModelRightButtonChanged(viewModel: self)
+		}
+	}
     let format: String?
 
     public required init(text: String = "",

@@ -196,18 +196,13 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		viewModelPlaceholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: false)
 		updateTextViewAttributedText(viewModel)
 		
-		if let info = viewModel.rightButtonInfo {
-			rightButton.setImage(UIImage(named: info.imageName), for: .normal)
-			showRightButton()
-		} else {
-			hideRightButton()
-		}
+		viewModelRightButtonChanged(viewModel: viewModel)
 	}
 	
 	private func hideRightButton() {
 		rightButton.isHidden = true
-		textViewToRightConstraint.isActive = true
 		textViewToRightButtonConstraint.isActive = false
+		textViewToRightConstraint.isActive = true
 	}
 	
 	private func showRightButton() {
@@ -257,6 +252,15 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 }
 
 extension MaterialTextView: MaterialTextViewModelDelegate {
+	
+	public func viewModelRightButtonChanged(viewModel: MaterialTextViewModel) {
+		if let info = viewModel.rightButtonInfo {
+			rightButton.setImage(UIImage(named: info.imageName), for: .normal)
+			showRightButton()
+		} else {
+			hideRightButton()
+		}
+	}
 	
 	public func viewModelStateChanged(viewModel: MaterialTextViewModel) {
 		updateTextViewHeight(viewModel: viewModel)
@@ -313,8 +317,8 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 			CATransaction.begin()
 			CATransaction.setDisableActions(true)
 			placeholderStartFrame = textComponentInternal.frame
-			placeholderLayer.bounds = CGRect(origin: CGPoint.zero, size: placeholderStartFrame.size)
-			placeholderLayer.position = textComponentInternal.layer.position
+			placeholderLayer.bounds = CGRect(origin: CGPoint.zero, size: CGSize(width: rightButton.frame.origin.x, height: placeholderStartFrame.size.height))
+			placeholderLayer.position = CGPoint(x: placeholderLayer.bounds.width/2, y: placeholderStartFrame.midY)
 			CATransaction.commit()
 		}
 	}
