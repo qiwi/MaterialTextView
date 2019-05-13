@@ -253,6 +253,10 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 
 extension MaterialTextView: MaterialTextViewModelDelegate {
 	
+	public func viewModelFormatChanged(format: String?) {
+		textComponentInternal.format = format
+	}
+	
 	public func viewModelRightButtonChanged(viewModel: MaterialTextViewModel) {
 		if let info = viewModel.rightButtonInfo {
 			rightButton.setImage(UIImage(named: info.imageName), for: .normal)

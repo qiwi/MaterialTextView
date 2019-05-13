@@ -16,6 +16,7 @@ public protocol MaterialTextViewModelDelegate: class {
 	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool)
 	func viewModelStyleChanged()
 	func viewModelFormatSymbolsChanged(formatSymbols: [Character: CharacterSet])
+	func viewModelFormatChanged(format: String?)
 	func viewModelTextComponentModeChanged(viewModel: MaterialTextViewModel)
 	func viewModelRightButtonChanged(viewModel: MaterialTextViewModel)
 }
@@ -27,6 +28,7 @@ public extension MaterialTextViewModelDelegate {
 	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool) {}
 	func viewModelStyleChanged() {}
 	func viewModelFormatSymbolsChanged(formatSymbols: [Character: CharacterSet]) {}
+	func viewModelFormatChanged(format: String?) {}
 	func viewModelTextComponentModeChanged(viewModel: MaterialTextViewModel) {}
 	func viewModelRightButtonChanged(viewModel: MaterialTextViewModel) {}
 }
@@ -240,7 +242,12 @@ public final class MaterialTextViewModel {
 			delegate?.viewModelRightButtonChanged(viewModel: self)
 		}
 	}
-    let format: String?
+	public var format: String? {
+		didSet {
+			view?.viewModelFormatChanged(format: format)
+			delegate?.viewModelFormatChanged(format: format)
+		}
+	}
 
     public required init(text: String = "",
 				  help: String = "",
