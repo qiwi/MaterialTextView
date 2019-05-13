@@ -13,7 +13,7 @@ public protocol MaterialTextComponent: class {
 	var keyboardType: UIKeyboardType { get set }
 }
 
-public protocol MaterialTextComponentInternal: MaterialTextComponent {
+internal protocol MaterialTextComponentInternal: MaterialTextComponent {
 	var format: String? { get set }
 	var maskAttributes: [NSAttributedString.Key: Any]! { get set }
 	var inputAttributes: [NSAttributedString.Key: Any] { get set }

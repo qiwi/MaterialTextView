@@ -247,7 +247,19 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 				}
 			}
 		}
+	}
+	
+	public override func layoutSubviews() {
+		super.layoutSubviews()
 		
+		if let viewModel = viewModel, viewModel.textComponentMode == .textField {
+			CATransaction.begin()
+			CATransaction.setDisableActions(true)
+			placeholderStartFrame = textComponentInternal.frame
+			placeholderLayer.bounds = CGRect(origin: CGPoint.zero, size: CGSize(width: rightButton.frame.origin.x, height: placeholderStartFrame.size.height))
+			placeholderLayer.position = CGPoint(x: placeholderLayer.bounds.width/2, y: placeholderStartFrame.midY)
+			CATransaction.commit()
+		}
 	}
 }
 
@@ -312,19 +324,6 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 		guard let attributes = viewModel?.visualState.helpAttributes else { return }
 		helpLabel.attributedText = NSAttributedString(string: newHelp, attributes: attributes)
 		self.layoutIfNeeded()
-	}
-	
-	public override func layoutSubviews() {
-		super.layoutSubviews()
-		
-		if let viewModel = viewModel, viewModel.textComponentMode == .textField {
-			CATransaction.begin()
-			CATransaction.setDisableActions(true)
-			placeholderStartFrame = textComponentInternal.frame
-			placeholderLayer.bounds = CGRect(origin: CGPoint.zero, size: CGSize(width: rightButton.frame.origin.x, height: placeholderStartFrame.size.height))
-			placeholderLayer.position = CGPoint(x: placeholderLayer.bounds.width/2, y: placeholderStartFrame.midY)
-			CATransaction.commit()
-		}
 	}
 	
 	public func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool) {
