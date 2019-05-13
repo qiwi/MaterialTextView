@@ -15,9 +15,11 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	
 	public weak var delegate: MaterialTextViewDelegate?
 	
-	private var textComponentInternal: (MaterialTextComponentInternal & UIView & UITextInput)!
-	public var textComponent: MaterialTextComponent & UIView & UITextInput {
-		return textComponentInternal
+	private var textComponentInternal: (MaterialTextComponentInternal & UIView)!
+	public var textComponent: MaterialTextComponent & UIView {
+		get {
+			return textComponentInternal
+		}
 	}
 	
 	public var helpLabel = UILabel()

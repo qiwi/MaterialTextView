@@ -9,7 +9,12 @@
 import Foundation
 import FormattableTextView
 
-public protocol MaterialTextComponent: class {
+public protocol MaterialTextComponent: class, UITextInput {
+	var keyboardType: UIKeyboardType { get set }
+	var keyboardAppearance: UIKeyboardAppearance { get set }
+	var returnKeyType: UIReturnKeyType { get set }
+	var autocapitalizationType: UITextAutocapitalizationType { get set }
+	var autocorrectionType: UITextAutocorrectionType { get set }
 }
 
 internal protocol MaterialTextComponentInternal: MaterialTextComponent {
@@ -24,6 +29,7 @@ internal protocol MaterialTextComponentInternal: MaterialTextComponent {
 }
 
 extension FormattableKernTextView: MaterialTextComponentInternal {
+	
 	public var typingAttributesInternal: [NSAttributedString.Key : Any] {
 		get { return typingAttributes }
 		set { self.typingAttributes = newValue }
