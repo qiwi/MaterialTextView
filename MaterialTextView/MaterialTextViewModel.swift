@@ -236,7 +236,7 @@ public final class MaterialTextViewModel {
 		}
 	}
 	
-	var rightButtonInfo: ButtonInfo? {
+	public var rightButtonInfo: ButtonInfo? {
 		didSet {
 			view?.viewModelRightButtonChanged(viewModel: self)
 			delegate?.viewModelRightButtonChanged(viewModel: self)
