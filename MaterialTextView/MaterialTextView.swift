@@ -459,17 +459,6 @@ extension MaterialTextView: UITextFieldDelegate {
 	}
 }
 
-extension MaterialTextView {
-	@IBInspectable public var keyboardTypeInt: Int {
-		get {
-			return self.textComponentInternal.keyboardType.rawValue
-		}
-		set(value) {
-			self.textComponentInternal.keyboardType = UIKeyboardType(rawValue: value) ?? UIKeyboardType.default
-		}
-	}
-}
-
 public protocol MaterialTextViewDelegate: class {
 	func materialTextViewDidChange(_ materialTextView: MaterialTextView)
 	func materialTextViewDidBeginEditing(_ materialTextView: MaterialTextView)

@@ -10,7 +10,6 @@ import Foundation
 import FormattableTextView
 
 public protocol MaterialTextComponent: class {
-	var keyboardType: UIKeyboardType { get set }
 }
 
 internal protocol MaterialTextComponentInternal: MaterialTextComponent {
