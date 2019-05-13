@@ -12,6 +12,10 @@ import UIKit
 @IBDesignable
 open class FormattableTextField: UITextField, FormattableInput, FormattableInputInternal {
 	
+	var useIntegerCoordinates: Bool {
+		return false
+	}
+	
 	internal var internalAttributedText: NSAttributedString {
 		get {
 			return self.attributedText ?? NSAttributedString(string: "")
@@ -47,6 +51,7 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 			for (key, value) in inputAttributes {
 				maskAttributes[key] = value
 			}
+			typingAttributes = inputAttributes
 		}
 	}
 	
@@ -85,7 +90,6 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 	}
 	
 	internal var internalInsetX: CGFloat = 0
-	
 	internal var internalInsetY: CGFloat = 0
 	
 	override open func textRect(forBounds bounds: CGRect) -> CGRect {
@@ -93,10 +97,19 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 	}
 	
 	override open func editingRect(forBounds bounds: CGRect) -> CGRect {
-		return bounds.insetBy(dx: internalInsetX + insetX, dy: internalInsetY)
+		return textRect(forBounds: bounds)
 	}
 	
 	private var delegateProxy = DelegateProxy()
+	
+	override open var delegate: UITextFieldDelegate? {
+		get {
+			return delegateProxy
+		}
+		set {
+			self.delegateProxy.userDelegate = newValue
+		}
+	}
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -113,6 +126,7 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 	private func customInit() {
 		setupMask()
 		maskAttributes = inputAttributes
+		typingAttributes = inputAttributes
 	}
 	
 	private func setupFormatChars() {
