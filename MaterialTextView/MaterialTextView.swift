@@ -166,7 +166,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 			textComponentInternal = FormattableTextField()
 			if let tf = textComponentInternal as? UITextField {
 				tf.delegate = self
-				tf.addTarget(self, action: #selector(textComponentDidChange), for: .editingChanged)
+				tf.addTarget(self, action: #selector(textComponentDidChange), for: UIControl.Event.editingChanged)
 			}
 		case .textView:
 			textComponentInternal = FormattableKernTextView(frame: .zero)
@@ -199,6 +199,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		updateTextViewAttributedText(viewModel)
 		
 		viewModelRightButtonChanged(viewModel: viewModel)
+		updatePlaceholderPosition()
 	}
 	
 	private func hideRightButton() {
@@ -251,16 +252,21 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		}
 	}
 	
+	fileprivate func updatePlaceholderPosition() {
+		CATransaction.begin()
+		CATransaction.setDisableActions(true)
+		placeholderStartFrame = textComponentInternal.frame
+		let bounds = CGRect(origin: CGPoint.zero, size: CGSize(width: rightButton.frame.origin.x, height: placeholderStartFrame.size.height))
+		placeholderLayer.bounds = bounds
+		placeholderLayer.position = CGPoint(x: placeholderLayer.bounds.width/2, y: placeholderStartFrame.midY)
+		CATransaction.commit()
+	}
+	
 	public override func layoutSubviews() {
 		super.layoutSubviews()
 		
 		if let viewModel = viewModel, viewModel.textComponentMode == .textField {
-			CATransaction.begin()
-			CATransaction.setDisableActions(true)
-			placeholderStartFrame = textComponentInternal.frame
-			placeholderLayer.bounds = CGRect(origin: CGPoint.zero, size: CGSize(width: rightButton.frame.origin.x, height: placeholderStartFrame.size.height))
-			placeholderLayer.position = CGPoint(x: placeholderLayer.bounds.width/2, y: placeholderStartFrame.midY)
-			CATransaction.commit()
+			updatePlaceholderPosition()
 		}
 	}
 }
