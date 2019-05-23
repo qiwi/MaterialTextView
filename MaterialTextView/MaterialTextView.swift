@@ -200,6 +200,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		
 		viewModelRightButtonChanged(viewModel: viewModel)
 		updatePlaceholderPosition()
+		viewModelStateChanged(viewModel: viewModel, placeholderTypeIsChanged: true)
 	}
 	
 	private func hideRightButton() {
@@ -264,7 +265,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	
 	public override func layoutSubviews() {
 		super.layoutSubviews()
-		
+
 		if let viewModel = viewModel, viewModel.textComponentMode == .textField {
 			updatePlaceholderPosition()
 		}
