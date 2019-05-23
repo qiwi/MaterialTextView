@@ -286,9 +286,9 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 		}
 	}
 	
-	public func viewModelStateChanged(viewModel: MaterialTextViewModel) {
+	public func viewModelStateChanged(viewModel: MaterialTextViewModel, placeholderTypeIsChanged: Bool) {
 		updateTextViewHeight(viewModel: viewModel)
-		changeTextStates(placeholderTypeIsChanged: false)
+		changeTextStates(placeholderTypeIsChanged: placeholderTypeIsChanged)
 		
 		if viewModel.isActive && !textComponentInternal.isFirstResponder {
 			textComponentInternal.becomeFirstResponder()
@@ -306,7 +306,7 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 		guard let viewModel = viewModel else { return }
 		updateTextViewAttributedText(viewModel)
 		updateFont()
-		viewModelStateChanged(viewModel: viewModel)
+		viewModelStateChanged(viewModel: viewModel, placeholderTypeIsChanged: false)
 		viewModelPlaceholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: false)
 	}
 	

@@ -12,7 +12,7 @@ import UIKit
 public protocol MaterialTextViewModelDelegate: class {
 	func viewModelTextChanged(viewModel: MaterialTextViewModel)
     func viewModelHelpChanged(newHelp: String)
-	func viewModelStateChanged(viewModel: MaterialTextViewModel)
+	func viewModelStateChanged(viewModel: MaterialTextViewModel, placeholderTypeIsChanged: Bool)
 	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool)
 	func viewModelStyleChanged()
 	func viewModelFormatSymbolsChanged(formatSymbols: [Character: CharacterSet])
@@ -24,7 +24,7 @@ public protocol MaterialTextViewModelDelegate: class {
 public extension MaterialTextViewModelDelegate {
 	func viewModelTextChanged(viewModel: MaterialTextViewModel) {}
 	func viewModelHelpChanged(newHelp: String) {}
-	func viewModelStateChanged(viewModel: MaterialTextViewModel) {}
+	func viewModelStateChanged(viewModel: MaterialTextViewModel, placeholderTypeIsChanged: Bool) {}
 	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool) {}
 	func viewModelStyleChanged() {}
 	func viewModelFormatSymbolsChanged(formatSymbols: [Character: CharacterSet]) {}
@@ -153,8 +153,8 @@ public final class MaterialTextViewModel {
 	
 	public var isActive: Bool = false {
 		didSet {
-			view?.viewModelStateChanged(viewModel: self)
-			delegate?.viewModelStateChanged(viewModel: self)
+			view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
+			delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
 		}
 	}
 
@@ -166,8 +166,8 @@ public final class MaterialTextViewModel {
 		set {
 			if _errorState != newValue {
 				_errorState = newValue
-				view?.viewModelStateChanged(viewModel: self)
-				delegate?.viewModelStateChanged(viewModel: self)
+				view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
+				delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
 			}
 		}
     }
@@ -207,11 +207,9 @@ public final class MaterialTextViewModel {
 				errorState = validate(validator: inputValidator)
 			}
 			wasInputValid = !errorState.isError
-			if placeholder.type == .normal {
-				if oldValue.isEmpty || newValue.isEmpty {
-					view?.viewModelStateChanged(viewModel: self)
-					delegate?.viewModelStateChanged(viewModel: self)
-				}
+			if oldValue.isEmpty || newValue.isEmpty {
+				view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: true)
+				delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: true)
 			}
 			self.view?.viewModelTextChanged(viewModel: self)
 			self.delegate?.viewModelTextChanged(viewModel: self)
@@ -276,8 +274,8 @@ extension MaterialTextViewModel: Validatable {
 	public func validate() -> Bool {
 		errorState = validate(validator: actionValidator)
 		wasActionValid = !errorState.isError
-		view?.viewModelStateChanged(viewModel: self)
-		delegate?.viewModelStateChanged(viewModel: self)
+		view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
+		delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
         return wasActionValid
     }
 
