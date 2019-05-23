@@ -35,15 +35,14 @@ extension FormattableKernTextView: MaterialTextComponentInternal {
 		set { self.typingAttributes = newValue }
 	}
 	
-	
 	public var inputAttributedText: NSAttributedString {
 		get { return attributedText }
 		set { attributedText = newValue }
 	}
 	
 	public var inputText: String {
-		get { return self.text }
-		set { self.text = inputText }
+		get { return self.attributedText.string }
+		set { self.inputAttributedText = NSAttributedString(string: newValue, attributes: typingAttributes) }
 	}
 }
 
@@ -67,7 +66,7 @@ extension FormattableTextField: MaterialTextComponentInternal {
 	}
 	
 	public var inputText: String {
-		get { return self.text ?? "" }
-		set { self.text = inputText }
+		get { return self.inputAttributedText.string }
+		set { self.inputAttributedText = NSAttributedString(string: newValue, attributes: typingAttributes) }
 	}
 }
