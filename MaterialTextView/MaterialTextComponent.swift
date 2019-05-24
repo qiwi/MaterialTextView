@@ -15,6 +15,7 @@ public protocol MaterialTextComponent: class, UITextInput {
 	var returnKeyType: UIReturnKeyType { get set }
 	var autocapitalizationType: UITextAutocapitalizationType { get set }
 	var autocorrectionType: UITextAutocorrectionType { get set }
+	var inputAccessoryView: UIView? { get set }
 }
 
 internal protocol MaterialTextComponentInternal: MaterialTextComponent {
