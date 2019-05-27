@@ -16,6 +16,9 @@ public protocol MaterialTextComponent: class, UITextInput {
 	var autocapitalizationType: UITextAutocapitalizationType { get set }
 	var autocorrectionType: UITextAutocorrectionType { get set }
 	var inputAccessoryView: UIView? { get set }
+	
+	@available(iOS 10.0, *)
+	var textContentType: UITextContentType! { get set }
 }
 
 internal protocol MaterialTextComponentInternal: MaterialTextComponent {
