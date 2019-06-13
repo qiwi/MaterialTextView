@@ -37,6 +37,8 @@ class ViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		tf.accessibilityIdentifier = "TextField"
+		tv.accessibilityIdentifier = "TextView"
 		fields = [tf, tv]
 		setupMaterialTextView(textView: tf, mode: .textField)
 		setupMaterialTextView(textView: tv, mode: .textView)

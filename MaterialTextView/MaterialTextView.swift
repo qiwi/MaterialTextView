@@ -73,6 +73,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		let viewModel = MaterialTextViewModel()
 		self.viewModel = viewModel
 		updateTextViewAttributedText(viewModel)
+		self.isAccessibilityElement = true
 	}
 	
 	public convenience init(viewModel: MaterialTextViewModel) {
@@ -303,6 +304,7 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 	public func viewModelTextChanged(viewModel: MaterialTextViewModel) {
 		updateTextViewAttributedText(viewModel)
 		updateTextViewHeight(viewModel: viewModel)
+		updateAccessibility()
 	}
 	
 	public func viewModelStyleChanged() {
@@ -345,6 +347,10 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 		changeTextStates(placeholderTypeIsChanged: typeIsChanged)
 	}
 	
+	private func updateAccessibility() {
+		guard let viewModel = viewModel else { return }
+		self.accessibilityValue = "\(viewModel.placeholder.text)|\(helpLabel.attributedText?.string ?? "")|\(viewModel.text)"
+	}
 	
 	private func changeTextStates(placeholderTypeIsChanged: Bool) {
 		guard let viewModel = viewModel else { return }
@@ -403,6 +409,7 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 			self.layoutIfNeeded()
 		})
 		helpLabel.attributedText = NSAttributedString(string: helpText, attributes: viewModel.visualState.helpAttributes)
+		updateAccessibility()
 	}
 }
 
