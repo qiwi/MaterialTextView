@@ -304,7 +304,7 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 	public func viewModelTextChanged(viewModel: MaterialTextViewModel) {
 		updateTextViewAttributedText(viewModel)
 		updateTextViewHeight(viewModel: viewModel)
-		updateAccessibility()
+		updateAccessibilityValue()
 	}
 	
 	public func viewModelStyleChanged() {
@@ -331,6 +331,7 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 	
 	public func viewModelTextComponentModeChanged(viewModel: MaterialTextViewModel) {
 		replaceTextComponent(viewModel)
+		updateAccessibilityLabelAndIdentifier()
 	}
 	
 	private func viewModelHelpChangedInternal(newHelp: String) {
@@ -345,11 +346,18 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 													   attributes: titleLabel.attributedText?.safeAttributes(at: 0, range: nil) ?? [:])
 		placeholderLayer.string = newPlaceholder.text
 		changeTextStates(placeholderTypeIsChanged: typeIsChanged)
+		updateAccessibilityLabelAndIdentifier()
 	}
 	
-	private func updateAccessibility() {
-		guard let viewModel = viewModel else { return }
-		self.accessibilityValue = "\(viewModel.placeholder.text)|\(helpLabel.attributedText?.string ?? "")|\(viewModel.text)"
+	private func updateAccessibilityLabelAndIdentifier() {
+		let accessibilityLabel = viewModel?.placeholder.text ?? ""
+		self.accessibilityLabel = accessibilityLabel
+		let type = (textComponent is UITextField) ? "tf" : "tv"
+		accessibilityIdentifier = "\(type)_\(accessibilityLabel)"
+	}
+	
+	private func updateAccessibilityValue() {
+		self.accessibilityValue = "\(viewModel?.text ?? "")|\(helpLabel.attributedText?.string ?? "")"
 	}
 	
 	private func changeTextStates(placeholderTypeIsChanged: Bool) {
@@ -409,7 +417,7 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 			self.layoutIfNeeded()
 		})
 		helpLabel.attributedText = NSAttributedString(string: helpText, attributes: viewModel.visualState.helpAttributes)
-		updateAccessibility()
+		updateAccessibilityValue()
 	}
 }
 
