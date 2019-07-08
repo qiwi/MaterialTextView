@@ -73,7 +73,6 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		let viewModel = MaterialTextViewModel()
 		self.viewModel = viewModel
 		updateTextViewAttributedText(viewModel)
-		self.isAccessibilityElement = true
 	}
 	
 	public convenience init(viewModel: MaterialTextViewModel) {
@@ -351,13 +350,18 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 	
 	private func updateAccessibilityLabelAndIdentifier() {
 		let accessibilityLabel = viewModel?.placeholder.text ?? ""
-		self.accessibilityLabel = accessibilityLabel
+		self.textComponentInternal.accessibilityLabel = accessibilityLabel
 		let type = (textComponent is UITextField) ? "tf" : "tv"
-		accessibilityIdentifier = "\(type)_\(accessibilityLabel)"
+		self.textComponentInternal.isAccessibilityElement = true
+		
+		let identifier = "\(type)_\(accessibilityLabel)"
+		self.textComponentInternal.accessibilityIdentifier = identifier
+		self.rightButton.accessibilityIdentifier = "\(identifier)_button"
+		self.helpLabel.accessibilityIdentifier = "\(identifier)_help"
 	}
 	
 	private func updateAccessibilityValue() {
-		self.accessibilityValue = "\(viewModel?.text ?? "")|\(helpLabel.attributedText?.string ?? "")"
+		self.textComponentInternal.accessibilityValue = "\(viewModel?.text ?? "")"
 	}
 	
 	private func changeTextStates(placeholderTypeIsChanged: Bool) {
