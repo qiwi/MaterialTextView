@@ -428,7 +428,6 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 extension MaterialTextView {
 	@objc func textComponentDidChange() {
 		guard let viewModel = viewModel else { return }
-		textComponentInternal.typingAttributesInternal = viewModel.style.textAttributes
 		if viewModel.text != textComponentInternal.inputText {
 			viewModel.text = textComponentInternal.inputText
 			delegate?.materialTextViewDidChange(self)
@@ -451,7 +450,6 @@ extension MaterialTextView {
 	func textComponentDidBeginEditing() {
 		guard let viewModel = viewModel else { return }
 		viewModel.isActive = true
-		textComponentInternal.typingAttributesInternal = viewModel.style.textAttributes
 		delegate?.materialTextViewDidBeginEditing(self)
 	}
 }

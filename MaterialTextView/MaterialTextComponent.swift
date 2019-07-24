@@ -29,15 +29,9 @@ internal protocol MaterialTextComponentInternal: MaterialTextComponent {
 	var inputAttributedText: NSAttributedString { get set }
 	var insetX: CGFloat { get set }
 	var formatSymbols: [Character: CharacterSet] { get set }
-	var typingAttributesInternal: [NSAttributedString.Key: Any] { get set }
 }
 
 extension FormattableKernTextView: MaterialTextComponentInternal {
-	
-	public var typingAttributesInternal: [NSAttributedString.Key : Any] {
-		get { return typingAttributes }
-		set { self.typingAttributes = newValue }
-	}
 	
 	public var inputAttributedText: NSAttributedString {
 		get { return attributedText }
@@ -51,11 +45,6 @@ extension FormattableKernTextView: MaterialTextComponentInternal {
 }
 
 extension FormattableTextField: MaterialTextComponentInternal {
-	
-	public var typingAttributesInternal: [NSAttributedString.Key : Any] {
-		get { return typingAttributes ?? [:] }
-		set { self.typingAttributes = newValue }
-	}
 	
 	public var inputAttributedText: NSAttributedString {
 		get {
