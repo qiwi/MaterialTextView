@@ -233,7 +233,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 
 		switch viewModel.textComponentMode {
 		case .textField:
-			self.textViewHeightConstraint.constant = textComponentInternal.intrinsicContentSize.height
+			self.textViewHeightConstraint.constant = textComponentInternal.bounds.height == 0 ? textComponentInternal.intrinsicContentSize.height : textComponentInternal.bounds.height
 		case .textView:
 			let attributedText = getAttributedText(viewModel: viewModel)
 			let size = attributedText.boundingRect(with: CGSize(width: textComponent.bounds.width, height: CGFloat.infinity), options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil)
