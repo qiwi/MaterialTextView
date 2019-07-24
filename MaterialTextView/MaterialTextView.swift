@@ -230,18 +230,17 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	}
 	
 	private func updateTextViewHeight(viewModel: MaterialTextViewModel) {
-		
-		let attributedText = getAttributedText(viewModel: viewModel)
-		let size = attributedText.boundingRect(with: CGSize(width: textComponent.bounds.width, height: viewModel.textComponentMode == .textField ? textComponentInternal.bounds.height : CGFloat.infinity), options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil)
-		let height = size.height
-		let para = viewModel.style.textAttributes[.paragraphStyle] as? NSParagraphStyle ?? NSParagraphStyle.materialTextViewDefault
-		let lineHeight = para.minimumLineHeight + para.lineSpacing
 
 		switch viewModel.textComponentMode {
 		case .textField:
-			self.textViewHeightConstraint.constant = height + textFieldHeightOffset
+			self.textViewHeightConstraint.constant = textComponentInternal.intrinsicContentSize.height
 		case .textView:
-			self.textViewHeightConstraint.constant = min(height, lineHeight * viewModel.maxNumberOfLinesWithoutScrolling - lineHeight/6)
+			let attributedText = getAttributedText(viewModel: viewModel)
+			let size = attributedText.boundingRect(with: CGSize(width: textComponent.bounds.width, height: CGFloat.infinity), options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil)
+			let height = size.height
+			let para = viewModel.style.textAttributes[.paragraphStyle] as? NSParagraphStyle ?? NSParagraphStyle.materialTextViewDefault
+			let lineHeight = para.minimumLineHeight + para.lineSpacing
+			self.textViewHeightConstraint.constant = max(min(height, lineHeight * viewModel.maxNumberOfLinesWithoutScrolling - lineHeight/6), lineHeight)
 			
 			self.superview?.layoutIfNeeded()
 			
