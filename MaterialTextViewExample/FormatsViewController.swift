@@ -17,7 +17,7 @@ class FormatsViewController: UIViewController {
         super.viewDidLoad()
 
 		tv.viewModel = MaterialTextViewModel(textComponentMode: .textView,
-											 placeholder: MaterialTextViewModel.Placeholder(type: .normal, text: "TextView"),
+											 placeholder: MaterialTextViewModel.Placeholder(type: .normal, text: "Digits (TextView)"),
 														   actionValidator: { text in return .valid },
 														   inputValidator: { text in
 															guard let text = text else { return .valid }
@@ -27,7 +27,7 @@ class FormatsViewController: UIViewController {
 														   rightButtonInfo: ButtonInfo(imageName: "icon", action: nil))
 		
 		tf.viewModel = MaterialTextViewModel(textComponentMode: .textField,
-											 placeholder: MaterialTextViewModel.Placeholder(type: .normal, text: "TextField"),
+											 placeholder: MaterialTextViewModel.Placeholder(type: .normal, text: "Digits (TextField)"),
 											 actionValidator: { text in return .valid },
 											 inputValidator: { text in
 												guard let text = text else { return .valid }

@@ -230,26 +230,20 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	}
 	
 	private func updateTextViewHeight(viewModel: MaterialTextViewModel) {
-
-		switch viewModel.textComponentMode {
-		case .textField:
-			self.textViewHeightConstraint.constant = textComponentInternal.bounds.height == 0 ? textComponentInternal.intrinsicContentSize.height : textComponentInternal.bounds.height
-		case .textView:
-			let attributedText = getAttributedText(viewModel: viewModel)
-			let size = attributedText.boundingRect(with: CGSize(width: textComponent.bounds.width, height: CGFloat.infinity), options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil)
-			let height = size.height
-			let para = viewModel.style.textAttributes[.paragraphStyle] as? NSParagraphStyle ?? NSParagraphStyle.materialTextViewDefault
-			let lineHeight = para.minimumLineHeight + para.lineSpacing
-			self.textViewHeightConstraint.constant = max(min(height, lineHeight * viewModel.maxNumberOfLinesWithoutScrolling - lineHeight/6), lineHeight)
-			
-			self.superview?.layoutIfNeeded()
-			
-			if let selectedRange = textComponentInternal.selectedTextRange {
-				let cursorPositionCurrent = textComponentInternal.offset(from: textComponentInternal.beginningOfDocument, to: selectedRange.start)
-				let cursorPositionEnd = textComponentInternal.inputText.count
-				if cursorPositionCurrent == cursorPositionEnd {
-					(textComponentInternal as? UITextView)?.scrollRangeToVisible(NSRange(location: textComponentInternal.inputText.count-1, length: 1))
-				}
+		let attributedText = getAttributedText(viewModel: viewModel)
+		let size = attributedText.boundingRect(with: CGSize(width: textComponent.bounds.width, height: CGFloat.infinity), options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil)
+		let height = size.height
+		let para = viewModel.style.textAttributes[.paragraphStyle] as? NSParagraphStyle ?? NSParagraphStyle.materialTextViewDefault
+		let lineHeight = para.minimumLineHeight + para.lineSpacing
+		self.textViewHeightConstraint.constant = max(min(height, lineHeight * viewModel.maxNumberOfLinesWithoutScrolling - lineHeight/6), lineHeight)
+		
+		self.superview?.layoutIfNeeded()
+		
+		if let textView = textComponentInternal as? UITextView, let selectedRange = textComponentInternal.selectedTextRange {
+			let cursorPositionCurrent = textComponentInternal.offset(from: textComponentInternal.beginningOfDocument, to: selectedRange.start)
+			let cursorPositionEnd = textComponentInternal.inputText.count
+			if cursorPositionCurrent == cursorPositionEnd {
+				textView.scrollRangeToVisible(NSRange(location: textComponentInternal.inputText.count-1, length: 1))
 			}
 		}
 	}
