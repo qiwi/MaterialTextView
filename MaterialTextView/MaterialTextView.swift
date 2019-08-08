@@ -232,10 +232,13 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	private func updateTextViewHeight(viewModel: MaterialTextViewModel) {
 		let attributedText = getAttributedText(viewModel: viewModel)
 		let size = attributedText.boundingRect(with: CGSize(width: textComponent.bounds.width, height: CGFloat.infinity), options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil)
-		let height = size.height - (viewModel.textComponentMode == .textField ? 1 : 0)
 		let para = viewModel.style.textAttributes[.paragraphStyle] as? NSParagraphStyle ?? NSParagraphStyle.materialTextViewDefault
 		let lineHeight = para.minimumLineHeight + para.lineSpacing
-		self.textViewHeightConstraint.constant = max(min(height, lineHeight * viewModel.maxNumberOfLinesWithoutScrolling - lineHeight/6), lineHeight)
+		if viewModel.textComponentMode == .textField {
+			self.textViewHeightConstraint.constant = lineHeight+1
+		} else {
+			self.textViewHeightConstraint.constant = max(min(size.height, lineHeight * viewModel.maxNumberOfLinesWithoutScrolling - lineHeight/6), lineHeight)
+		}
 		
 		self.superview?.layoutIfNeeded()
 		
@@ -406,6 +409,16 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 		case .normal:
 			placeholderLayer.isHidden = !viewModel.text.isEmpty
 			placeholderLayer.animate(animationDuration: placeholderLayer.isHidden ? 0 : animationDuration, newFrame: placeholderStartFrame, animationType: .identity, newColor: viewModel.visualState.placeholderColor.cgColor)
+		case .alwaysOnTop:
+			placeholderLayer.isHidden = false
+			if let textFont = viewModel.style.textAttributes[.font] as? UIFont {
+				let newFrame = titleLabel.layer.frame
+				let scale = viewModel.style.titleFontSize/textFont.pointSize
+				let animationType: CATextLayer.ScaleAnimationType = placeholderTypeIsChanged ? .scaleAndTranslate(scale: scale) : .skip
+				let colorStyle = viewModel.errorState.isError ? viewModel.style.errorInactive : viewModel.style.normalInactive
+				let color = colorStyle.titleColor.cgColor
+				placeholderLayer.animate(animationDuration: animationDuration, newFrame: newFrame, animationType: animationType, newColor: color)
+			}
 		}
 		
 		UIView.animate(withDuration: animationDuration, animations: {

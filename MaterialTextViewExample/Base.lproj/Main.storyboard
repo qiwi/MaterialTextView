@@ -1324,23 +1324,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wgm-fk-ZBr" customClass="MaterialTextView" customModule="MaterialTextViewExample" customModuleProvider="target">
-                                <rect key="frame" x="16" y="83" width="343" height="74"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bNG-lM-B1g" customClass="MaterialTextView" customModule="MaterialTextViewExample" customModuleProvider="target">
-                                <rect key="frame" x="16" y="296" width="343" height="74"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="7mt-lL-8oX">
+                                <rect key="frame" x="16" y="83" width="343" height="160"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wgm-fk-ZBr" customClass="MaterialTextView" customModule="MaterialTextViewExample" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="74"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bNG-lM-B1g" customClass="MaterialTextView" customModule="MaterialTextViewExample" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="86" width="343" height="74"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="wgm-fk-ZBr" firstAttribute="leading" secondItem="ckw-60-2e9" secondAttribute="leading" constant="16" id="Bp3-t5-bCK"/>
-                            <constraint firstItem="bNG-lM-B1g" firstAttribute="top" secondItem="wgm-fk-ZBr" secondAttribute="bottom" constant="24" id="IEb-KR-mlz"/>
-                            <constraint firstItem="ckw-60-2e9" firstAttribute="trailing" secondItem="wgm-fk-ZBr" secondAttribute="trailing" constant="16" id="Oyt-vb-urn"/>
-                            <constraint firstItem="bNG-lM-B1g" firstAttribute="leading" secondItem="wgm-fk-ZBr" secondAttribute="leading" id="dLD-vU-1fa"/>
-                            <constraint firstItem="bNG-lM-B1g" firstAttribute="trailing" secondItem="wgm-fk-ZBr" secondAttribute="trailing" id="sdS-Fh-Nbn"/>
-                            <constraint firstItem="wgm-fk-ZBr" firstAttribute="top" secondItem="ckw-60-2e9" secondAttribute="top" constant="16" id="yeg-4y-Gz7"/>
+                            <constraint firstItem="ckw-60-2e9" firstAttribute="trailing" secondItem="7mt-lL-8oX" secondAttribute="trailing" constant="16" id="2tg-lE-D6Z"/>
+                            <constraint firstItem="7mt-lL-8oX" firstAttribute="leading" secondItem="ckw-60-2e9" secondAttribute="leading" constant="16" id="hzy-tG-hcJ"/>
+                            <constraint firstItem="7mt-lL-8oX" firstAttribute="top" secondItem="ckw-60-2e9" secondAttribute="top" constant="24" id="icJ-Xa-jEn"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ckw-60-2e9"/>
                     </view>

@@ -17,23 +17,23 @@ class FormatsViewController: UIViewController {
         super.viewDidLoad()
 
 		tv.viewModel = MaterialTextViewModel(textComponentMode: .textView,
-											 placeholder: MaterialTextViewModel.Placeholder(type: .normal, text: "Digits (TextView)"),
+											 placeholder: MaterialTextViewModel.Placeholder(type: .alwaysOnTop, text: "TextView"),
 														   actionValidator: { text in return .valid },
 														   inputValidator: { text in
 															guard let text = text else { return .valid }
 															return text.count > 5 ? .invalid(text: "Too long") : .valid
 											},
-														   format: "dddd dddd dddd ddddddd",
+														   format: "ddddddd ₽",
 														   rightButtonInfo: ButtonInfo(imageName: "icon", action: nil))
 		
 		tf.viewModel = MaterialTextViewModel(textComponentMode: .textField,
-											 placeholder: MaterialTextViewModel.Placeholder(type: .normal, text: "Digits (TextField)"),
+											 placeholder: MaterialTextViewModel.Placeholder(type: .alwaysOnTop, text: "TextField"),
 											 actionValidator: { text in return .valid },
 											 inputValidator: { text in
 												guard let text = text else { return .valid }
 												return text.count > 5 ? .invalid(text: "Too long") : .valid
 		},
-											 format: "dddd dddd dddd ddddddd",
+											 format: "ddddddd ₽",
 											 rightButtonInfo: ButtonInfo(imageName: "icon", action: nil))
     }
 

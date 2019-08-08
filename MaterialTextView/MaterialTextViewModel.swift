@@ -74,6 +74,7 @@ public final class MaterialTextViewModel {
     public enum PlaceholderType {
         case normal
         case animated
+		case alwaysOnTop
     }
 
 	public struct Placeholder: Equatable {
@@ -208,8 +209,8 @@ public final class MaterialTextViewModel {
 			}
 			wasInputValid = !errorState.isError
 			if oldValue.isEmpty || newValue.isEmpty {
-				view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: true)
-				delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: true)
+				view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
+				delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
 			}
 			self.view?.viewModelTextChanged(viewModel: self)
 			self.delegate?.viewModelTextChanged(viewModel: self)
