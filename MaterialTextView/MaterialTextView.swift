@@ -410,15 +410,14 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 			placeholderLayer.isHidden = !viewModel.text.isEmpty
 			placeholderLayer.animate(animationDuration: placeholderLayer.isHidden ? 0 : animationDuration, newFrame: placeholderStartFrame, animationType: .identity, newColor: viewModel.visualState.placeholderColor.cgColor)
 		case .alwaysOnTop:
-			placeholderLayer.isHidden = false
-			if let textFont = viewModel.style.textAttributes[.font] as? UIFont {
-				let newFrame = titleLabel.layer.frame
-				let scale = viewModel.style.titleFontSize/textFont.pointSize
-				let animationType: CATextLayer.ScaleAnimationType = placeholderTypeIsChanged ? .scaleAndTranslate(scale: scale) : .skip
-				let colorStyle = viewModel.errorState.isError ? viewModel.style.errorInactive : viewModel.style.normalInactive
-				let color = colorStyle.titleColor.cgColor
-				placeholderLayer.animate(animationDuration: animationDuration, newFrame: newFrame, animationType: animationType, newColor: color)
+			placeholderLayer.isHidden = true
+			if let fontName = (viewModel.style.textAttributes[NSAttributedString.Key.font] as? UIFont)?.fontName {
+				titleLabel.font = UIFont(name: fontName, size: viewModel.style.titleFontSize)
+			} else {
+				titleLabel.font = UIFont.systemFont(ofSize: viewModel.style.titleFontSize)
 			}
+			titleLabel.textColor = viewModel.visualState.placeholderColor
+			titleLabel.isHidden = false
 		}
 		
 		UIView.animate(withDuration: animationDuration, animations: {

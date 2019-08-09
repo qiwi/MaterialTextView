@@ -1347,6 +1347,7 @@
                         <viewLayoutGuide key="safeArea" id="ckw-60-2e9"/>
                     </view>
                     <connections>
+                        <outlet property="stack" destination="7mt-lL-8oX" id="hLl-eE-xAG"/>
                         <outlet property="tf" destination="bNG-lM-B1g" id="8wI-JH-ZXP"/>
                         <outlet property="tv" destination="wgm-fk-ZBr" id="LJX-6x-ZVk"/>
                     </connections>
