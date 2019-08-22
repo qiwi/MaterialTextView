@@ -11,5 +11,5 @@ Pod::Spec.new do |s|
   s.source = { :git => 'https://github.com/qiwi/MaterialTextView' }
   s.framework = "UIKit"
   s.source_files = 'MaterialTextView/*.swift'
-  s.dependency 'https://github.com/qiwi/FormattableTextView'
+  s.dependency 'FormattableTextView'
 end
