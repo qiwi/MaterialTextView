@@ -17,6 +17,7 @@ Placeholder has 2 modes: animatable and normal.
 
 ### CocoaPods
 ```
+pod 'FormattableTextView', :git => 'https://github.com/qiwi/FormattableTextView'
 pod 'MaterialTextView', :git => 'https://github.com/qiwi/MaterialTextView'
 ```
 
