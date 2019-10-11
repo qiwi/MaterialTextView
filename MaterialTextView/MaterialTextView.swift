@@ -153,7 +153,12 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		if let style = viewModel?.style, let font = style.textAttributes[.font] as? UIFont {
 			if !(placeholderLayer.font is String) {
 				placeholderLayer.uiFont = font
-				titleLabel.attributedText = NSAttributedString(string: (placeholderLayer.string as? String).nonEmpty, attributes: [NSAttributedString.Key.font: UIFont(descriptor: font.fontDescriptor, size: style.titleFontSize)])
+				titleLabel.attributedText = NSAttributedString(string: (placeholderLayer.string as? String).nonEmpty,
+															   attributes:
+				[
+					NSAttributedString.Key.font: UIFont(descriptor: font.fontDescriptor, size: style.titleFontSize),
+					NSAttributedString.Key.foregroundColor: style.normalActive.titleColor
+				])
 			}
 		}
 	}
@@ -411,12 +416,9 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 			placeholderLayer.animate(animationDuration: placeholderLayer.isHidden ? 0 : animationDuration, newFrame: placeholderStartFrame, animationType: .identity, newColor: viewModel.visualState.placeholderColor.cgColor)
 		case .alwaysOnTop:
 			placeholderLayer.isHidden = true
-			if let fontName = (viewModel.style.textAttributes[NSAttributedString.Key.font] as? UIFont)?.fontName {
-				titleLabel.font = UIFont(name: fontName, size: viewModel.style.titleFontSize)
-			} else {
-				titleLabel.font = UIFont.systemFont(ofSize: viewModel.style.titleFontSize)
-			}
-			titleLabel.textColor = viewModel.visualState.placeholderColor
+			let attr = NSMutableAttributedString(attributedString: titleLabel.attributedText ?? NSAttributedString())
+			attr.addAttributes([NSAttributedString.Key.foregroundColor: viewModel.visualState.placeholderColor], range: NSRange(location: 0, length: attr.string.count))
+			titleLabel.attributedText = attr
 			titleLabel.isHidden = false
 		}
 		
