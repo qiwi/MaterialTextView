@@ -40,11 +40,20 @@ internal extension CATextLayer {
 			return UIFont(name: font, size: self.fontSize)!
 		}
 		set(value) {
-			self.font = value.fontName as CFTypeRef?
+			self.font = getFontName(font: value) as CFTypeRef?
 			self.animate(duration: 0) { textLayer in
 				textLayer.fontSize = value.pointSize
 			}
 		}
+	}
+	
+	private func getFontName(font: UIFont) -> String {
+		if #available(iOS 13.0, *) {
+			if font.fontName.starts(with: ".") {
+				return String(font.fontName.dropFirst())
+			}
+		}
+		return font.fontName
 	}
 
 	enum ScaleAnimationType {
