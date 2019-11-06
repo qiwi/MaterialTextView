@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,7 +16,7 @@
 		7C211108222FFC8B00D74B90 /* MaterialTextViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C211102222FFC8B00D74B90 /* MaterialTextViewModel.swift */; };
 		7C211109222FFC8B00D74B90 /* MaterialTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C211103222FFC8B00D74B90 /* MaterialTextView.swift */; };
 		7C21110A222FFC8B00D74B90 /* CALayer+Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C211104222FFC8B00D74B90 /* CALayer+Extentions.swift */; };
-		7C21110F222FFD3D00D74B90 /* FormattableTextView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C21110E222FFD3C00D74B90 /* FormattableTextView.framework */; };
+		7C21110F222FFD3D00D74B90 /* FormattableTextView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C21110E222FFD3C00D74B90 /* FormattableTextView.framework */; platformFilter = ios; };
 		7C2111182230F01500D74B90 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2111172230F01500D74B90 /* AppDelegate.swift */; };
 		7C21111A2230F01500D74B90 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2111192230F01500D74B90 /* ViewController.swift */; };
 		7C21111D2230F01500D74B90 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C21111B2230F01500D74B90 /* Main.storyboard */; };
@@ -204,6 +204,7 @@
 					};
 					7C2111142230F01400D74B90 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1120;
 					};
 				};
 			};
@@ -450,6 +451,7 @@
 		7C2110FD222FFC5A00D74B90 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -483,6 +485,7 @@
 		7C2110FE222FFC5A00D74B90 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -527,7 +530,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.qiwi.MaterialTextViewExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -547,7 +550,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.qiwi.MaterialTextViewExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
