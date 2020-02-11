@@ -185,8 +185,10 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		}
 		textComponentInternal.insetX = 0
 		addTextComponent()
+		let text = viewModel.text
 		textComponentInternal.formatSymbols = viewModel.formatSymbols
 		textComponentInternal.format = viewModel.format
+		viewModel.text = text
 		viewModelTextChanged(viewModel: viewModel)
 		viewModelHelpChanged(newHelp: viewModel.help)
 	}

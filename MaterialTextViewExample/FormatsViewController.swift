@@ -41,6 +41,10 @@ class FormatsViewController: UIViewController {
 		let tv = MaterialTextView(viewModel: MaterialTextViewModel(text: "", help: "", style: .defaultStyle, textComponentMode: .textField, placeholder: .init(type: .alwaysOnTop, text: "Amount (always on top)"), actionValidator: { _ in return .valid }, inputValidator: { _ in return .valid }, format: "dddddd $", rightButtonInfo: nil))
 		tv.translatesAutoresizingMaskIntoConstraints = false
 		stack.addArrangedSubview(tv)
+		
+		let tv2 = MaterialTextView(viewModel: MaterialTextViewModel(text: "Created programmatically", help: "", style: .defaultStyle, textComponentMode: .textField, placeholder: .init(type: .alwaysOnTop, text: "Created programmatically"), actionValidator: { _ in return .valid }, inputValidator: { _ in return .valid }, format: "***************************", rightButtonInfo: nil))
+		tv2.translatesAutoresizingMaskIntoConstraints = false
+		stack.addArrangedSubview(tv2)
     }
 
 }
