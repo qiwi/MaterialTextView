@@ -53,9 +53,9 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		if textComponentInternal.inputText != viewModel.text {
 			textComponentInternal.inputText = viewModel.text
 			self.textComponentDidChange()
-			textComponentInternal.inputAttributes = viewModel.style.textAttributes
-			textComponentInternal.maskAttributes = textComponentInternal.inputAttributes
 		}
+		textComponentInternal.inputAttributes = viewModel.style.textAttributes
+		textComponentInternal.maskAttributes = textComponentInternal.inputAttributes
 	}
 	
 	override init(frame: CGRect) {
