@@ -24,7 +24,7 @@ class FormatsViewController: UIViewController {
 															guard let text = text else { return .valid }
 															return text.count > 5 ? .invalid(text: "Too long") : .valid
 											},
-														   format: "ddddddd",
+														   formats: ["ddddddd"],
 														   rightButtonInfo: ButtonInfo(imageName: "icon", action: nil))
 		
 		tf.viewModel = MaterialTextViewModel(textComponentMode: .textField,
@@ -34,15 +34,15 @@ class FormatsViewController: UIViewController {
 												guard let text = text else { return .valid }
 												return text.count > 5 ? .invalid(text: "Too long") : .valid
 		},
-											 format: "wwwwwwwwww",
+											 formats: ["wwwwwwwwww"],
 											 rightButtonInfo: ButtonInfo(imageName: "icon", action: nil))
 		
 		// Create MaterialTextView programmatically
-		let tv = MaterialTextView(viewModel: MaterialTextViewModel(text: "", help: "", style: .defaultStyle, textComponentMode: .textField, placeholder: .init(type: .alwaysOnTop, text: "Amount (always on top)"), actionValidator: { _ in return .valid }, inputValidator: { _ in return .valid }, format: "dddddd $", rightButtonInfo: nil))
+		let tv = MaterialTextView(viewModel: MaterialTextViewModel(text: "", help: "", style: .defaultStyle, textComponentMode: .textField, placeholder: .init(type: .alwaysOnTop, text: "Amount (always on top)"), actionValidator: { _ in return .valid }, inputValidator: { _ in return .valid }, formats: ["dddddd $"], rightButtonInfo: nil))
 		tv.translatesAutoresizingMaskIntoConstraints = false
 		stack.addArrangedSubview(tv)
 		
-		let tv2 = MaterialTextView(viewModel: MaterialTextViewModel(text: "Created programmatically", help: "", style: .defaultStyle, textComponentMode: .textField, placeholder: .init(type: .alwaysOnTop, text: "Created programmatically"), actionValidator: { _ in return .valid }, inputValidator: { _ in return .valid }, format: "***************************", rightButtonInfo: nil))
+		let tv2 = MaterialTextView(viewModel: MaterialTextViewModel(text: "Created programmatically", help: "", style: .defaultStyle, textComponentMode: .textField, placeholder: .init(type: .alwaysOnTop, text: "Created programmatically"), actionValidator: { _ in return .valid }, inputValidator: { _ in return .valid }, formats: ["***************************"], rightButtonInfo: nil))
 		tv2.translatesAutoresizingMaskIntoConstraints = false
 		stack.addArrangedSubview(tv2)
     }
