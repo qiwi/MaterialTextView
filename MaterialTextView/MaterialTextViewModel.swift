@@ -16,7 +16,7 @@ public protocol MaterialTextViewModelDelegate: class {
 	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool)
 	func viewModelStyleChanged()
 	func viewModelFormatSymbolsChanged(formatSymbols: [Character: CharacterSet])
-	func viewModelFormatChanged(format: String?)
+	func viewModelFormatsChanged(formats: [String])
 	func viewModelTextComponentModeChanged(viewModel: MaterialTextViewModel)
 	func viewModelRightButtonChanged(viewModel: MaterialTextViewModel)
 }
@@ -28,7 +28,7 @@ public extension MaterialTextViewModelDelegate {
 	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool) {}
 	func viewModelStyleChanged() {}
 	func viewModelFormatSymbolsChanged(formatSymbols: [Character: CharacterSet]) {}
-	func viewModelFormatChanged(format: String?) {}
+	func viewModelFormatsChanged(formats: [String]) {}
 	func viewModelTextComponentModeChanged(viewModel: MaterialTextViewModel) {}
 	func viewModelRightButtonChanged(viewModel: MaterialTextViewModel) {}
 }
@@ -241,10 +241,10 @@ public final class MaterialTextViewModel {
 			delegate?.viewModelRightButtonChanged(viewModel: self)
 		}
 	}
-	public var format: String? {
+	public var formats: [String] {
 		didSet {
-			view?.viewModelFormatChanged(format: format)
-			delegate?.viewModelFormatChanged(format: format)
+			view?.viewModelFormatsChanged(formats: formats)
+			delegate?.viewModelFormatsChanged(formats: formats)
 		}
 	}
 
@@ -255,7 +255,7 @@ public final class MaterialTextViewModel {
 				  placeholder: Placeholder = Placeholder(type: .normal, text: ""),
 				  actionValidator: @escaping Validator<String> = { _ in return .valid },
 				  inputValidator: Validator<String>? = nil,
-				  format: String? = nil,
+				  formats: [String] = [],
 				  rightButtonInfo: ButtonInfo? = nil) {
         self._text = text
         self.help = help
@@ -263,7 +263,7 @@ public final class MaterialTextViewModel {
         self.actionValidator = actionValidator
         self.inputValidator = inputValidator
         self._placeholder = placeholder
-        self.format = format
+        self.formats = formats
         self.rightButtonInfo = rightButtonInfo
 		_style = style
 		didUpdateStyle()

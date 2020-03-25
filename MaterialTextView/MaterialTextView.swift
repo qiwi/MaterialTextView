@@ -187,7 +187,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		addTextComponent()
 		let text = viewModel.text
 		textComponentInternal.formatSymbols = viewModel.formatSymbols
-		textComponentInternal.format = viewModel.format
+		textComponentInternal.formats = viewModel.formats
 		viewModel.text = text
 		viewModelTextChanged(viewModel: viewModel)
 		viewModelHelpChanged(newHelp: viewModel.help)
@@ -279,8 +279,8 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 
 extension MaterialTextView: MaterialTextViewModelDelegate {
 	
-	public func viewModelFormatChanged(format: String?) {
-		textComponentInternal.format = format
+	public func viewModelFormatsChanged(formats: [String]) {
+		textComponentInternal.formats = formats
 	}
 	
 	public func viewModelRightButtonChanged(viewModel: MaterialTextViewModel) {
