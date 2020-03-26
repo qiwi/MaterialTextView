@@ -21,14 +21,9 @@ public protocol MaterialTextComponent: class, UITextInput {
 	var textContentType: UITextContentType! { get set }
 }
 
-internal protocol MaterialTextComponentInternal: MaterialTextComponent {
-	var formats: [String] { get set }
-	var maskAttributes: [NSAttributedString.Key: Any]! { get set }
-	var inputAttributes: [NSAttributedString.Key: Any] { get set }
+internal protocol MaterialTextComponentInternal: MaterialTextComponent, FormattableInput {
 	var inputText: String { get set }
 	var inputAttributedText: NSAttributedString { get set }
-	var insetX: CGFloat { get set }
-	var formatSymbols: [Character: CharacterSet] { get set }
 }
 
 extension FormattableKernTextView: MaterialTextComponentInternal {
