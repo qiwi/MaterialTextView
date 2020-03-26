@@ -54,8 +54,11 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 			textComponentInternal.inputText = viewModel.text
 			self.textComponentDidChange()
 		}
-		textComponentInternal.inputAttributes = viewModel.style.textAttributes
-		textComponentInternal.maskAttributes = textComponentInternal.inputAttributes
+		if #available(iOS 11.0, *) {
+		} else {
+			textComponentInternal.inputAttributes = viewModel.style.textAttributes
+			textComponentInternal.maskAttributes = textComponentInternal.inputAttributes
+		}
 	}
 	
 	override init(frame: CGRect) {

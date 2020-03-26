@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MaterialTextView
 
 enum StyleTag: Int {
 	case normalActive = 100
