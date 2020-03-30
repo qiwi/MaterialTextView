@@ -9,9 +9,8 @@
 import Foundation
 import UIKit
 
-public protocol MaterialTextViewModelDelegate: class {
-	func viewModelTextChanged(viewModel: MaterialTextViewModel)
-    func viewModelHelpChanged(newHelp: String)
+public protocol MaterialTextViewModelBaseDelegate: class {
+	func viewModelHelpChanged(newHelp: String)
 	func viewModelStateChanged(viewModel: MaterialTextViewModel, placeholderTypeIsChanged: Bool)
 	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool)
 	func viewModelStyleChanged()
@@ -19,6 +18,14 @@ public protocol MaterialTextViewModelDelegate: class {
 	func viewModelFormatsChanged(formats: [String])
 	func viewModelTextComponentModeChanged(viewModel: MaterialTextViewModel)
 	func viewModelRightButtonChanged(viewModel: MaterialTextViewModel)
+}
+
+public protocol MaterialTextViewModelDelegate: MaterialTextViewModelBaseDelegate {
+	func viewModelTextChanged(viewModel: MaterialTextViewModel)
+}
+
+public protocol MaterialTextViewViewModelDelegate: MaterialTextViewModelBaseDelegate {
+	func viewModelTextChanged(viewModel: MaterialTextViewModel, styleChanged: Bool)
 }
 
 public extension MaterialTextViewModelDelegate {
@@ -44,7 +51,7 @@ public struct ButtonInfo {
     }
 }
 
-protocol MaterialTextViewProtocol: MaterialTextViewModelDelegate {
+protocol MaterialTextViewProtocol: MaterialTextViewViewModelDelegate {
     func setupViewModel()
     var viewModel: MaterialTextViewModel? { get set }
 }
@@ -190,7 +197,7 @@ public final class MaterialTextViewModel {
     /// Результат последней валидации
     public var wasInputValid = true
 	public var wasActionValid = false
-    fileprivate weak var view: (UIView & MaterialTextViewModelDelegate)?
+    fileprivate weak var view: (UIView & MaterialTextViewViewModelDelegate)?
     public weak var delegate: MaterialTextViewModelDelegate?
 	
 	public var maxNumberOfLinesWithoutScrolling: CGFloat = 3
@@ -212,7 +219,7 @@ public final class MaterialTextViewModel {
 				view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
 				delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
 			}
-			self.view?.viewModelTextChanged(viewModel: self)
+			self.view?.viewModelTextChanged(viewModel: self, styleChanged: false)
 			self.delegate?.viewModelTextChanged(viewModel: self)
         }
     }
