@@ -49,13 +49,12 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		}
 	}
 	
-	private func updateTextViewAttributedText(_ viewModel: MaterialTextViewModel) {
+	private func updateTextViewAttributedText(_ viewModel: MaterialTextViewModel, styleChanged: Bool) {
 		if textComponentInternal.inputText != viewModel.text {
 			textComponentInternal.inputText = viewModel.text
 			self.textComponentDidChange()
 		}
-		if #available(iOS 11.0, *) {
-		} else {
+		if styleChanged {
 			textComponentInternal.inputAttributes = viewModel.style.textAttributes
 			textComponentInternal.maskAttributes = textComponentInternal.inputAttributes
 		}
@@ -75,7 +74,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		customInit()
 		let viewModel = MaterialTextViewModel()
 		self.viewModel = viewModel
-		updateTextViewAttributedText(viewModel)
+		updateTextViewAttributedText(viewModel, styleChanged: true)
 	}
 	
 	public convenience init(viewModel: MaterialTextViewModel) {
@@ -208,7 +207,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		self.layoutIfNeeded()
 		
 		viewModelPlaceholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: false)
-		updateTextViewAttributedText(viewModel)
+		updateTextViewAttributedText(viewModel, styleChanged: true)
 		
 		viewModelRightButtonChanged(viewModel: viewModel)
 		updatePlaceholderPosition()
@@ -307,14 +306,14 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 	}
 	
 	public func viewModelTextChanged(viewModel: MaterialTextViewModel) {
-		updateTextViewAttributedText(viewModel)
+		updateTextViewAttributedText(viewModel, styleChanged: false)
 		updateTextViewHeight(viewModel: viewModel)
 		updateAccessibilityValue()
 	}
 	
 	public func viewModelStyleChanged() {
 		guard let viewModel = viewModel else { return }
-		updateTextViewAttributedText(viewModel)
+		updateTextViewAttributedText(viewModel, styleChanged: true)
 		updateFont()
 		viewModelStateChanged(viewModel: viewModel, placeholderTypeIsChanged: false)
 		viewModelPlaceholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: false)
