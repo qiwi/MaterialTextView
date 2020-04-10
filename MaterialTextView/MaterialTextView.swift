@@ -49,6 +49,10 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		}
 	}
 	
+	internal var currentFormat: String? {
+		textComponentInternal.currentFormat
+	}
+	
 	private func updateTextViewAttributedText(_ viewModel: MaterialTextViewModel, styleChanged: Bool) {
 		if textComponentInternal.inputText != viewModel.text {
 			textComponentInternal.inputText = viewModel.text

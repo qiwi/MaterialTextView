@@ -24,8 +24,10 @@ public protocol MaterialTextViewModelDelegate: MaterialTextViewModelBaseDelegate
 	func viewModelTextChanged(viewModel: MaterialTextViewModel)
 }
 
-public protocol MaterialTextViewViewModelDelegate: MaterialTextViewModelBaseDelegate {
+internal protocol MaterialTextViewViewModelDelegate: MaterialTextViewModelBaseDelegate {
 	func viewModelTextChanged(viewModel: MaterialTextViewModel, styleChanged: Bool)
+	
+	var currentFormat: String? { get }
 }
 
 public extension MaterialTextViewModelDelegate {
@@ -253,6 +255,10 @@ public final class MaterialTextViewModel {
 			view?.viewModelFormatsChanged(formats: formats)
 			delegate?.viewModelFormatsChanged(formats: formats)
 		}
+	}
+	
+	public var currentFormat: String? {
+		view?.currentFormat
 	}
 
     public required init(text: String = "",
