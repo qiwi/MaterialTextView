@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 public protocol MaterialTextViewModelBaseDelegate: class {
+	func viewModelTextChanged(viewModel: MaterialTextViewModel)
 	func viewModelHelpChanged(newHelp: String)
 	func viewModelStateChanged(viewModel: MaterialTextViewModel, placeholderTypeIsChanged: Bool)
 	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool)
@@ -21,11 +22,9 @@ public protocol MaterialTextViewModelBaseDelegate: class {
 }
 
 public protocol MaterialTextViewModelDelegate: MaterialTextViewModelBaseDelegate {
-	func viewModelTextChanged(viewModel: MaterialTextViewModel)
 }
 
 internal protocol MaterialTextViewViewModelDelegate: MaterialTextViewModelBaseDelegate {
-	func viewModelTextChanged(viewModel: MaterialTextViewModel, styleChanged: Bool)
 	
 	var currentFormat: String? { get }
 }
@@ -221,7 +220,7 @@ public final class MaterialTextViewModel {
 				view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
 				delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
 			}
-			self.view?.viewModelTextChanged(viewModel: self, styleChanged: false)
+			self.view?.viewModelTextChanged(viewModel: self)
 			self.delegate?.viewModelTextChanged(viewModel: self)
         }
     }

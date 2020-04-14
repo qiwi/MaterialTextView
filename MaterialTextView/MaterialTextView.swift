@@ -53,7 +53,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		textComponentInternal.currentFormat
 	}
 	
-	private func updateTextViewAttributedText(_ viewModel: MaterialTextViewModel, styleChanged: Bool) {
+	private func updateTextViewAttributedText(_ viewModel: MaterialTextViewModel) {
 		if textComponentInternal.inputText != viewModel.text {
 			textComponentInternal.inputText = viewModel.text
 			self.textComponentDidChange()
@@ -76,7 +76,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		customInit()
 		let viewModel = MaterialTextViewModel()
 		self.viewModel = viewModel
-		updateTextViewAttributedText(viewModel, styleChanged: true)
+		updateTextViewAttributedText(viewModel)
 	}
 	
 	public convenience init(viewModel: MaterialTextViewModel) {
@@ -193,7 +193,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		textComponentInternal.formatSymbols = viewModel.formatSymbols
 		textComponentInternal.formats = viewModel.formats
 		viewModel.text = text
-		viewModelTextChanged(viewModel: viewModel, styleChanged: true)
+		viewModelTextChanged(viewModel: viewModel)
 		viewModelHelpChanged(newHelp: viewModel.help)
 	}
 	
@@ -209,7 +209,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		self.layoutIfNeeded()
 		
 		viewModelPlaceholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: false)
-		updateTextViewAttributedText(viewModel, styleChanged: true)
+		updateTextViewAttributedText(viewModel)
 		
 		viewModelRightButtonChanged(viewModel: viewModel)
 		updatePlaceholderPosition()
@@ -307,15 +307,15 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 		}
 	}
 	
-	public func viewModelTextChanged(viewModel: MaterialTextViewModel, styleChanged: Bool) {
-		updateTextViewAttributedText(viewModel, styleChanged: styleChanged)
+	public func viewModelTextChanged(viewModel: MaterialTextViewModel) {
+		updateTextViewAttributedText(viewModel)
 		updateTextViewHeight(viewModel: viewModel)
 		updateAccessibilityValue()
 	}
 	
 	public func viewModelStyleChanged() {
 		guard let viewModel = viewModel else { return }
-		updateTextViewAttributedText(viewModel, styleChanged: true)
+		updateTextViewAttributedText(viewModel)
 		updateFont()
 		viewModelStateChanged(viewModel: viewModel, placeholderTypeIsChanged: false)
 		viewModelPlaceholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: false)
