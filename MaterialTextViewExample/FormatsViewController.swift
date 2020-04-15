@@ -40,13 +40,22 @@ class FormatsViewController: UIViewController {
 		
 		// Create MaterialTextView programmatically
 		// set text to invalid value in order to check for glitches at start
-		let tv = MaterialTextView(viewModel: MaterialTextViewModel(text: " ", help: "", style: .defaultStyle, textComponentMode: .textField, placeholder: .init(type: .alwaysOnTop, text: "Amount (always on top)"), actionValidator: { _ in return .valid }, inputValidator: { _ in return .valid }, formats: ["ddddddddddddddddddddddddd $"], rightButtonInfo: nil))
+		let tv = MaterialTextView(viewModel: MaterialTextViewModel(text: "", help: "", style: .defaultStyle, textComponentMode: .textField, placeholder: .init(type: .alwaysOnTop, text: "Amount (always on top)"), formats: ["ddddddddddddddddddddddddd $"], rightButtonInfo: nil))
 		tv.translatesAutoresizingMaskIntoConstraints = false
 		stack.addArrangedSubview(tv)
 		
-		let tv2 = MaterialTextView(viewModel: MaterialTextViewModel(text: "Created programmatically", help: "", style: .defaultStyle, textComponentMode: .textField, placeholder: .init(type: .alwaysOnTop, text: "Created programmatically"), actionValidator: { _ in return .valid }, inputValidator: { _ in return .valid }, formats: ["***************************"], rightButtonInfo: nil))
+		let tv2 = MaterialTextView(viewModel: MaterialTextViewModel(text: "Created programmatically", help: "", style: .defaultStyle, textComponentMode: .textField, placeholder: .init(type: .alwaysOnTop, text: "Created programmatically"), formats: ["***************************"], rightButtonInfo: nil))
 		tv2.translatesAutoresizingMaskIntoConstraints = false
 		stack.addArrangedSubview(tv2)
+		
+		let tv3 = MaterialTextView(viewModel: MaterialTextViewModel(style: .defaultStyle, textComponentMode: .textView, placeholder: .init(type: .alwaysOnTop, text: "Telephone number"), formats: ["+d(ddd) ddd-dd-dd"], rightButtonInfo: nil))
+		tv3.translatesAutoresizingMaskIntoConstraints = false
+		if #available(iOS 10.0, *) {
+			tv3.textComponent.textContentType = .telephoneNumber
+			tv3.textComponent.keyboardType = .numberPad
+			tv3.textComponent.allowSmartSuggestions = true
+		}
+		stack.addArrangedSubview(tv3)
     }
 
 }
