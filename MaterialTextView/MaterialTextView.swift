@@ -57,9 +57,8 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		textComponentInternal.inputAttributes = viewModel.style.textAttributes
 		textComponentInternal.maskAttributes = textComponentInternal.inputAttributes
 		
-		let shouldChange = textComponentInternal.inputText != viewModel.text
-		textComponentInternal.inputText = viewModel.text
-		if shouldChange {
+		if textComponentInternal.inputText != viewModel.text || textComponentInternal is FormattableTextField {
+			textComponentInternal.inputText = viewModel.text
 			self.textComponentDidChange()
 		}
 	}
