@@ -54,12 +54,14 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	}
 	
 	private func updateTextViewAttributedText(_ viewModel: MaterialTextViewModel) {
-		if textComponentInternal.inputText != viewModel.text {
-			textComponentInternal.inputText = viewModel.text
-			self.textComponentDidChange()
-		}
 		textComponentInternal.inputAttributes = viewModel.style.textAttributes
 		textComponentInternal.maskAttributes = textComponentInternal.inputAttributes
+		
+		let shouldChange = textComponentInternal.inputText != viewModel.text
+		textComponentInternal.inputText = viewModel.text
+		if shouldChange {
+			self.textComponentDidChange()
+		}
 	}
 	
 	override init(frame: CGRect) {
