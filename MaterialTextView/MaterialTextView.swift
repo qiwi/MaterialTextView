@@ -158,13 +158,14 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		if let style = viewModel?.style, let font = style.textAttributes[.font] as? UIFont {
 			if !(placeholderLayer.font is String) {
 				placeholderLayer.uiFont = font
-				titleLabel.attributedText = NSAttributedString(string: (placeholderLayer.string as? String).nonEmpty,
-															   attributes:
-				[
-					NSAttributedString.Key.font: UIFont(descriptor: font.fontDescriptor, size: style.titleFontSize),
-					NSAttributedString.Key.foregroundColor: style.normalActive.titleColor
-				])
 			}
+			
+			titleLabel.attributedText = NSAttributedString(string: (placeholderLayer.string as? String).nonEmpty,
+														   attributes:
+			[
+				NSAttributedString.Key.font: UIFont(descriptor: font.fontDescriptor, size: style.titleFontSize),
+				NSAttributedString.Key.foregroundColor: style.normalActive.titleColor
+			])
 		}
 	}
 	
