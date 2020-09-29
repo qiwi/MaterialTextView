@@ -30,7 +30,7 @@ final class ViewController: UIViewController {
 	let formats = [
 		["dddd dddd dddd dddd"],
 		["wdddww dd"],
-		["+7(ddd)ddd-dd-dd",
+		["+7 (ddd) ddd-dd-dd",
 		"+44 07ddd dddddd"],
 		["dddddd ₽"]
 	]
@@ -67,6 +67,7 @@ final class ViewController: UIViewController {
 			if i == 2 {
 				(tv as? UITextView)?.textContentType = .telephoneNumber
 				(tv as? UITextField)?.textContentType = .telephoneNumber
+                (tv as? UITextField)?.keyboardType = .numbersAndPunctuation
 				tv.allowSmartSuggestions = true
 			}
 			tv.layer.cornerRadius = 5
