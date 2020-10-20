@@ -195,7 +195,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		textComponentInternal.formatSymbols = viewModel.formatSymbols
 		textComponentInternal.formats = viewModel.formats
 		viewModel.text = text
-		viewModelTextChanged(viewModel: viewModel)
+		updateAttributes(viewModel)
 		viewModelHelpChanged(newHelp: viewModel.help)
 	}
 	
@@ -310,9 +310,16 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 	}
 	
 	public func viewModelTextChanged(viewModel: MaterialTextViewModel) {
+		updateAccessibilityValue()
+		if textComponentInternal.inputText == viewModel.text {
+			return
+		}
+		updateAttributes(viewModel)
+	}
+	
+	private func updateAttributes(_ viewModel: MaterialTextViewModel) {
 		updateTextViewAttributedText(viewModel)
 		updateTextViewHeight(viewModel: viewModel)
-		updateAccessibilityValue()
 	}
 	
 	public func viewModelStyleChanged() {
