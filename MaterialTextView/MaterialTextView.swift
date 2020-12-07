@@ -29,6 +29,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	private var attributedPlaceholder: NSAttributedString!
 	private var rightButton = UIButton(type: .system)
 	private var placeholderLayer = CATextLayer()
+	private var shouldUpdateViewModel: Bool = true
 	
 	private var helpLabelTopConstraint: NSLayoutConstraint!
 	private var helpLabelBottomConstraint: NSLayoutConstraint!
@@ -54,11 +55,13 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	}
 	
 	private func updateTextViewAttributedText(_ viewModel: MaterialTextViewModel) {
+		self.shouldUpdateViewModel = false
 		textComponentInternal.inputAttributes = viewModel.style.textAttributes
 		textComponentInternal.maskAttributes = textComponentInternal.inputAttributes
+		self.shouldUpdateViewModel = true
 		
-		if textComponentInternal.inputText != viewModel.text {
-			textComponentInternal.inputText = viewModel.text
+		if textComponentInternal.inputText != viewModel.internalText {
+			textComponentInternal.inputText = viewModel.internalText
 			self.textComponentDidChange()
 		}
 	}
@@ -191,10 +194,10 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		}
 		textComponentInternal.insetX = 0
 		addTextComponent()
-		let text = viewModel.text
+		let text = viewModel.internalText
 		textComponentInternal.formatSymbols = viewModel.formatSymbols
 		textComponentInternal.formats = viewModel.formats
-		viewModel.text = text
+		viewModel.internalText = text
 		updateAttributes(viewModel)
 		viewModelHelpChanged(newHelp: viewModel.help)
 	}
@@ -235,9 +238,12 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 	}
 	
 	private func getAttributedText(viewModel: MaterialTextViewModel) -> NSAttributedString {
-		var attributedText = textComponentInternal.inputAttributedText
-		if textComponentInternal.inputText.isEmpty {
+		let text = self.currentFormat == nil ? textComponentInternal.inputText : viewModel.internalText
+		var attributedText: NSAttributedString
+		if text.isEmpty {
 			attributedText = NSAttributedString(string: " ", attributes: viewModel.style.textAttributes)
+		} else {
+			attributedText = self.currentFormat == nil ? textComponentInternal.inputAttributedText : NSAttributedString(string: viewModel.internalText, attributes: viewModel.style.textAttributes)
 		}
 		return attributedText
 	}
@@ -311,7 +317,7 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 	
 	public func viewModelTextChanged(viewModel: MaterialTextViewModel) {
 		updateAccessibilityValue()
-		if textComponentInternal.inputText == viewModel.text {
+		if textComponentInternal.inputText == viewModel.internalText {
 			return
 		}
 		updateAttributes(viewModel)
@@ -412,7 +418,7 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 					var animationType: CATextLayer.ScaleAnimationType
 					var color: CGColor
 					let colorStyle = viewModel.errorState.isError ? viewModel.style.errorInactive : viewModel.style.normalInactive
-					if viewModel.text.isEmpty {
+					if viewModel.internalText.isEmpty {
 						newFrame = placeholderStartFrame
 						animationType = .identity
 						color = colorStyle.placeholderColor.cgColor
@@ -427,7 +433,7 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 				}
 			}
 		case .normal:
-			placeholderLayer.isHidden = !viewModel.text.isEmpty
+			placeholderLayer.isHidden = !viewModel.internalText.isEmpty
 			placeholderLayer.animate(animationDuration: placeholderLayer.isHidden ? 0 : animationDuration, newFrame: placeholderStartFrame, animationType: .identity, newColor: viewModel.visualState.placeholderColor.cgColor)
 		case .alwaysOnTop:
 			placeholderLayer.isHidden = true
@@ -450,8 +456,8 @@ extension MaterialTextView: MaterialTextViewModelDelegate {
 extension MaterialTextView {
 	@objc func textComponentDidChange() {
 		guard let viewModel = viewModel else { return }
-		if viewModel.text != textComponentInternal.inputText {
-			viewModel.text = textComponentInternal.inputText
+		if shouldUpdateViewModel && viewModel.internalText != textComponentInternal.inputText {
+			viewModel.internalText = textComponentInternal.inputText
 			delegate?.materialTextViewDidChange(self)
 		}
 	}

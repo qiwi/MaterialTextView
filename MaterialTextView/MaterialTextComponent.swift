@@ -32,13 +32,21 @@ internal protocol MaterialTextComponentInternal: MaterialTextComponent, Formatta
 extension FormattableKernTextView: MaterialTextComponentInternal {
 	
 	public var inputAttributedText: NSAttributedString {
-		get { return attributedText }
+		get { return formats.isEmpty ? attributedText :
+			NSAttributedString(string: text, attributes: inputAttributes)
+		}
 		set { attributedText = newValue }
 	}
 	
 	public var inputText: String {
-		get { return self.inputAttributedText.string }
-		set { self.inputAttributedText = NSAttributedString(string: newValue, attributes: inputAttributes) }
+		get { return formats.isEmpty ? self.inputAttributedText.string : self.text }
+		set {
+			if formats.isEmpty {
+				self.inputAttributedText = NSAttributedString(string: newValue, attributes: inputAttributes)
+			} else {
+				self.text = newValue
+			}
+		}
 	}
 }
 
@@ -46,6 +54,9 @@ extension FormattableTextField: MaterialTextComponentInternal {
 	
 	public var inputAttributedText: NSAttributedString {
 		get {
+			if !formats.isEmpty {
+				return NSAttributedString(string: text, attributes: inputAttributes)
+			}
 			if let attrText = attributedText {
 				return attrText
 			}
@@ -57,7 +68,13 @@ extension FormattableTextField: MaterialTextComponentInternal {
 	}
 	
 	public var inputText: String {
-		get { return self.inputAttributedText.string }
-		set { self.inputAttributedText = NSAttributedString(string: newValue, attributes: inputAttributes) }
+		get { return formats.isEmpty ? self.inputAttributedText.string : self.text }
+		set {
+			if formats.isEmpty {
+				self.inputAttributedText = NSAttributedString(string: newValue, attributes: inputAttributes)
+			} else {
+				self.text = newValue
+			}
+		}
 	}
 }

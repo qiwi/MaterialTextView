@@ -42,6 +42,8 @@ class FormatsViewController: UIViewController {
 		// set text to invalid value in order to check for glitches at start
 		let tv = MaterialTextView(viewModel: MaterialTextViewModel(text: "", help: "", style: .defaultStyle, textComponentMode: .textField, placeholder: .init(type: .alwaysOnTop, text: "Amount (always on top)"), formats: ["ddddddddddddddddddddddddd $"], rightButtonInfo: nil))
 		tv.translatesAutoresizingMaskIntoConstraints = false
+		tv.viewModel?.text = "123"
+		tv.textComponent.keyboardType = .numberPad
 		stack.addArrangedSubview(tv)
 		
 		let tv2 = MaterialTextView(viewModel: MaterialTextViewModel(text: "Created programmatically", help: "", style: .defaultStyle, textComponentMode: .textField, placeholder: .init(type: .alwaysOnTop, text: "Created programmatically"), formats: ["***************************"], rightButtonInfo: nil))

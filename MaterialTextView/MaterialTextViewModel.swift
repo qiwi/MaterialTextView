@@ -202,6 +202,11 @@ public final class MaterialTextViewModel {
     public weak var delegate: MaterialTextViewModelDelegate?
 	
 	public var maxNumberOfLinesWithoutScrolling: CGFloat = 3
+	
+	internal var internalText: String {
+		get { return _text }
+		set { _text = newValue }
+	}
 
 	private var _text: String
     public var text: String {
