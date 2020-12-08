@@ -205,7 +205,10 @@ public final class MaterialTextViewModel {
 	
 	internal var internalText: String {
 		get { return _text }
-		set { _text = newValue }
+		set {
+			_text = newValue
+			self.delegate?.viewModelTextChanged(viewModel: self)
+		}
 	}
 
 	private var _text: String
