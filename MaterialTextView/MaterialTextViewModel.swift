@@ -206,7 +206,12 @@ public final class MaterialTextViewModel {
 	internal var internalText: String {
 		get { return _text }
 		set {
+			let oldValue = _text
 			_text = newValue
+			if oldValue.isEmpty || newValue.isEmpty {
+				view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
+				delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
+			}
 			self.delegate?.viewModelTextChanged(viewModel: self)
 		}
 	}
