@@ -22,6 +22,6 @@ let package = Package(
     targets: [
         // Our package contains two targets, one for our library
         // code, and one for our tests:
-        .target(name: "MaterialTextView", dependencies: ["FormattableTextView"], path: "MaterialTextView")
+        .target(name: "MaterialTextView", dependencies: ["FormattableTextView"], path: "MaterialTextView", exclude: ["Info.plist"])
     ]
 )
