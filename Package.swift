@@ -17,7 +17,7 @@ let package = Package(
     ],
     
     dependencies: [
-        .package(path: "../FormattableTextView")
+        .package(url: "https://github.com/qiwi/FormattableTextView.git", .branch("swift-pm"))
     ],
     targets: [
         // Our package contains two targets, one for our library
