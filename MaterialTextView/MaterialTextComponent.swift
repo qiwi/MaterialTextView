@@ -8,6 +8,7 @@
 
 import Foundation
 import FormattableTextView
+import UIKit
 
 public protocol MaterialTextComponent: class, UITextInput {
 	var keyboardType: UIKeyboardType { get set }
