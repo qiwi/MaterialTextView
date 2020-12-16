@@ -5,8 +5,8 @@ import PackageDescription
 let package = Package(
     name: "MaterialTextView",
     platforms: [
-            .iOS(.v9),
-        ],
+        .iOS(.v9),
+    ],
     products: [
         // The external product of our package is an importable
         // library that has the same name as the package itself:
@@ -23,5 +23,9 @@ let package = Package(
         // Our package contains two targets, one for our library
         // code, and one for our tests:
         .target(name: "MaterialTextView", dependencies: ["FormattableTextView"], path: "MaterialTextView", exclude: ["Info.plist"])
+    ],
+    
+    swiftLanguageVersions: [
+        .v5
     ]
 )
