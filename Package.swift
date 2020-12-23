@@ -12,6 +12,7 @@ let package = Package(
         // library that has the same name as the package itself:
         .library(
             name: "MaterialTextView",
+            type: .static,
             targets: ["MaterialTextView"]
         )
     ],
