@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "FormattableTextView",
+        "repositoryURL": "https://github.com/qiwi/FormattableTextView.git",
+        "state": {
+          "branch": "master",
+          "revision": "6b31c6c445daded55f69b47a59c1bf7ba2c8d4fa",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
