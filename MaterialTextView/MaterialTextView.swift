@@ -233,6 +233,7 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		textViewToRightButtonConstraint.isActive = true
 	}
 	
+    @discardableResult
 	override public func becomeFirstResponder() -> Bool {
 		return textComponentInternal.becomeFirstResponder()
 	}
