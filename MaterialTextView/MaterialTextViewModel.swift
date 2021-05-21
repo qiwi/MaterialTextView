@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public protocol MaterialTextViewModelBaseDelegate: class {
+public protocol MaterialTextViewModelBaseDelegate: AnyObject {
 	func viewModelTextChanged(viewModel: MaterialTextViewModel)
 	func viewModelHelpChanged(newHelp: String)
 	func viewModelStateChanged(viewModel: MaterialTextViewModel, placeholderTypeIsChanged: Bool)
@@ -25,8 +25,8 @@ public protocol MaterialTextViewModelDelegate: MaterialTextViewModelBaseDelegate
 }
 
 internal protocol MaterialTextViewViewModelDelegate: MaterialTextViewModelBaseDelegate {
-	
 	var currentFormat: String? { get }
+	var formattedText: String? { get }
 }
 
 public extension MaterialTextViewModelDelegate {
@@ -271,6 +271,10 @@ public final class MaterialTextViewModel {
 	
 	public var currentFormat: String? {
 		view?.currentFormat
+	}
+	
+	public var formattedText: String? {
+		view?.formattedText
 	}
 
     public required init(text: String = "",

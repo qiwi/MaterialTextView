@@ -10,7 +10,7 @@ import Foundation
 import FormattableTextView
 import UIKit
 
-public protocol MaterialTextComponent: class, UITextInput {
+public protocol MaterialTextComponent: AnyObject, UITextInput {
 	var keyboardType: UIKeyboardType { get set }
 	var keyboardAppearance: UIKeyboardAppearance { get set }
 	var returnKeyType: UIReturnKeyType { get set }

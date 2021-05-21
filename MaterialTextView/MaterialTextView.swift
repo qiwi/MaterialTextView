@@ -54,6 +54,10 @@ public final class MaterialTextView: UIView, MaterialTextViewProtocol {
 		textComponentInternal.currentFormat
 	}
 	
+	internal var formattedText: String? {
+		textComponentInternal.formattedText
+	}
+	
 	private func updateTextViewAttributedText(_ viewModel: MaterialTextViewModel) {
 		self.shouldUpdateViewModel = false
 		textComponentInternal.inputAttributes = viewModel.style.textAttributes
@@ -516,7 +520,7 @@ extension MaterialTextView: UITextFieldDelegate {
 	}
 }
 
-public protocol MaterialTextViewDelegate: class {
+public protocol MaterialTextViewDelegate: AnyObject {
 	func materialTextViewDidChange(_ materialTextView: MaterialTextView)
 	func materialTextViewDidBeginEditing(_ materialTextView: MaterialTextView)
 	func materialTextViewDidEndEditing(_ materialTextView: MaterialTextView)
