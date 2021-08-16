@@ -558,25 +558,6 @@ public final class MaterialTextView: UIView {
 		helpChanged(newHelp: help)
 	}
 	
-//	private func didSetViewModel(_ viewModel: MaterialTextViewModel?) {
-//		guard let viewModel = viewModel else { return }
-//		self.setupViewModel()
-//
-//		replaceTextComponent(viewModel)
-//
-//		placeholderLayer.foregroundColor = style.normalInactive.titleColor.cgColor
-//		self.line.backgroundColor = style.normalInactive.lineColor
-//		self.setNeedsLayout()
-//		self.layoutIfNeeded()
-//
-//		placeholderChanged(newPlaceholder: placeholder, typeIsChanged: false)
-//		updateTextViewAttributedText(viewModel)
-//
-//		rightButtonChanged()
-//		updatePlaceholderPosition()
-//		stateChanged(placeholderTypeIsChanged: true)
-//	}
-	
     @discardableResult
 	override public func becomeFirstResponder() -> Bool {
 		return textComponentInternal.becomeFirstResponder()
