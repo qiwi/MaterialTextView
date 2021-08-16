@@ -12,7 +12,6 @@
 		7C2110F9222FFC5A00D74B90 /* MaterialTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C2110F7222FFC5A00D74B90 /* MaterialTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C211105222FFC8B00D74B90 /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2110FF222FFC8B00D74B90 /* Validator.swift */; };
 		7C211106222FFC8B00D74B90 /* MaterialTextView-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C211100222FFC8B00D74B90 /* MaterialTextView-Bridging-Header.h */; };
-		7C211108222FFC8B00D74B90 /* MaterialTextViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C211102222FFC8B00D74B90 /* MaterialTextViewModel.swift */; };
 		7C211109222FFC8B00D74B90 /* MaterialTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C211103222FFC8B00D74B90 /* MaterialTextView.swift */; };
 		7C21110A222FFC8B00D74B90 /* CALayer+Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C211104222FFC8B00D74B90 /* CALayer+Extentions.swift */; };
 		7C2111182230F01500D74B90 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2111172230F01500D74B90 /* AppDelegate.swift */; };
@@ -21,6 +20,7 @@
 		7C21111F2230F01500D74B90 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C21111E2230F01500D74B90 /* Assets.xcassets */; };
 		7C2111222230F01500D74B90 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C2111202230F01500D74B90 /* LaunchScreen.storyboard */; };
 		7C21112922311D5500D74B90 /* Imports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C21112822311D5500D74B90 /* Imports.swift */; };
+		7C3DDA1826C67B3D005F1691 /* MaterialTextView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3DDA1726C67B3D005F1691 /* MaterialTextView+Extensions.swift */; };
 		7C5A89B123509CBF007A5535 /* UIFont+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5A89B023509CBF007A5535 /* UIFont+Extensions.swift */; };
 		7C7C07B52281762300E50181 /* MaterialTextComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7C07B42281762300E50181 /* MaterialTextComponent.swift */; };
 		7C8F6632242D1743004285F8 /* MaterialTextView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */; };
@@ -35,7 +35,6 @@
 		7C2110F8222FFC5A00D74B90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C2110FF222FFC8B00D74B90 /* Validator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
 		7C211100222FFC8B00D74B90 /* MaterialTextView-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MaterialTextView-Bridging-Header.h"; sourceTree = "<group>"; };
-		7C211102222FFC8B00D74B90 /* MaterialTextViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaterialTextViewModel.swift; sourceTree = "<group>"; };
 		7C211103222FFC8B00D74B90 /* MaterialTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaterialTextView.swift; sourceTree = "<group>"; };
 		7C211104222FFC8B00D74B90 /* CALayer+Extentions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CALayer+Extentions.swift"; sourceTree = "<group>"; };
 		7C21110B222FFC9400D74B90 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
@@ -48,6 +47,7 @@
 		7C2111212230F01500D74B90 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7C2111232230F01500D74B90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C21112822311D5500D74B90 /* Imports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imports.swift; sourceTree = "<group>"; };
+		7C3DDA1726C67B3D005F1691 /* MaterialTextView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MaterialTextView+Extensions.swift"; sourceTree = "<group>"; };
 		7C5A89B023509CBF007A5535 /* UIFont+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extensions.swift"; sourceTree = "<group>"; };
 		7C7C07B42281762300E50181 /* MaterialTextComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialTextComponent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -98,7 +98,7 @@
 				7C211104222FFC8B00D74B90 /* CALayer+Extentions.swift */,
 				7C211100222FFC8B00D74B90 /* MaterialTextView-Bridging-Header.h */,
 				7C211103222FFC8B00D74B90 /* MaterialTextView.swift */,
-				7C211102222FFC8B00D74B90 /* MaterialTextViewModel.swift */,
+				7C3DDA1726C67B3D005F1691 /* MaterialTextView+Extensions.swift */,
 				7C2110FF222FFC8B00D74B90 /* Validator.swift */,
 				7C2110F7222FFC5A00D74B90 /* MaterialTextView.h */,
 				7C2110F8222FFC5A00D74B90 /* Info.plist */,
@@ -258,7 +258,7 @@
 				7C211109222FFC8B00D74B90 /* MaterialTextView.swift in Sources */,
 				7C7C07B52281762300E50181 /* MaterialTextComponent.swift in Sources */,
 				7C21112922311D5500D74B90 /* Imports.swift in Sources */,
-				7C211108222FFC8B00D74B90 /* MaterialTextViewModel.swift in Sources */,
+				7C3DDA1826C67B3D005F1691 /* MaterialTextView+Extensions.swift in Sources */,
 				7C211105222FFC8B00D74B90 /* Validator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -565,7 +565,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/qiwi/FormattableTextView.git";
 			requirement = {
-				branch = master;
+				branch = frozen;
 				kind = branch;
 			};
 		};
