@@ -24,9 +24,11 @@ public extension MaterialTextViewDelegate {
 
 extension MaterialTextView {
 	@objc func textComponentDidChange() {
-		if shouldUpdate && internalText != textComponentInternal.inputText {
-			internalText = textComponentInternal.inputText
+		if shouldUpdate && text != textComponentInternal.inputText {
+			shouldUpdate = false
+			text = textComponentInternal.inputText
 			delegate?.materialTextViewDidChange(self)
+			shouldUpdate = true
 		}
 	}
 	

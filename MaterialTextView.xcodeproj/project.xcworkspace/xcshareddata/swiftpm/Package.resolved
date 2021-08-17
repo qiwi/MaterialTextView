@@ -3,10 +3,10 @@
     "pins": [
       {
         "package": "FormattableTextView",
-        "repositoryURL": "https://github.com/qiwi/FormattableTextView.git",
+        "repositoryURL": "https://github.com/qiwi/FormattableTextView",
         "state": {
-          "branch": "frozen",
-          "revision": "859e8ec19afadfb52e4f12116f5b854a14fdb52f",
+          "branch": "master",
+          "revision": "2924c33b1d528ee79215fe39b9de73f538fd4d84",
           "version": null
         }
       }

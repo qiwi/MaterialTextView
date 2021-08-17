@@ -21,10 +21,10 @@
 		7C2111222230F01500D74B90 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C2111202230F01500D74B90 /* LaunchScreen.storyboard */; };
 		7C21112922311D5500D74B90 /* Imports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C21112822311D5500D74B90 /* Imports.swift */; };
 		7C3DDA1826C67B3D005F1691 /* MaterialTextView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3DDA1726C67B3D005F1691 /* MaterialTextView+Extensions.swift */; };
+		7C3DDA1B26CBA87F005F1691 /* FormattableTextView in Frameworks */ = {isa = PBXBuildFile; productRef = 7C3DDA1A26CBA87F005F1691 /* FormattableTextView */; };
 		7C5A89B123509CBF007A5535 /* UIFont+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5A89B023509CBF007A5535 /* UIFont+Extensions.swift */; };
 		7C7C07B52281762300E50181 /* MaterialTextComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7C07B42281762300E50181 /* MaterialTextComponent.swift */; };
 		7C8F6632242D1743004285F8 /* MaterialTextView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */; };
-		7C9A74632657EA0B00C1FF52 /* FormattableTextView in Frameworks */ = {isa = PBXBuildFile; productRef = 7C9A74622657EA0B00C1FF52 /* FormattableTextView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,7 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C9A74632657EA0B00C1FF52 /* FormattableTextView in Frameworks */,
+				7C3DDA1B26CBA87F005F1691 /* FormattableTextView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,7 +162,7 @@
 			);
 			name = MaterialTextView;
 			packageProductDependencies = (
-				7C9A74622657EA0B00C1FF52 /* FormattableTextView */,
+				7C3DDA1A26CBA87F005F1691 /* FormattableTextView */,
 			);
 			productName = MaterialTextView;
 			productReference = 7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */;
@@ -215,7 +215,7 @@
 			);
 			mainGroup = 7C2110EA222FFC5A00D74B90;
 			packageReferences = (
-				7C9A74612657EA0B00C1FF52 /* XCRemoteSwiftPackageReference "FormattableTextView" */,
+				7C3DDA1926CBA87F005F1691 /* XCRemoteSwiftPackageReference "FormattableTextView" */,
 			);
 			productRefGroup = 7C2110F5222FFC5A00D74B90 /* Products */;
 			projectDirPath = "";
@@ -561,20 +561,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7C9A74612657EA0B00C1FF52 /* XCRemoteSwiftPackageReference "FormattableTextView" */ = {
+		7C3DDA1926CBA87F005F1691 /* XCRemoteSwiftPackageReference "FormattableTextView" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/qiwi/FormattableTextView.git";
+			repositoryURL = "https://github.com/qiwi/FormattableTextView";
 			requirement = {
-				branch = frozen;
+				branch = master;
 				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7C9A74622657EA0B00C1FF52 /* FormattableTextView */ = {
+		7C3DDA1A26CBA87F005F1691 /* FormattableTextView */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7C9A74612657EA0B00C1FF52 /* XCRemoteSwiftPackageReference "FormattableTextView" */;
+			package = 7C3DDA1926CBA87F005F1691 /* XCRemoteSwiftPackageReference "FormattableTextView" */;
 			productName = FormattableTextView;
 		};
 /* End XCSwiftPackageProductDependency section */

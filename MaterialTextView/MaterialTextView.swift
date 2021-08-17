@@ -109,7 +109,7 @@ public final class MaterialTextView: UIView {
 					var animationType: CATextLayer.ScaleAnimationType
 					var color: CGColor
 					let colorStyle = errorState.isError ? style.errorInactive : style.normalInactive
-					if internalText.isEmpty {
+					if text.isEmpty {
 						newFrame = placeholderStartFrame
 						animationType = .identity
 						color = colorStyle.placeholderColor.cgColor
@@ -124,7 +124,7 @@ public final class MaterialTextView: UIView {
 				}
 			}
 		case .normal:
-			placeholderLayer.isHidden = !internalText.isEmpty
+			placeholderLayer.isHidden = !text.isEmpty
 			placeholderLayer.animate(animationDuration: placeholderLayer.isHidden ? 0 : animationDuration, newFrame: placeholderStartFrame, animationType: .identity, newColor: visualState.placeholderColor.cgColor)
 		case .alwaysOnTop:
 			placeholderLayer.isHidden = true
@@ -177,18 +177,6 @@ public final class MaterialTextView: UIView {
 	}
 	
 	public var maxNumberOfLinesWithoutScrolling: CGFloat = 3
-	
-	internal var internalText: String {
-		get { return _text }
-		set {
-			let oldValue = _text
-			_text = newValue
-			if oldValue.isEmpty || newValue.isEmpty {
-				stateChanged(placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
-			}
-			textChanged()
-		}
-	}
 
 	private var _text: String = ""
 	public var text: String {
@@ -367,8 +355,8 @@ public final class MaterialTextView: UIView {
 		textComponentInternal.maskAttributes = textComponentInternal.inputAttributes
 		self.shouldUpdate = true
 		
-		if textComponentInternal.inputText != internalText {
-			textComponentInternal.inputText = internalText
+		if textComponentInternal.inputText != text {
+			textComponentInternal.inputText = text
 			self.textComponentDidChange()
 		}
 	}
@@ -394,14 +382,13 @@ public final class MaterialTextView: UIView {
 	
 	private func textChanged() {
 		updateAccessibilityValue()
-		if textComponentInternal.inputText == internalText {
-			return
-		}
 		updateAttributes()
 	}
 	
 	private func updateAttributes() {
-		updateAttributedText()
+		if shouldUpdate {
+			updateAttributedText()
+		}
 		updateTextViewHeight()
 	}
 	
@@ -450,12 +437,12 @@ public final class MaterialTextView: UIView {
 	}
 	
 	private func getAttributedText() -> NSAttributedString {
-		let text = self.currentFormat == nil ? textComponentInternal.inputText : internalText
+		let text = self.currentFormat == nil ? textComponentInternal.inputText : text
 		var attributedText: NSAttributedString
 		if text.isEmpty {
 			attributedText = NSAttributedString(string: " ", attributes: style.textAttributes)
 		} else {
-			attributedText = self.currentFormat == nil ? textComponentInternal.inputAttributedText : NSAttributedString(string: internalText, attributes: style.textAttributes)
+			attributedText = self.currentFormat == nil ? textComponentInternal.inputAttributedText : NSAttributedString(string: text, attributes: style.textAttributes)
 		}
 		return attributedText
 	}
@@ -550,10 +537,10 @@ public final class MaterialTextView: UIView {
 		}
 		textComponentInternal.insetX = 0
 		addTextComponent()
-		let text = internalText
+		let text = self.text
 		textComponentInternal.formatSymbols = formatSymbols
 		textComponentInternal.formats = formats
-		internalText = text
+		self.text = text
 		updateAttributes()
 		helpChanged(newHelp: help)
 	}
