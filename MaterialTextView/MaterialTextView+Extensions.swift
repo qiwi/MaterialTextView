@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 public protocol MaterialTextViewDelegate: AnyObject {
 	func materialTextViewDidChange(_ materialTextView: MaterialTextView)
