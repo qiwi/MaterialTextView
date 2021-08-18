@@ -19,4 +19,4 @@ public enum ValidatorResult {
 }
 
 public typealias Validator<T> = (T?) -> ValidatorResult
-typealias EmptyClosure = () -> Void
+public typealias EmptyClosure = () -> Void

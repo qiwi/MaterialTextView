@@ -28,6 +28,7 @@ extension MaterialTextView {
 		if shouldUpdate && text != textComponentInternal.inputText {
 			shouldUpdate = false
 			text = textComponentInternal.inputText
+			textDidChange?()
 			delegate?.materialTextViewDidChange(self)
 			shouldUpdate = true
 		}
@@ -38,16 +39,21 @@ extension MaterialTextView {
 			let result = delegate.materialTextView(self, shouldChangeTextIn: range, replacementText: text)
 			if !result { return false }
 		}
+		if let result = shouldChangeText?(range, text) {
+			return result
+		}
 		return true
 	}
 	
 	func textComponentDidEndEditing() {
 		isActive = false
+		didEndEditing?()
 		delegate?.materialTextViewDidEndEditing(self)
 	}
 	
 	func textComponentDidBeginEditing() {
 		isActive = true
+		didBeginEditing?()
 		delegate?.materialTextViewDidBeginEditing(self)
 	}
 }
