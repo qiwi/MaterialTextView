@@ -18,8 +18,9 @@ class FormatsViewController: UIViewController {
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
+		tv.text = "123"
 		tv.textComponentMode = .textView
-		tv.placeholder = .init(type: .normal, text: "Digits (TextView)")
+		tv.placeholder = .init(type: .animated, text: "Digits (TextView, animated)")
 		tv.inputValidator = { $0?.count ?? 999 > 5 ? .invalid(text: "Too long") : .valid }
 		tv.formats = ["ddddddd"]
 		tv.rightButtonInfo = .init(imageName: "icon", action: nil)

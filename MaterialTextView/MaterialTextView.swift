@@ -30,6 +30,7 @@ public final class MaterialTextView: UIView {
 	internal var shouldUpdate: Bool = true
 	private let textFieldHeightOffset: CGFloat = 1
 	private var attributedPlaceholder: NSAttributedString!
+	private var hadInput: Bool = false
 	
 	internal var textViewToRightConstraint: NSLayoutConstraint!
 	internal var textViewToRightButtonConstraint: NSLayoutConstraint!
@@ -116,7 +117,7 @@ public final class MaterialTextView: UIView {
 					} else {
 						newFrame = titleLabel.layer.frame
 						let scale = style.titleFontSize/textFont.pointSize
-						animationType = placeholderTypeIsChanged ? .scaleAndTranslate(scale: scale) : .skip
+						animationType = placeholderTypeIsChanged || !hadInput ? .scaleAndTranslate(scale: scale) : .skip
 						color = colorStyle.titleColor.cgColor
 					}
 					
@@ -302,6 +303,9 @@ public final class MaterialTextView: UIView {
 	
 	public var isActive: Bool = false {
 		didSet {
+			if isActive {
+				hadInput = true
+			}
 			stateChanged(placeholderTypeIsChanged: false)
 		}
 	}
@@ -395,7 +399,6 @@ public final class MaterialTextView: UIView {
 	private func styleChanged() {
 		updateAttributedText()
 		updateFont()
-		stateChanged(placeholderTypeIsChanged: false)
 		placeholderChanged(newPlaceholder: placeholder, typeIsChanged: false)
 	}
 	
