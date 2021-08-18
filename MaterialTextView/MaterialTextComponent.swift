@@ -18,9 +18,7 @@ public protocol MaterialTextComponent: UITextInput {
 	var autocorrectionType: UITextAutocorrectionType { get set }
 	var inputView: UIView? { get set }
 	var inputAccessoryView: UIView? { get set }
-	var currentFormat: String? { get }
 	var allowSmartSuggestions: Bool { get set }
-	var maskAppearance: MaskAppearance { get set }
 	
 	@available(iOS 10.0, *)
 	var textContentType: UITextContentType! { get set }

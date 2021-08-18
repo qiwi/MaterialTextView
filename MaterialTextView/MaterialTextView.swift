@@ -182,6 +182,15 @@ public final class MaterialTextView: UIView {
 		updateTintColor()
 	}
 	
+	public var maskAppearance: MaskAppearance {
+		get {
+			textComponentInternal.maskAppearance
+		}
+		set {
+			textComponentInternal.maskAppearance = newValue
+		}
+	}
+	
 	public var maxNumberOfLinesWithoutScrolling: CGFloat = 3
 
 	private var _text: String = ""
@@ -228,12 +237,13 @@ public final class MaterialTextView: UIView {
 		}
 	}
 	
-	private func maskAttributesChanged(newAttributes: [NSAttributedString.Key : Any]) {
-		self.textComponentInternal.maskAttributes = newAttributes
-	}
-	
-	private func formatSymbolsChanged(formatSymbols: [Character : CharacterSet]) {
-		self.textComponentInternal.formatSymbols = formatSymbols
+	public var maskAttributes: [NSAttributedString.Key: Any] {
+		get {
+			textComponentInternal.maskAttributes
+		}
+		set {
+			textComponentInternal.maskAttributes = newValue
+		}
 	}
 	
 	public var rightButtonInfo: ButtonInfo? {
@@ -298,7 +308,7 @@ public final class MaterialTextView: UIView {
 		set {
 			if _formatSymbols == newValue { return }
 			_formatSymbols = newValue
-			formatSymbolsChanged(formatSymbols: newValue)
+			textComponentInternal.formatSymbols = newValue
 		}
 	}
 	
@@ -354,7 +364,7 @@ public final class MaterialTextView: UIView {
 		rightButtonInfo?.action?()
 	}
 	
-	internal var currentFormat: String? {
+	public var currentFormat: String? {
 		textComponentInternal.currentFormat
 	}
 	
