@@ -234,6 +234,7 @@ public final class MaterialTextView: UIView {
 			_textComponentMode = newValue
 			replaceTextComponent()
 			updateAccessibilityLabelAndIdentifier()
+			stateChanged(placeholderTypeIsChanged: true)
 		}
 	}
 	
@@ -417,7 +418,6 @@ public final class MaterialTextView: UIView {
 	
 	private func styleChanged() {
 		updateAttributedText()
-		updateFont()
 		placeholderChanged(newPlaceholder: placeholder, typeIsChanged: false)
 	}
 	

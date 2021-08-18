@@ -18,12 +18,13 @@ class FormatsViewController: UIViewController {
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
+		tv.help = "Max length is 5 symbols"
 		tv.text = "123456"
-		tv.textComponentMode = .textView
 		tv.placeholder = .init(type: .animated, text: "Digits (TextView, animated)")
 		tv.inputValidator = { $0?.count ?? 999 > 5 ? .invalid(text: "Too long") : .valid }
 		tv.formats = ["ddddddd"]
 		tv.rightButtonInfo = .init(imageName: "icon", action: nil)
+		tv.textComponentMode = .textView
 		
 		tf.textComponentMode = .textField
 		tf.placeholder = .init(type: .normal, text: "Alphabet symbols only (TextField)")
