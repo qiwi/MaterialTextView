@@ -218,7 +218,8 @@ public final class MaterialTextView: UIView {
 		set {
 			if _textComponentMode == newValue { return }
 			_textComponentMode = newValue
-			textComponentModeChanged()
+			replaceTextComponent()
+			updateAccessibilityLabelAndIdentifier()
 		}
 	}
 	
@@ -228,11 +229,6 @@ public final class MaterialTextView: UIView {
 	
 	private func formatSymbolsChanged(formatSymbols: [Character : CharacterSet]) {
 		self.textComponentInternal.formatSymbols = formatSymbols
-	}
-	
-	private func textComponentModeChanged() {
-		replaceTextComponent()
-		updateAccessibilityLabelAndIdentifier()
 	}
 	
 	public var rightButtonInfo: ButtonInfo? {
@@ -335,7 +331,15 @@ public final class MaterialTextView: UIView {
 	// Вызывается по validate()
 	public var actionValidator: Validator<String>?
 	// Вызывается при каждом изменении текста
-	public var inputValidator: Validator<String>?
+	public var inputValidator: Validator<String>? {
+		didSet {
+			if let inputValidator = inputValidator {
+				errorState = self.validate(validator: inputValidator)
+			}
+			wasInputValid = !errorState.isError
+			stateChanged(placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
+		}
+	}
 
 	/// Результат последней валидации
 	public var wasInputValid = true
