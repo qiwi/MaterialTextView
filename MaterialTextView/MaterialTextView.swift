@@ -24,13 +24,14 @@ public final class MaterialTextView: UIView {
 	
 	public var helpLabel = UILabel()
 	internal var rightButton = UIButton(type: .system)
-	internal var placeholderLayer = CATextLayer()
+	internal var placeholderLabel = UILabel()
 	internal var titleLabel = UILabel()
 	internal var line = UIView()
 	internal var shouldUpdate: Bool = true
 	private let textFieldHeightOffset: CGFloat = 1
 	private var attributedPlaceholder: NSAttributedString!
 	private var hadInput: Bool = false
+	private var isFirstInput: Bool = true
 	
 	internal var textViewToRightConstraint: NSLayoutConstraint!
 	internal var textViewToRightButtonConstraint: NSLayoutConstraint!
@@ -44,8 +45,7 @@ public final class MaterialTextView: UIView {
 	public var didEndEditing: EmptyClosure? = { }
 	public var shouldChangeText: ((NSRange, String) -> Bool)? = { _, _ in return true}
 	
-	public var animationDuration: Double = 0.1
-	internal var placeholderStartFrame = CGRect.zero
+	public var animationDuration: Double = 1
 
 	private var _placeholder: Placeholder = .init(type: .animated, text: "")
 	public var placeholder: Placeholder {
@@ -59,90 +59,87 @@ public final class MaterialTextView: UIView {
 	}
 	
 	private func placeholderChanged(newPlaceholder: Placeholder, typeIsChanged: Bool) {
-		updateFont()
-		titleLabel.attributedText = NSAttributedString(string: newPlaceholder.text.nonEmpty,
-													   attributes: titleLabel.attributedText?.safeAttributes(at: 0, range: nil) ?? [:])
-		placeholderLayer.string = newPlaceholder.text
-		changeTextStates(placeholderTypeIsChanged: typeIsChanged)
+		placeholderLabel.attributedText = NSAttributedString(string: placeholder.text,
+															 attributes: style.placeholderAttributes)
 		updateAccessibilityLabelAndIdentifier()
-		updatePlaceholderPosition()
 		stateChanged(placeholderTypeIsChanged: true)
-	}
-	
-	private func updateFont() {
-		if let font = style.textAttributes[.font] as? UIFont {
-			if !(placeholderLayer.font is String) {
-				placeholderLayer.uiFont = font
-			}
-			
-			titleLabel.attributedText = NSAttributedString(string: (placeholderLayer.string as? String).nonEmpty,
-														   attributes:
-			[
-				NSAttributedString.Key.font: UIFont(descriptor: font.fontDescriptor, size: style.titleFontSize),
-				NSAttributedString.Key.foregroundColor: style.normalActive.titleColor
-			])
-		}
 	}
 	
 	private func changeTextStates(placeholderTypeIsChanged: Bool) {
 		var helpText = help
+		var isError = false
 		
 		switch errorState {
 		case .error(let text):
 			helpText = text
+			isError = true
 		default:
 			break
 		}
 		
 		helpChanged(newHelp: helpText)
+		var animation: EmptyClosure?
 		
 		switch placeholder.type {
-		case .animated:
-			placeholderLayer.isHidden = false
-			if let textFont = style.textAttributes[.font] as? UIFont {
-				if isActive {
-					let colorStyle = errorState.isError ? style.errorActive : style.normalActive
-					guard CATransform3DEqualToTransform(placeholderLayer.transform, CATransform3DIdentity) else {
-						placeholderLayer.animate(duration: animationDuration) { layer in
-							layer.foregroundColor = colorStyle.titleColor.cgColor
-						}
-						break
+		case .animated, .normal:
+			if isActive {
+				self.titleLabel.attributedText = NSAttributedString(string: self.placeholder.text,
+																	attributes: isError ? self.style.errorActive.titleAttributes : self.style.normalActive.titleAttributes)
+//				if self.placeholder.type == .animated && self.text.isEmpty && self.titleLabel.transform == .identity && isFirstInput {
+//					isFirstInput = false
+//					self.titleLabel.transform = .init(sourceRect: self.titleLabel.frame, destinationRect: self.placeholderLabel.frame)
+//				}
+				animation = {
+					self.titleLabel.alpha = self.placeholder.type == .animated ? 1 : 0
+					self.placeholderLabel.alpha = self.placeholder.type == .normal && self.text.isEmpty ? 1 : 0
+//					if self.placeholder.type == .animated && self.placeholderLabel.bounds.width > 0 {
+//						if self.titleLabel.transform != .identity {
+							self.titleLabel.transform = .identity
+//						}
+//						if self.placeholderLabel.transform == .identity {
+							self.placeholderLabel.transform = .init(sourceRect: self.placeholderLabel.frame, destinationRect: self.titleLabel.frame)
+//						}
+//					}
+				}
+			} else {
+				self.titleLabel.attributedText = NSAttributedString(string: self.placeholder.text,
+																	attributes: isError ? self.style.errorInactive.titleAttributes : self.style.normalInactive.titleAttributes)
+//				if self.placeholder.type == .animated && self.text.isEmpty && self.titleLabel.bounds.width > 0 {
+//					if self.titleLabel.transform != .identity {
+//						self.titleLabel.transform = .identity
+//					}
+//					if self.placeholderLabel.transform == .identity {
+//						self.placeholderLabel.transform = .init(sourceRect: self.placeholderLabel.frame, destinationRect: self.titleLabel.frame)
+//					}
+//				}
+				animation = {
+					self.titleLabel.alpha = self.placeholder.type == .animated && !self.text.isEmpty ? 1 : 0
+					self.placeholderLabel.alpha = self.text.isEmpty ? 1 : 0
+					if self.placeholder.type == .animated && self.text.isEmpty && self.titleLabel.bounds.width > 0 {
+						self.placeholderLabel.transform = .identity
+						self.titleLabel.transform = .init(sourceRect: self.titleLabel.frame, destinationRect: self.placeholderLabel.frame)
 					}
-					let scale = style.titleFontSize/textFont.pointSize
-					placeholderLayer.animate(animationDuration: animationDuration, newFrame: titleLabel.layer.frame, animationType: .scaleAndTranslate(scale: scale), newColor: colorStyle.titleColor.cgColor)
-				} else {
-					var newFrame: CGRect
-					var animationType: CATextLayer.ScaleAnimationType
-					var color: CGColor
-					let colorStyle = errorState.isError ? style.errorInactive : style.normalInactive
-					if text.isEmpty {
-						newFrame = placeholderStartFrame
-						animationType = .identity
-						color = colorStyle.placeholderColor.cgColor
-					} else {
-						newFrame = titleLabel.layer.frame
-						let scale = style.titleFontSize/textFont.pointSize
-						animationType = placeholderTypeIsChanged || !hadInput ? .scaleAndTranslate(scale: scale) : .skip
-						color = colorStyle.titleColor.cgColor
-					}
-					
-					placeholderLayer.animate(animationDuration: animationDuration, newFrame: newFrame, animationType: animationType, newColor: color)
 				}
 			}
-		case .normal:
-			placeholderLayer.isHidden = !text.isEmpty
-			placeholderLayer.animate(animationDuration: placeholderLayer.isHidden ? 0 : animationDuration, newFrame: placeholderStartFrame, animationType: .identity, newColor: visualState.placeholderColor.cgColor)
 		case .alwaysOnTop:
-			placeholderLayer.isHidden = true
-			let attr = NSMutableAttributedString(attributedString: titleLabel.attributedText ?? NSAttributedString())
-			attr.addAttributes([NSAttributedString.Key.foregroundColor: visualState.placeholderColor], range: NSRange(location: 0, length: attr.string.count))
-			titleLabel.attributedText = attr
-			titleLabel.isHidden = false
+			var attributes: [NSAttributedString.Key : Any]
+			if isActive {
+				attributes = isError ? self.style.errorActive.titleAttributes : self.style.normalActive.titleAttributes
+			} else {
+				attributes = isError ? self.style.errorInactive.titleAttributes : self.style.normalInactive.titleAttributes
+			}
+			self.titleLabel.transform = .identity
+			self.titleLabel.alpha = 1
+			self.titleLabel.attributedText = NSAttributedString(string: self.placeholder.text,
+																attributes: attributes)
+			self.placeholderLabel.alpha = 0
+			self.placeholderLabel.transform = .identity
 		}
-		
+		let animationDuration = hadInput ? self.animationDuration : 0
 		UIView.animate(withDuration: animationDuration, animations: {
 			self.line.backgroundColor = self.visualState.lineColor
 			self.lineHeightConstraint.constant = self.visualState.lineHeight
+			animation?()
 			self.layoutIfNeeded()
 		})
 		helpLabel.attributedText = NSAttributedString(string: helpText, attributes: visualState.helpAttributes)
@@ -166,6 +163,7 @@ public final class MaterialTextView: UIView {
 	}
 	
 	private var _style: Style = .defaultStyle
+	private var _styleWithoutTintColor: Style = .defaultStyle
 	public var style: Style {
 		get {
 			return _style
@@ -173,6 +171,7 @@ public final class MaterialTextView: UIView {
 		set {
 			if _style == newValue { return }
 			_style = newValue
+			_styleWithoutTintColor = newValue
 			didUpdateStyle()
 		}
 	}
@@ -284,14 +283,17 @@ public final class MaterialTextView: UIView {
 	public var useTintColorForActiveTitle = true
 	
 	private func updateTintColor() {
-		var newStyle = _style
 		if useTintColorForActiveLine {
-			newStyle.normalActive.lineColor = tintColor
+			_style.normalActive.lineColor = tintColor
+		} else {
+			_style.normalActive.lineColor = _styleWithoutTintColor.normalActive.lineColor
 		}
+		
 		if useTintColorForActiveTitle {
-			newStyle.normalActive.titleColor = tintColor
+			_style.normalActive.titleAttributes[.foregroundColor] = tintColor
+		} else {
+			_style.normalActive.titleAttributes[.foregroundColor] = _styleWithoutTintColor.normalActive.titleAttributes
 		}
-		_style = newStyle
 	}
 	
 	public enum TextComponentMode {
@@ -475,8 +477,7 @@ public final class MaterialTextView: UIView {
 		}
 		addSubview(titleLabel)
 		NSLayoutConstraint.activate([titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-									 titleLabel.topAnchor.constraint(equalTo: self.topAnchor),
-									 titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor)])
+									 titleLabel.topAnchor.constraint(equalTo: self.topAnchor)])
 		titleLabel.setContentHuggingPriority(.init(249), for: .horizontal)
 		titleLabel.setContentHuggingPriority(.init(249), for: .vertical)
 		
@@ -499,6 +500,13 @@ public final class MaterialTextView: UIView {
 		helpLabel.setContentHuggingPriority(.init(251), for: .horizontal)
 		helpLabel.setContentHuggingPriority(.init(251), for: .vertical)
 		helpLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+		
+		placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
+		insertSubview(placeholderLabel, at: 1)
+		NSLayoutConstraint.activate([
+			placeholderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+			placeholderLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3)
+		])
 	}
 	
 	private func addTextComponent() {
@@ -527,14 +535,16 @@ public final class MaterialTextView: UIView {
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(becomeFirstResponder))
 		addGestureRecognizer(tapGesture)
 		
+		titleLabel.attributedText = NSAttributedString(string: placeholder.text,
+													   attributes: style.normalInactive.titleAttributes)
+		placeholderLabel.attributedText = NSAttributedString(string: placeholder.text,
+															 attributes: style.placeholderAttributes)
 		makeLayout()
-		placeholderLayer.contentsScale = UIScreen.main.scale
-		layer.addSublayer(placeholderLayer)
-		titleLabel.isHidden = true
-		titleLabel.attributedText = NSAttributedString(string: " ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10)])
 		
 		rightButton.addTarget(self, action: #selector(rightButtonAction(_:)), for: .touchUpInside)
 		replaceTextComponent()
+		
+		placeholderChanged(newPlaceholder: self.placeholder, typeIsChanged: true)
 	}
 	
 	internal func replaceTextComponent() {
@@ -570,23 +580,5 @@ public final class MaterialTextView: UIView {
     @discardableResult
 	override public func becomeFirstResponder() -> Bool {
 		return textComponentInternal.becomeFirstResponder()
-	}
-	
-	fileprivate func updatePlaceholderPosition() {
-		CATransaction.begin()
-		CATransaction.setDisableActions(true)
-		placeholderStartFrame = textComponentInternal.frame
-		let bounds = CGRect(origin: CGPoint.zero, size: CGSize(width: rightButton.frame.origin.x, height: placeholderStartFrame.size.height))
-		placeholderLayer.bounds = bounds
-		placeholderLayer.position = CGPoint(x: placeholderLayer.bounds.width/2, y: placeholderStartFrame.midY)
-		CATransaction.commit()
-	}
-	
-	public override func layoutSubviews() {
-		super.layoutSubviews()
-
-		if textComponentMode == .textField {
-			updatePlaceholderPosition()
-		}
 	}
 }

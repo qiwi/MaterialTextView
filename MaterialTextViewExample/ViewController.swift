@@ -116,16 +116,14 @@ class ViewController: UIViewController {
 	@IBAction func titleColorChanged(_ sender: UIButton) {
 		fields.forEach {
 			$0.style.visualState(byTag: sender.tag, completion: { visualState in
-				visualState.titleColor = sender.backgroundColor!
+				visualState.titleAttributes[.foregroundColor] = sender.backgroundColor!
 			})
 		}
 	}
 	
 	@IBAction func placeholderColorChanged(_ sender: UIButton) {
 		fields.forEach {
-			$0.style.visualState(byTag: sender.tag, completion: { visualState in
-				visualState.placeholderColor = sender.backgroundColor!
-			})
+			$0.style.placeholderAttributes[.foregroundColor] = sender.backgroundColor!
 		}
 	}
 	

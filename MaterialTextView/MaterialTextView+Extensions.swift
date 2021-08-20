@@ -138,7 +138,7 @@ public extension MaterialTextView {
 		}
 	}
 
-	enum PlaceholderType {
+	enum PlaceholderType: Equatable {
 		case normal
 		case animated
 		case alwaysOnTop
@@ -162,21 +162,21 @@ public extension MaterialTextView {
 		public static func == (lhs: VisualState, rhs: VisualState) -> Bool {
 			return  lhs.lineHeight == rhs.lineHeight &&
 				lhs.lineColor == rhs.lineColor &&
-				lhs.placeholderColor == rhs.placeholderColor &&
-				lhs.titleColor == rhs.titleColor &&
+				areAttributesEqual(lhs.titleAttributes, rhs.titleAttributes) &&
 				areAttributesEqual(lhs.helpAttributes, rhs.helpAttributes)
 		}
 		
 		public var helpAttributes: [NSAttributedString.Key: Any]
-		public var titleColor: UIColor
-		public var placeholderColor: UIColor
+		public var titleAttributes: [NSAttributedString.Key: Any]
 		public var lineColor: UIColor
 		public var lineHeight: CGFloat
 		
-		public init(helpAttributes: [NSAttributedString.Key: Any], titleColor: UIColor, placeholderColor: UIColor, lineColor: UIColor, lineHeight: CGFloat) {
+		public init(helpAttributes: [NSAttributedString.Key: Any],
+					titleAttributes: [NSAttributedString.Key: Any],
+					lineColor: UIColor,
+					lineHeight: CGFloat) {
 			self.helpAttributes = helpAttributes
-			self.titleColor = titleColor
-			self.placeholderColor = placeholderColor
+			self.titleAttributes = titleAttributes
 			self.lineColor = lineColor
 			self.lineHeight = lineHeight
 		}
@@ -189,8 +189,8 @@ public extension MaterialTextView {
 				lhs.normalInactive == rhs.normalInactive &&
 				lhs.errorActive == rhs.errorActive &&
 				lhs.errorInactive == rhs.errorInactive &&
-				lhs.titleFontSize == rhs.titleFontSize &&
-				areAttributesEqual(lhs.textAttributes, rhs.textAttributes)
+				areAttributesEqual(lhs.textAttributes, rhs.textAttributes) &&
+				areAttributesEqual(lhs.placeholderAttributes, rhs.placeholderAttributes)
 		}
 		
 		public var normalActive: VisualState
@@ -198,45 +198,52 @@ public extension MaterialTextView {
 		public var errorActive: VisualState
 		public var errorInactive: VisualState
 		public var textAttributes: [NSAttributedString.Key: Any]
-		public var titleFontSize: CGFloat
+		public var placeholderAttributes: [NSAttributedString.Key: Any]
 		
-		public init(normalActive: VisualState, normalInactive: VisualState, errorActive: VisualState, errorInactive: VisualState, textAttributes: [NSAttributedString.Key: Any], titleFontSize: CGFloat) {
+		public init(normalActive: VisualState,
+					normalInactive: VisualState,
+					errorActive: VisualState,
+					errorInactive: VisualState,
+					textAttributes: [NSAttributedString.Key: Any],
+					placeholderAttributes: [NSAttributedString.Key: Any]) {
 			self.normalActive = normalActive
 			self.normalInactive = normalInactive
 			self.errorActive = errorActive
 			self.errorInactive = errorInactive
 			self.textAttributes = textAttributes
-			self.titleFontSize = titleFontSize
+			self.placeholderAttributes = placeholderAttributes
 		}
 		
 		public static var defaultStyle =
 			Style(normalActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															 .foregroundColor: UIColor.darkGray],
-											titleColor: UIColor.black,
-											placeholderColor: UIColor.lightGray,
+											titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
+															  .foregroundColor: UIColor.black],
 											lineColor: UIColor.blue,
 											lineHeight: 2),
 				  normalInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															   .foregroundColor: UIColor.darkGray],
-											  titleColor: UIColor.gray,
-											  placeholderColor: UIColor.lightGray,
+											  titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
+																.foregroundColor: UIColor.gray],
 											  lineColor: UIColor.black,
 											  lineHeight: 1),
 				  errorActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															.foregroundColor: UIColor.red],
-										   titleColor: UIColor.red,
-										   placeholderColor: UIColor.lightGray,
+										   titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
+															 .foregroundColor: UIColor.red],
 										   lineColor: UIColor.red,
 										   lineHeight: 2),
 				  errorInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															  .foregroundColor: UIColor.red],
-											 titleColor: UIColor.red,
-											 placeholderColor: UIColor.lightGray,
+											 titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
+															   .foregroundColor: UIColor.red],
 											 lineColor: UIColor.red,
 											 lineHeight: 1),
 				  textAttributes: [.font: UIFont.systemFont(ofSize: 16),
 								   .foregroundColor: UIColor.black],
-				  titleFontSize: 10)
+				  placeholderAttributes: [.font: UIFont.systemFont(ofSize: 16),
+										  .foregroundColor: UIColor.lightGray]
+			)
 	}
 }
 
