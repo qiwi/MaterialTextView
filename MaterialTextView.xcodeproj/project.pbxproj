@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7C1003B8223955AA007C0D50 /* NSAttributedString+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1003B7223955AA007C0D50 /* NSAttributedString+Extensions.swift */; };
+		7C1003B8223955AA007C0D50 /* NSParagraphStyle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1003B7223955AA007C0D50 /* NSParagraphStyle+Extensions.swift */; };
 		7C1FFE0622FAC3E9000C378A /* FormatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1FFE0522FAC3E9000C378A /* FormatsViewController.swift */; };
 		7C2110F9222FFC5A00D74B90 /* MaterialTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C2110F7222FFC5A00D74B90 /* MaterialTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C211105222FFC8B00D74B90 /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2110FF222FFC8B00D74B90 /* Validator.swift */; };
@@ -22,13 +22,12 @@
 		7C33246F26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33246E26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift */; };
 		7C3DDA1826C67B3D005F1691 /* MaterialTextView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3DDA1726C67B3D005F1691 /* MaterialTextView+Extensions.swift */; };
 		7C3DDA1B26CBA87F005F1691 /* FormattableTextView in Frameworks */ = {isa = PBXBuildFile; productRef = 7C3DDA1A26CBA87F005F1691 /* FormattableTextView */; };
-		7C5A89B123509CBF007A5535 /* UIFont+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5A89B023509CBF007A5535 /* UIFont+Extensions.swift */; };
 		7C7C07B52281762300E50181 /* MaterialTextComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7C07B42281762300E50181 /* MaterialTextComponent.swift */; };
 		7C8F6632242D1743004285F8 /* MaterialTextView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7C1003B7223955AA007C0D50 /* NSAttributedString+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extensions.swift"; sourceTree = "<group>"; };
+		7C1003B7223955AA007C0D50 /* NSParagraphStyle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSParagraphStyle+Extensions.swift"; sourceTree = "<group>"; };
 		7C1FFE0522FAC3E9000C378A /* FormatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatsViewController.swift; sourceTree = "<group>"; };
 		7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MaterialTextView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C2110F7222FFC5A00D74B90 /* MaterialTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MaterialTextView.h; sourceTree = "<group>"; };
@@ -48,7 +47,6 @@
 		7C21112822311D5500D74B90 /* Imports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imports.swift; sourceTree = "<group>"; };
 		7C33246E26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGAffineTransform+Extensions.swift"; sourceTree = "<group>"; };
 		7C3DDA1726C67B3D005F1691 /* MaterialTextView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MaterialTextView+Extensions.swift"; sourceTree = "<group>"; };
-		7C5A89B023509CBF007A5535 /* UIFont+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extensions.swift"; sourceTree = "<group>"; };
 		7C7C07B42281762300E50181 /* MaterialTextComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialTextComponent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -102,9 +100,8 @@
 				7C2110F7222FFC5A00D74B90 /* MaterialTextView.h */,
 				7C2110F8222FFC5A00D74B90 /* Info.plist */,
 				7C21112822311D5500D74B90 /* Imports.swift */,
-				7C1003B7223955AA007C0D50 /* NSAttributedString+Extensions.swift */,
+				7C1003B7223955AA007C0D50 /* NSParagraphStyle+Extensions.swift */,
 				7C7C07B42281762300E50181 /* MaterialTextComponent.swift */,
-				7C5A89B023509CBF007A5535 /* UIFont+Extensions.swift */,
 				7C33246E26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift */,
 			);
 			path = MaterialTextView;
@@ -252,8 +249,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C1003B8223955AA007C0D50 /* NSAttributedString+Extensions.swift in Sources */,
-				7C5A89B123509CBF007A5535 /* UIFont+Extensions.swift in Sources */,
+				7C1003B8223955AA007C0D50 /* NSParagraphStyle+Extensions.swift in Sources */,
 				7C211109222FFC8B00D74B90 /* MaterialTextView.swift in Sources */,
 				7C7C07B52281762300E50181 /* MaterialTextComponent.swift in Sources */,
 				7C21112922311D5500D74B90 /* Imports.swift in Sources */,

@@ -82,36 +82,25 @@ public final class MaterialTextView: UIView {
 		
 		switch placeholder.type {
 		case .animated, .normal:
+			if self.placeholder.type == .normal {
+				self.titleLabel.alpha = 0
+			}
 			if isActive {
 				self.titleLabel.attributedText = NSAttributedString(string: self.placeholder.text,
 																	attributes: isError ? self.style.errorActive.titleAttributes : self.style.normalActive.titleAttributes)
-//				if self.placeholder.type == .animated && self.text.isEmpty && self.titleLabel.transform == .identity && isFirstInput {
-//					isFirstInput = false
-//					self.titleLabel.transform = .init(sourceRect: self.titleLabel.frame, destinationRect: self.placeholderLabel.frame)
-//				}
 				animation = {
-					self.titleLabel.alpha = self.placeholder.type == .animated ? 1 : 0
+					if self.placeholder.type == .animated {
+						self.titleLabel.alpha = 1
+					}
 					self.placeholderLabel.alpha = self.placeholder.type == .normal && self.text.isEmpty ? 1 : 0
-//					if self.placeholder.type == .animated && self.placeholderLabel.bounds.width > 0 {
-//						if self.titleLabel.transform != .identity {
-							self.titleLabel.transform = .identity
-//						}
-//						if self.placeholderLabel.transform == .identity {
-							self.placeholderLabel.transform = .init(sourceRect: self.placeholderLabel.frame, destinationRect: self.titleLabel.frame)
-//						}
-//					}
+					self.titleLabel.transform = .identity
+					if self.placeholder.type == .animated && self.placeholderLabel.transform == .identity {
+						self.placeholderLabel.transform = .init(sourceRect: self.placeholderLabel.frame, destinationRect: self.titleLabel.frame)
+					}
 				}
 			} else {
 				self.titleLabel.attributedText = NSAttributedString(string: self.placeholder.text,
-																	attributes: isError ? self.style.errorInactive.titleAttributes : self.style.normalInactive.titleAttributes)
-//				if self.placeholder.type == .animated && self.text.isEmpty && self.titleLabel.bounds.width > 0 {
-//					if self.titleLabel.transform != .identity {
-//						self.titleLabel.transform = .identity
-//					}
-//					if self.placeholderLabel.transform == .identity {
-//						self.placeholderLabel.transform = .init(sourceRect: self.placeholderLabel.frame, destinationRect: self.titleLabel.frame)
-//					}
-//				}
+																	attributes: isError ? self.style.errorInactive.titleAttributes : self.style.normalActive.titleAttributes)
 				animation = {
 					self.titleLabel.alpha = self.placeholder.type == .animated && !self.text.isEmpty ? 1 : 0
 					self.placeholderLabel.alpha = self.text.isEmpty ? 1 : 0
@@ -233,7 +222,6 @@ public final class MaterialTextView: UIView {
 			_textComponentMode = newValue
 			replaceTextComponent()
 			updateAccessibilityLabelAndIdentifier()
-			stateChanged(placeholderTypeIsChanged: true)
 		}
 	}
 	
@@ -574,7 +562,6 @@ public final class MaterialTextView: UIView {
 		textComponentInternal.formats = formats
 		self.text = text
 		updateAttributes()
-		helpChanged(newHelp: help)
 	}
 	
     @discardableResult
