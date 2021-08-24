@@ -45,7 +45,7 @@ public final class MaterialTextView: UIView {
 	public var didEndEditing: EmptyClosure? = { }
 	public var shouldChangeText: ((NSRange, String) -> Bool)? = { _, _ in return true}
 	
-	public var animationDuration: Double = 1
+	public var animationDuration: Double = 0.2
 
 	private var _placeholder: Placeholder = .init(type: .animated, text: "")
 	public var placeholder: Placeholder {
@@ -125,12 +125,13 @@ public final class MaterialTextView: UIView {
 			self.placeholderLabel.transform = .identity
 		}
 		let animationDuration = hadInput ? self.animationDuration : 0
-		UIView.animate(withDuration: animationDuration, animations: {
+		UIView.animate(withDuration: animationDuration, delay: 0, options: .curveEaseInOut, animations: {
 			self.line.backgroundColor = self.visualState.lineColor
 			self.lineHeightConstraint.constant = self.visualState.lineHeight
 			animation?()
 			self.layoutIfNeeded()
-		})
+		}, completion: nil)
+
 		helpLabel.attributedText = NSAttributedString(string: helpText, attributes: visualState.helpAttributes)
 		updateAccessibilityValue()
 	}
