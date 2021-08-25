@@ -78,8 +78,10 @@ public final class MaterialTextView: UIView {
 		}
 		
 		helpChanged(newHelp: helpText)
+		self.titleLabel.text = self.placeholder.text
 		var animation: EmptyClosure?
 		var animationDuration = self.animationDuration
+		var attributes = [NSAttributedString.Key: Any]()
 		
 		switch placeholder.type {
 		case .animated, .normal:
@@ -88,10 +90,8 @@ public final class MaterialTextView: UIView {
 				animationDuration = 0
 			}
 			if isActive {
-				
+				attributes = isError ? self.style.errorActive.titleAttributes : self.style.normalActive.titleAttributes
 				animation = {
-					self.titleLabel.attributedText = NSAttributedString(string: self.placeholder.text,
-																		attributes: isError ? self.style.errorActive.titleAttributes : self.style.normalActive.titleAttributes)
 					if self.placeholder.type == .animated {
 						self.titleLabel.alpha = 1
 					}
@@ -102,8 +102,7 @@ public final class MaterialTextView: UIView {
 					}
 				}
 			} else {
-				self.titleLabel.attributedText = NSAttributedString(string: self.placeholder.text,
-																	attributes: isError ? self.style.errorInactive.titleAttributes : self.style.normalActive.titleAttributes)
+				attributes = isError ? self.style.errorInactive.titleAttributes : self.style.normalActive.titleAttributes
 				animation = {
 					self.titleLabel.alpha = self.placeholder.type == .animated && !self.text.isEmpty ? 1 : 0
 					self.placeholderLabel.alpha = self.text.isEmpty ? 1 : 0
@@ -116,7 +115,6 @@ public final class MaterialTextView: UIView {
 				}
 			}
 		case .alwaysOnTop:
-			var attributes: [NSAttributedString.Key : Any]
 			if isActive {
 				attributes = isError ? self.style.errorActive.titleAttributes : self.style.normalActive.titleAttributes
 			} else {
@@ -124,10 +122,14 @@ public final class MaterialTextView: UIView {
 			}
 			self.titleLabel.transform = .identity
 			self.titleLabel.alpha = 1
-			self.titleLabel.attributedText = NSAttributedString(string: self.placeholder.text,
-																attributes: attributes)
 			self.placeholderLabel.alpha = 0
 			self.placeholderLabel.transform = .identity
+		}
+		if let font = attributes[.font] as? UIFont {
+			self.titleLabel.font = font
+		}
+		if let color = attributes[.foregroundColor] as? UIColor {
+			self.titleLabel.textColor = color
 		}
 		UIView.animate(withDuration: hadInput ? animationDuration : 0) {
 			animation?()
