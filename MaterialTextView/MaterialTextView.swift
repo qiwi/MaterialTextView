@@ -130,8 +130,6 @@ public final class MaterialTextView: UIView {
 		}
 		if let color = attributes[.foregroundColor] as? UIColor {
 			self.titleLabel.textColor = color
-		} else {
-			print(attributes)
 		}
 		UIView.animate(withDuration: hadInput ? animationDuration : 0) {
 			animation?()
@@ -291,7 +289,7 @@ public final class MaterialTextView: UIView {
 		if useTintColorForActiveTitle {
 			_style.normalActive.titleAttributes[.foregroundColor] = tintColor
 		} else {
-			_style.normalActive.titleAttributes[.foregroundColor] = _styleWithoutTintColor.normalActive.titleAttributes
+			_style.normalActive.titleAttributes[.foregroundColor] = _styleWithoutTintColor.normalActive.titleAttributes[.foregroundColor]
 		}
 	}
 	
