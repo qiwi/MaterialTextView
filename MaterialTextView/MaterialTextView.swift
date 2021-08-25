@@ -78,7 +78,7 @@ public final class MaterialTextView: UIView {
 		}
 		
 		helpChanged(newHelp: helpText)
-		self.titleLabel.text = self.placeholder.text
+//		self.titleLabel.text = self.placeholder.text
 		var animation: EmptyClosure?
 		var animationDuration = self.animationDuration
 		var attributes = [NSAttributedString.Key: Any]()
@@ -125,12 +125,13 @@ public final class MaterialTextView: UIView {
 			self.placeholderLabel.alpha = 0
 			self.placeholderLabel.transform = .identity
 		}
-		if let font = attributes[.font] as? UIFont {
-			self.titleLabel.font = font
-		}
-		if let color = attributes[.foregroundColor] as? UIColor {
-			self.titleLabel.textColor = color
-		}
+//		if let font = attributes[.font] as? UIFont {
+//			self.titleLabel.font = font
+//		}
+//		if let color = attributes[.foregroundColor] as? UIColor {
+//			self.titleLabel.textColor = color
+//		}
+		self.titleLabel.attributedText = NSAttributedString(string: self.placeholder.text, attributes: attributes)
 		UIView.animate(withDuration: hadInput ? animationDuration : 0) {
 			animation?()
 		}
