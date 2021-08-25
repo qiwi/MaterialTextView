@@ -45,7 +45,8 @@ public final class MaterialTextView: UIView {
 	public var didEndEditing: EmptyClosure? = { }
 	public var shouldChangeText: ((NSRange, String) -> Bool)? = { _, _ in return true}
 	
-	public var animationDuration: Double = 0.2
+	public var placeholderAnimationDuration: Double = 0.15
+	public var lineAnimationDuration: Double = 0.1
 
 	private var _placeholder: Placeholder = .init(type: .animated, text: "")
 	public var placeholder: Placeholder {
@@ -78,16 +79,15 @@ public final class MaterialTextView: UIView {
 		}
 		
 		helpChanged(newHelp: helpText)
-//		self.titleLabel.text = self.placeholder.text
 		var animation: EmptyClosure?
-		var animationDuration = self.animationDuration
+		var placeholderAnimationDuration = self.placeholderAnimationDuration
 		var attributes = [NSAttributedString.Key: Any]()
 		
 		switch placeholder.type {
 		case .animated, .normal:
 			if self.placeholder.type == .normal {
 				self.titleLabel.alpha = 0
-				animationDuration = 0
+				placeholderAnimationDuration = 0
 			}
 			if isActive {
 				attributes = isError ? self.style.errorActive.titleAttributes : self.style.normalActive.titleAttributes
@@ -125,17 +125,11 @@ public final class MaterialTextView: UIView {
 			self.placeholderLabel.alpha = 0
 			self.placeholderLabel.transform = .identity
 		}
-//		if let font = attributes[.font] as? UIFont {
-//			self.titleLabel.font = font
-//		}
-//		if let color = attributes[.foregroundColor] as? UIColor {
-//			self.titleLabel.textColor = color
-//		}
 		self.titleLabel.attributedText = NSAttributedString(string: self.placeholder.text, attributes: attributes)
-		UIView.animate(withDuration: hadInput ? animationDuration : 0) {
+		UIView.animate(withDuration: hadInput ? placeholderAnimationDuration : 0) {
 			animation?()
 		}
-		UIView.animate(withDuration: hadInput ? self.animationDuration : 0) {
+		UIView.animate(withDuration: hadInput ? self.lineAnimationDuration : 0) {
 			self.line.backgroundColor = self.visualState.lineColor
 			self.lineHeightConstraint.constant = self.visualState.lineHeight
 			self.layoutIfNeeded()
