@@ -79,11 +79,13 @@ public final class MaterialTextView: UIView {
 		
 		helpChanged(newHelp: helpText)
 		var animation: EmptyClosure?
+		var animationDuration = self.animationDuration
 		
 		switch placeholder.type {
 		case .animated, .normal:
 			if self.placeholder.type == .normal {
 				self.titleLabel.alpha = 0
+				animationDuration = 0
 			}
 			if isActive {
 				self.titleLabel.attributedText = NSAttributedString(string: self.placeholder.text,
@@ -107,6 +109,8 @@ public final class MaterialTextView: UIView {
 					if self.placeholder.type == .animated && self.text.isEmpty && self.titleLabel.bounds.width > 0 {
 						self.placeholderLabel.transform = .identity
 						self.titleLabel.transform = .init(sourceRect: self.titleLabel.frame, destinationRect: self.placeholderLabel.frame)
+					} else {
+						self.titleLabel.transform = .identity
 					}
 				}
 			}
@@ -124,13 +128,14 @@ public final class MaterialTextView: UIView {
 			self.placeholderLabel.alpha = 0
 			self.placeholderLabel.transform = .identity
 		}
-		let animationDuration = hadInput ? self.animationDuration : 0
-		UIView.animate(withDuration: animationDuration, delay: 0, options: .curveEaseInOut, animations: {
+		UIView.animate(withDuration: hadInput ? animationDuration : 0) {
+			animation?()
+		}
+		UIView.animate(withDuration: hadInput ? self.animationDuration : 0) {
 			self.line.backgroundColor = self.visualState.lineColor
 			self.lineHeightConstraint.constant = self.visualState.lineHeight
-			animation?()
 			self.layoutIfNeeded()
-		}, completion: nil)
+		}
 
 		helpLabel.attributedText = NSAttributedString(string: helpText, attributes: visualState.helpAttributes)
 		updateAccessibilityValue()
