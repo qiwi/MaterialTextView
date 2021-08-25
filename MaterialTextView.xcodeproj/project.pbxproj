@@ -20,11 +20,36 @@
 		7C2111222230F01500D74B90 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C2111202230F01500D74B90 /* LaunchScreen.storyboard */; };
 		7C21112922311D5500D74B90 /* Imports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C21112822311D5500D74B90 /* Imports.swift */; };
 		7C33246F26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33246E26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift */; };
+		7C33248B26D635B100E69DB4 /* MaterialTextView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */; };
+		7C33248C26D635B100E69DB4 /* MaterialTextView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7C3DDA1826C67B3D005F1691 /* MaterialTextView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3DDA1726C67B3D005F1691 /* MaterialTextView+Extensions.swift */; };
 		7C3DDA1B26CBA87F005F1691 /* FormattableTextView in Frameworks */ = {isa = PBXBuildFile; productRef = 7C3DDA1A26CBA87F005F1691 /* FormattableTextView */; };
 		7C7C07B52281762300E50181 /* MaterialTextComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7C07B42281762300E50181 /* MaterialTextComponent.swift */; };
-		7C8F6632242D1743004285F8 /* MaterialTextView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7C33248D26D635B100E69DB4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7C2110EB222FFC5A00D74B90 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C2110F3222FFC5A00D74B90;
+			remoteInfo = MaterialTextView;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7C33248F26D635B100E69DB4 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7C33248C26D635B100E69DB4 /* MaterialTextView.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		7C1003B7223955AA007C0D50 /* NSParagraphStyle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSParagraphStyle+Extensions.swift"; sourceTree = "<group>"; };
@@ -63,7 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C8F6632242D1743004285F8 /* MaterialTextView.framework in Frameworks */,
+				7C33248B26D635B100E69DB4 /* MaterialTextView.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,12 +197,16 @@
 				7C2111112230F01400D74B90 /* Sources */,
 				7C2111122230F01400D74B90 /* Frameworks */,
 				7C2111132230F01400D74B90 /* Resources */,
+				7C33248F26D635B100E69DB4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				7C33248E26D635B100E69DB4 /* PBXTargetDependency */,
 			);
 			name = MaterialTextViewExample;
+			packageProductDependencies = (
+			);
 			productName = MaterialTextViewExample;
 			productReference = 7C2111152230F01400D74B90 /* MaterialTextViewExample.app */;
 			productType = "com.apple.product-type.application";
@@ -270,6 +299,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7C33248E26D635B100E69DB4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C2110F3222FFC5A00D74B90 /* MaterialTextView */;
+			targetProxy = 7C33248D26D635B100E69DB4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		7C21111B2230F01500D74B90 /* Main.storyboard */ = {
