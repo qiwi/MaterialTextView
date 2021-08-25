@@ -102,7 +102,7 @@ public final class MaterialTextView: UIView {
 					}
 				}
 			} else {
-				attributes = isError ? self.style.errorInactive.titleAttributes : self.style.normalActive.titleAttributes
+				attributes = isError ? self.style.errorInactive.titleAttributes : self.style.normalInactive.titleAttributes
 				animation = {
 					self.titleLabel.alpha = self.placeholder.type == .animated && !self.text.isEmpty ? 1 : 0
 					self.placeholderLabel.alpha = self.text.isEmpty ? 1 : 0
