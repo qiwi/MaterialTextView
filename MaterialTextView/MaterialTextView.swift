@@ -88,9 +88,10 @@ public final class MaterialTextView: UIView {
 				animationDuration = 0
 			}
 			if isActive {
-				self.titleLabel.attributedText = NSAttributedString(string: self.placeholder.text,
-																	attributes: isError ? self.style.errorActive.titleAttributes : self.style.normalActive.titleAttributes)
+				
 				animation = {
+					self.titleLabel.attributedText = NSAttributedString(string: self.placeholder.text,
+																		attributes: isError ? self.style.errorActive.titleAttributes : self.style.normalActive.titleAttributes)
 					if self.placeholder.type == .animated {
 						self.titleLabel.alpha = 1
 					}
