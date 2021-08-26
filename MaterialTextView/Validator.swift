@@ -18,5 +18,5 @@ public enum ValidatorResult {
 	case invalid(text: String)
 }
 
-public typealias Validator<T> = (T?) -> ValidatorResult
+public typealias Validator<T> = (T) -> ValidatorResult
 public typealias EmptyClosure = () -> Void

@@ -90,7 +90,6 @@ class ViewController: UIViewController {
 	private func updateInputValidator() {
 		fields.forEach {
 			$0.inputValidator = { text in
-				guard let text = text else { return .valid }
 				return text.count > 4 ? .invalid(text: "Text is too long") : .valid
 			}
 		}

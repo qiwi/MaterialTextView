@@ -20,7 +20,7 @@ class FormatsViewController: UIViewController {
 		
 		tv.help = "Max length is 5 symbols"
 		tv.placeholder = .init(type: .animated, text: "Digits (TextView, animated)")
-		tv.inputValidator = { $0?.count ?? 999 > 5 ? .invalid(text: "Too long") : .valid }
+		tv.inputValidator = { $0.count > 5 ? .invalid(text: "Too long") : .valid }
 		tv.formats = ["ddddddd"]
 		tv.rightButtonInfo = .init(imageName: "icon", action: nil)
 		tv.textComponentMode = .textView
@@ -28,7 +28,7 @@ class FormatsViewController: UIViewController {
 		
 		tf.textComponentMode = .textField
 		tf.placeholder = .init(type: .normal, text: "Alphabet symbols only (TextField)")
-		tf.inputValidator = { $0?.count ?? 999 > 5 ? .invalid(text: "Too long") : .valid }
+		tf.inputValidator = { $0.count > 5 ? .invalid(text: "Too long") : .valid }
 		tf.formats = ["wwwwwwwwwwwwwwwwww"]
 		tf.rightButtonInfo = .init(imageName: "icon", action: nil)
 		
