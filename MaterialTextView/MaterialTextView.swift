@@ -40,7 +40,7 @@ public final class MaterialTextView: UIView {
 	private var helpLabelTopConstraint: NSLayoutConstraint!
 	private var helpLabelBottomConstraint: NSLayoutConstraint!
 	
-	public var textDidChange: EmptyClosure? = { }
+	public var textDidChange: ((String) -> Void)? = { _ in }
 	public var didBeginEditing: EmptyClosure? = { }
 	public var didEndEditing: EmptyClosure? = { }
 	public var shouldChangeText: ((NSRange, String) -> Bool)? = { _, _ in return true}

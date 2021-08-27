@@ -28,7 +28,7 @@ extension MaterialTextView {
 		if shouldUpdate && text != textComponentInternal.inputText {
 			shouldUpdate = false
 			text = textComponentInternal.inputText
-			textDidChange?()
+			textDidChange?(text)
 			delegate?.materialTextViewDidChange(self)
 			shouldUpdate = true
 		}
