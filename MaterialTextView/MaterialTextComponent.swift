@@ -19,6 +19,7 @@ public protocol MaterialTextComponent: UITextInput {
 	var inputView: UIView? { get set }
 	var inputAccessoryView: UIView? { get set }
 	var allowSmartSuggestions: Bool { get set }
+	var formattedText: String? { get }
 	
 	@available(iOS 10.0, *)
 	var textContentType: UITextContentType! { get set }

@@ -95,7 +95,7 @@ public final class MaterialTextView: UIView {
 					if self.placeholder.type == .animated {
 						self.titleLabel.alpha = 1
 					}
-					self.placeholderLabel.alpha = self.placeholder.type == .normal && self.text.isEmpty ? 1 : 0
+					self.placeholderLabel.alpha = self.placeholder.type == .normal && self.formattedText.isEmpty && self.text.isEmpty ? 1 : 0
 					self.titleLabel.transform = .identity
 					if self.placeholder.type == .animated && self.placeholderLabel.transform == .identity {
 						self.placeholderLabel.transform = .init(sourceRect: self.placeholderLabel.frame, destinationRect: self.titleLabel.frame)
@@ -104,9 +104,9 @@ public final class MaterialTextView: UIView {
 			} else {
 				attributes = isError ? self.style.errorInactive.titleAttributes : self.style.normalInactive.titleAttributes
 				animation = {
-					self.titleLabel.alpha = self.placeholder.type == .animated && !self.text.isEmpty ? 1 : 0
-					self.placeholderLabel.alpha = self.text.isEmpty ? 1 : 0
-					if self.placeholder.type == .animated && self.text.isEmpty && self.titleLabel.bounds.width > 0 {
+					self.titleLabel.alpha = self.placeholder.type == .animated && (!self.formattedText.isEmpty || !self.text.isEmpty) ? 1 : 0
+					self.placeholderLabel.alpha = self.formattedText.isEmpty && self.text.isEmpty ? 1 : 0
+					if self.placeholder.type == .animated && self.formattedText.isEmpty && self.text.isEmpty && self.titleLabel.bounds.width > 0 {
 						self.placeholderLabel.transform = .identity
 						self.titleLabel.transform = .init(sourceRect: self.titleLabel.frame, destinationRect: self.placeholderLabel.frame)
 					} else {
@@ -203,6 +203,10 @@ public final class MaterialTextView: UIView {
 			}
 			textChanged()
 		}
+	}
+	
+	public var formattedText: String {
+		textComponent.formattedText ?? ""
 	}
 
 	public var help: String = "" {
@@ -361,10 +365,6 @@ public final class MaterialTextView: UIView {
 	
 	public var currentFormat: String? {
 		textComponentInternal.currentFormat
-	}
-	
-	internal var formattedText: String? {
-		textComponentInternal.formattedText
 	}
 	
 	internal func updateAttributedText() {
