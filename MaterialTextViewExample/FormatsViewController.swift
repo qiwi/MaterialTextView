@@ -18,39 +18,46 @@ class FormatsViewController: UIViewController {
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
-		tv.help = "Max length is 5 symbols"
-		tv.placeholder = .init(type: .animated, text: "Digits (TextView, animated)")
-		tv.inputValidator = { $0.count > 5 ? .invalid(text: "Too long") : .valid }
-		tv.formats = ["ddddddd"]
-		tv.rightButtonInfo = .init(imageName: "icon", action: nil)
-		tv.textComponentMode = .textView
-		tv.text = "123456"
+		self.tv.help = "Max length is 5 symbols"
+		self.tv.placeholder = .init(type: .animated, text: "Digits (TextView, animated)")
+		self.tv.inputValidator = { $0.count > 5 ? .invalid(text: "Too long") : .valid }
+		self.tv.formats = ["ddddddd"]
+		self.tv.rightButtonInfo = .init(imageName: "icon", action: nil)
+		self.tv.textComponentMode = .textView
+		self.tv.text = "123456"
 		
-		tf.textComponentMode = .textField
-		tf.placeholder = .init(type: .normal, text: "Alphabet symbols only (TextField)")
-		tf.inputValidator = { $0.count > 5 ? .invalid(text: "Too long") : .valid }
-		tf.formats = ["wwwwwwwwwwwwwwwwww"]
-		tf.rightButtonInfo = .init(imageName: "icon", action: nil)
+		self.tf.textComponentMode = .textField
+		self.tf.placeholder = .init(type: .normal, text: "Alphabet symbols only (TextField)")
+		self.tf.inputValidator = { $0.count > 5 ? .invalid(text: "Too long") : .valid }
+		self.tf.formats = ["wwwwwwwwwwwwwwwwww"]
+		self.tf.rightButtonInfo = .init(imageName: "icon", action: nil)
+		
+		let tv = MaterialTextView()
+		tv.placeholder = .init(type: .animated, text: "Animated")
+		tv.formats = ["ddddd $"]
+		tv.text = "2"
+		tv.translatesAutoresizingMaskIntoConstraints = false
+		tv.textComponent.keyboardType = .numberPad
+		stack.addArrangedSubview(tv)
+		tv.text = ""
+		tv.formatSymbols = ["d": CharacterSet.decimalDigits.union(CharacterSet(charactersIn: ",."))]
 		
 		// Create MaterialTextView programmatically
 		// set text to invalid value in order to check for glitches at start
-		let tv = MaterialTextView()
-		tv.placeholder = .init(type: .alwaysOnTop, text: "Amount (always on top)")
-		tv.formats = ["ddddddddddddddddddddddddd $"]
-		tv.translatesAutoresizingMaskIntoConstraints = false
-		tv.text = "123"
-		tv.textComponent.keyboardType = .numberPad
-		stack.addArrangedSubview(tv)
-		
 		let tv2 = MaterialTextView()
+		tv2.placeholder = .init(type: .alwaysOnTop, text: "Amount (always on top)")
+		tv2.formats = ["ddddddddddddddddddddddddd $"]
+		tv2.translatesAutoresizingMaskIntoConstraints = false
+		tv2.text = "123"
+		tv2.textComponent.keyboardType = .numberPad
+		stack.addArrangedSubview(tv2)
 		tv2.text = "Created programmatically"
-		tv.placeholder = .init(type: .alwaysOnTop, text: "Created programmatically")
+		tv2.placeholder = .init(type: .alwaysOnTop, text: "Created programmatically")
 		tv2.translatesAutoresizingMaskIntoConstraints = false
 		
 		let tv3 = MaterialTextView()
 		tv3.placeholder = .init(type: .alwaysOnTop, text: "Telephone number")
 		tv3.formats = ["+d (ddd) ddd-dd-dd"]
-		tv3.translatesAutoresizingMaskIntoConstraints = false
 		tv3.translatesAutoresizingMaskIntoConstraints = false
 		if #available(iOS 10.0, *) {
 			tv3.textComponent.textContentType = .telephoneNumber

@@ -206,7 +206,7 @@ public final class MaterialTextView: UIView {
 	}
 	
 	public var formattedText: String {
-		textComponent.formattedText ?? ""
+		textComponent.formattedText
 	}
 
 	public var help: String = "" {

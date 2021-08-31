@@ -157,7 +157,7 @@ public extension MaterialTextView {
 
 public extension MaterialTextView {
 	
-	public struct VisualState: Equatable {
+	struct VisualState: Equatable {
 		
 		public static func == (lhs: VisualState, rhs: VisualState) -> Bool {
 			return  lhs.lineHeight == rhs.lineHeight &&
@@ -182,7 +182,7 @@ public extension MaterialTextView {
 		}
 	}
 	
-	public struct Style: Equatable {
+	struct Style: Equatable {
 		
 		public static func == (lhs: Style, rhs: Style) -> Bool {
 			return lhs.normalActive == rhs.normalActive &&
