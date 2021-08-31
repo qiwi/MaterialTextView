@@ -45,26 +45,33 @@ class FormatsViewController: UIViewController {
 		// Create MaterialTextView programmatically
 		// set text to invalid value in order to check for glitches at start
 		let tv2 = MaterialTextView()
-		tv2.placeholder = .init(type: .alwaysOnTop, text: "Amount (always on top)")
-		tv2.formats = ["ddddddddddddddddddddddddd $"]
+		tv2.placeholder = .init(type: .animated, text: "Animated")
+		tv2.text = "2"
 		tv2.translatesAutoresizingMaskIntoConstraints = false
-		tv2.text = "123"
-		tv2.textComponent.keyboardType = .numberPad
 		stack.addArrangedSubview(tv2)
-		tv2.text = "Created programmatically"
-		tv2.placeholder = .init(type: .alwaysOnTop, text: "Created programmatically")
-		tv2.translatesAutoresizingMaskIntoConstraints = false
+		tv2.text = ""
 		
 		let tv3 = MaterialTextView()
-		tv3.placeholder = .init(type: .alwaysOnTop, text: "Telephone number")
-		tv3.formats = ["+d (ddd) ddd-dd-dd"]
+		tv3.placeholder = .init(type: .alwaysOnTop, text: "Amount (always on top)")
+		tv3.formats = ["ddddddddddddddddddddddddd $"]
 		tv3.translatesAutoresizingMaskIntoConstraints = false
-		if #available(iOS 10.0, *) {
-			tv3.textComponent.textContentType = .telephoneNumber
-			tv3.textComponent.keyboardType = .numberPad
-			tv3.textComponent.allowSmartSuggestions = true
-		}
+		tv3.text = "123"
+		tv3.textComponent.keyboardType = .numberPad
 		stack.addArrangedSubview(tv3)
+		tv3.text = "Created programmatically"
+		tv3.placeholder = .init(type: .alwaysOnTop, text: "Created programmatically")
+		tv3.translatesAutoresizingMaskIntoConstraints = false
+		
+		let tv4 = MaterialTextView()
+		tv4.placeholder = .init(type: .alwaysOnTop, text: "Telephone number")
+		tv4.formats = ["+d (ddd) ddd-dd-dd"]
+		tv4.translatesAutoresizingMaskIntoConstraints = false
+		if #available(iOS 10.0, *) {
+			tv4.textComponent.textContentType = .telephoneNumber
+			tv4.textComponent.keyboardType = .numberPad
+			tv4.textComponent.allowSmartSuggestions = true
+		}
+		stack.addArrangedSubview(tv4)
     }
 
 }

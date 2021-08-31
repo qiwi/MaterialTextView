@@ -23,6 +23,8 @@ public protocol MaterialTextComponent: UITextInput {
 	
 	@available(iOS 10.0, *)
 	var textContentType: UITextContentType! { get set }
+	
+	func formatted(text: String) -> NSAttributedString
 }
 
 internal protocol MaterialTextComponentInternal: MaterialTextComponent, FormattableInput {
