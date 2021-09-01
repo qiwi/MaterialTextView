@@ -14,6 +14,7 @@ public protocol MaterialTextViewDelegate: AnyObject {
 	func materialTextViewDidBeginEditing(_ materialTextView: MaterialTextView)
 	func materialTextViewDidEndEditing(_ materialTextView: MaterialTextView)
 	func materialTextView(_ materialTextView: MaterialTextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool
+	func materialTextViewStateDidChange(_ materialTextView: MaterialTextView, errorState: MaterialTextView.ErrorState)
 }
 
 public extension MaterialTextViewDelegate {
@@ -21,6 +22,7 @@ public extension MaterialTextViewDelegate {
 	func materialTextViewDidBeginEditing(_ materialTextView: MaterialTextView) { }
 	func materialTextViewDidEndEditing(_ materialTextView: MaterialTextView) { }
 	func materialTextView(_ materialTextView: MaterialTextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool { return true }
+	func materialTextViewStateDidChange(_ materialTextView: MaterialTextView, errorState: MaterialTextView.ErrorState) { }
 }
 
 extension MaterialTextView {

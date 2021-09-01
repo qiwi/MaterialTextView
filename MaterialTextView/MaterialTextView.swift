@@ -40,10 +40,11 @@ public final class MaterialTextView: UIView {
 	private var helpLabelTopConstraint: NSLayoutConstraint!
 	private var helpLabelBottomConstraint: NSLayoutConstraint!
 	
-	public var textDidChange: ((String) -> Void)? = { _ in }
-	public var didBeginEditing: EmptyClosure? = { }
-	public var didEndEditing: EmptyClosure? = { }
-	public var shouldChangeText: ((NSRange, String) -> Bool)? = { _, _ in return true}
+	public var textDidChange: ((String) -> Void)?
+	public var didBeginEditing: EmptyClosure?
+	public var didEndEditing: EmptyClosure?
+	public var shouldChangeText: ((NSRange, String) -> Bool)?
+	public var stateDidChange: ((ErrorState) -> Void)?
 	
 	public var placeholderAnimationDuration: Double = 0.15
 	public var lineAnimationDuration: Double = 0.1
@@ -77,6 +78,9 @@ public final class MaterialTextView: UIView {
 		default:
 			break
 		}
+		
+		delegate?.materialTextViewStateDidChange(self, errorState: errorState)
+		stateDidChange?(errorState)
 		
 		helpChanged(newHelp: helpText)
 		var animation: EmptyClosure?
