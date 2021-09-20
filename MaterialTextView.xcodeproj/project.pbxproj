@@ -22,6 +22,7 @@
 		7C33246F26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33246E26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift */; };
 		7C33248B26D635B100E69DB4 /* MaterialTextView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */; };
 		7C33248C26D635B100E69DB4 /* MaterialTextView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7C3324A326E23EA800E69DB4 /* MaterialTextViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3324A226E23EA700E69DB4 /* MaterialTextViewModel.swift */; };
 		7C3DDA1826C67B3D005F1691 /* MaterialTextView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3DDA1726C67B3D005F1691 /* MaterialTextView+Extensions.swift */; };
 		7C3DDA1B26CBA87F005F1691 /* FormattableTextView in Frameworks */ = {isa = PBXBuildFile; productRef = 7C3DDA1A26CBA87F005F1691 /* FormattableTextView */; };
 		7C7C07B52281762300E50181 /* MaterialTextComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7C07B42281762300E50181 /* MaterialTextComponent.swift */; };
@@ -71,6 +72,7 @@
 		7C2111232230F01500D74B90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C21112822311D5500D74B90 /* Imports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imports.swift; sourceTree = "<group>"; };
 		7C33246E26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGAffineTransform+Extensions.swift"; sourceTree = "<group>"; };
+		7C3324A226E23EA700E69DB4 /* MaterialTextViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialTextViewModel.swift; sourceTree = "<group>"; };
 		7C3DDA1726C67B3D005F1691 /* MaterialTextView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MaterialTextView+Extensions.swift"; sourceTree = "<group>"; };
 		7C7C07B42281762300E50181 /* MaterialTextComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialTextComponent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -121,6 +123,7 @@
 				7C211100222FFC8B00D74B90 /* MaterialTextView-Bridging-Header.h */,
 				7C211103222FFC8B00D74B90 /* MaterialTextView.swift */,
 				7C3DDA1726C67B3D005F1691 /* MaterialTextView+Extensions.swift */,
+				7C3324A226E23EA700E69DB4 /* MaterialTextViewModel.swift */,
 				7C2110FF222FFC8B00D74B90 /* Validator.swift */,
 				7C2110F7222FFC5A00D74B90 /* MaterialTextView.h */,
 				7C2110F8222FFC5A00D74B90 /* Info.plist */,
@@ -284,6 +287,7 @@
 				7C21112922311D5500D74B90 /* Imports.swift in Sources */,
 				7C3DDA1826C67B3D005F1691 /* MaterialTextView+Extensions.swift in Sources */,
 				7C33246F26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift in Sources */,
+				7C3324A326E23EA800E69DB4 /* MaterialTextViewModel.swift in Sources */,
 				7C211105222FFC8B00D74B90 /* Validator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
