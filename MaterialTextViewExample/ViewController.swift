@@ -51,15 +51,12 @@ class ViewController: UIViewController {
 		applyTagForAllSubviews(view: stackErrorInactive, tag: StyleTag.errorInactive.rawValue)
 	}
 	
-	private func setupMaterialTextView(textView: MaterialTextView, mode: MaterialTextView.TextComponentMode) {
-		textView.placeholder = .init(type: .animated, text: titleField.text!)
-		textView.help = helpField.text!
-		textView.textComponentMode = mode
-		textView.useTintColorForActiveLine = false
-		textView.useTintColorForActiveTitle = false
-		textView.rightButtonInfo = .init(imageName: "icon", action: {
+	private func setupMaterialTextView(textView: MaterialTextView, mode: MaterialTextViewModel.TextComponentMode) {
+		textView.viewModel = .init(help: helpField.text!, textComponentMode: mode, placeholder: .init(type: .animated, text: titleField.text!), rightButtonInfo: .init(imageName: "icon", action: {
 			print("Button was touched")
-		})
+		}))
+		textView.viewModel.useTintColorForActiveLine = false
+		textView.viewModel.useTintColorForActiveTitle = false
 	}
 	
 	private func applyTagForAllSubviews(view: UIView, tag: Int) {
@@ -72,24 +69,24 @@ class ViewController: UIViewController {
 	}
 	
 	@IBAction func animatedPlaceholderWasTapped(_ sender: UISwitch) {
-		fields.forEach { $0.placeholder.type = sender.isOn ? .animated : .normal }
+		fields.forEach { $0.viewModel.placeholder.type = sender.isOn ? .animated : .normal }
 	}
 	
 	@IBAction func rightButtonWasTapped(_ sender: UISwitch) {
-		fields.forEach { $0.rightButtonInfo = sender.isOn ? .init(imageName: "icon", action: { print("Button was tapped") }) : nil }
+		fields.forEach { $0.viewModel.rightButtonInfo = sender.isOn ? .init(imageName: "icon", action: { print("Button was tapped") }) : nil }
 	}
 	
 	@IBAction func titleChanged(_ sender: UITextField) {
-		fields.forEach { $0.placeholder.text = sender.text! }
+		fields.forEach { $0.viewModel.placeholder.text = sender.text! }
 	}
 	
 	@IBAction func helpChanged(_ sender: UITextField) {
-		fields.forEach { $0.help = sender.text! }
+		fields.forEach { $0.viewModel.help = sender.text! }
 	}
 	
 	private func updateInputValidator() {
 		fields.forEach {
-			$0.inputValidator = { text in
+			$0.viewModel.inputValidator = { text in
 				return text.count > 4 ? .invalid(text: "Text is too long") : .valid
 			}
 		}
@@ -97,7 +94,7 @@ class ViewController: UIViewController {
 	
 	@IBAction func lineHeightValueChanged(_ sender: UIStepper) {
 		fields.forEach {
-			$0.style.visualState(byTag: sender.tag, completion: { visualState in
+			$0.viewModel.style.visualState(byTag: sender.tag, completion: { visualState in
 				visualState.lineHeight = CGFloat(sender.value)
 				lineHeightLabels.first(where: { $0.tag == sender.tag })?.text = "\(UInt(sender.value))"
 			})
@@ -106,7 +103,7 @@ class ViewController: UIViewController {
 	
 	@IBAction func lineColorChanged(_ sender: UIButton) {
 		fields.forEach {
-			$0.style.visualState(byTag: sender.tag, completion: { visualState in
+			$0.viewModel.style.visualState(byTag: sender.tag, completion: { visualState in
 				visualState.lineColor = sender.backgroundColor!
 			})
 		}
@@ -114,7 +111,7 @@ class ViewController: UIViewController {
 	
 	@IBAction func titleColorChanged(_ sender: UIButton) {
 		fields.forEach {
-			$0.style.visualState(byTag: sender.tag, completion: { visualState in
+			$0.viewModel.style.visualState(byTag: sender.tag, completion: { visualState in
 				visualState.titleAttributes[.foregroundColor] = sender.backgroundColor!
 			})
 		}
@@ -122,13 +119,13 @@ class ViewController: UIViewController {
 	
 	@IBAction func placeholderColorChanged(_ sender: UIButton) {
 		fields.forEach {
-			$0.style.placeholderAttributes[.foregroundColor] = sender.backgroundColor!
+			$0.viewModel.style.placeholderAttributes[.foregroundColor] = sender.backgroundColor!
 		}
 	}
 	
 	@IBAction func helpColorChanged(_ sender: UIButton) {
 		fields.forEach {
-			$0.style.visualState(byTag: sender.tag, completion: { visualState in
+			$0.viewModel.style.visualState(byTag: sender.tag, completion: { visualState in
 				visualState.helpAttributes[NSAttributedString.Key.foregroundColor] = sender.backgroundColor!
 			})
 		}
@@ -136,8 +133,8 @@ class ViewController: UIViewController {
 	
 }
 
-extension MaterialTextView.Style {
-	mutating func visualState(byTag tag: Int, completion: (inout MaterialTextView.VisualState) -> Void) {
+extension MaterialTextViewModel.Style {
+	mutating func visualState(byTag tag: Int, completion: (inout MaterialTextViewModel.VisualState) -> Void) {
 		guard let styleTag = StyleTag(rawValue: tag) else { return }
 		switch styleTag {
 		case .normalActive: completion(&self.normalActive)

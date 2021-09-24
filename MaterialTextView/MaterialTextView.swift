@@ -40,38 +40,31 @@ public final class MaterialTextView: UIView {
 	private var helpLabelTopConstraint: NSLayoutConstraint!
 	private var helpLabelBottomConstraint: NSLayoutConstraint!
 	
-	public var textDidChange: ((String) -> Void)?
-	public var didBeginEditing: EmptyClosure?
-	public var didEndEditing: EmptyClosure?
-	public var shouldChangeText: ((NSRange, String) -> Bool)?
-	public var stateDidChange: ((ErrorState) -> Void)?
-	
 	public var placeholderAnimationDuration: Double = 0.15
 	public var lineAnimationDuration: Double = 0.1
-
-	private var _placeholder: Placeholder = .init(type: .animated, text: "")
-	public var placeholder: Placeholder {
-		get { return _placeholder }
-		set {
-			if _placeholder == newValue { return }
-			let oldPlaceholder = _placeholder
-			_placeholder = newValue
-			placeholderChanged(newPlaceholder: placeholder, typeIsChanged: newValue.type != oldPlaceholder.type)
+	
+	public var viewModel: MaterialTextViewModel = .init() {
+		didSet {
+			setupViewModel()
+			styleChanged()
+			formatsChanged(formats: viewModel.formats)
 		}
 	}
 	
-	private func placeholderChanged(newPlaceholder: Placeholder, typeIsChanged: Bool) {
-		placeholderLabel.attributedText = NSAttributedString(string: placeholder.text,
-															 attributes: style.placeholderAttributes)
+	private func placeholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool) {
+		placeholderLabel.attributedText = NSAttributedString(string: newPlaceholder.text,
+															 attributes: viewModel.style.placeholderAttributes)
 		updateAccessibilityLabelAndIdentifier()
 		stateChanged(placeholderTypeIsChanged: true)
 	}
 	
 	private func changeTextStates(placeholderTypeIsChanged: Bool) {
-		var helpText = help
+		let placeholder = self.viewModel.placeholder
+		
+		var helpText = viewModel.help
 		var isError = false
 		
-		switch errorState {
+		switch viewModel.errorState {
 		case .error(let text):
 			helpText = text
 			isError = true
@@ -79,39 +72,36 @@ public final class MaterialTextView: UIView {
 			break
 		}
 		
-		delegate?.materialTextViewStateDidChange(self, errorState: errorState)
-		stateDidChange?(errorState)
-		
 		helpChanged(newHelp: helpText)
 		var animation: EmptyClosure?
 		var placeholderAnimationDuration = self.placeholderAnimationDuration
 		var attributes = [NSAttributedString.Key: Any]()
-		let formattedText = self.textComponent.formatted(text: self.text).string
+		let formattedText = self.formattedText
 		
 		switch placeholder.type {
 		case .animated, .normal:
-			if self.placeholder.type == .normal {
+			if placeholder.type == .normal {
 				self.titleLabel.alpha = 0
 				placeholderAnimationDuration = 0
 			}
-			if isActive {
-				attributes = isError ? self.style.errorActive.titleAttributes : self.style.normalActive.titleAttributes
+			if viewModel.isActive {
+				attributes = isError ? self.viewModel.style.errorActive.titleAttributes : self.viewModel.style.normalActive.titleAttributes
 				animation = {
-					if self.placeholder.type == .animated {
+					if placeholder.type == .animated {
 						self.titleLabel.alpha = 1
 					}
-					self.placeholderLabel.alpha = self.placeholder.type == .normal && formattedText.isEmpty && self.text.isEmpty ? 1 : 0
+					self.placeholderLabel.alpha = placeholder.type == .normal && formattedText.isEmpty && self.viewModel.text.isEmpty ? 1 : 0
 					self.titleLabel.transform = .identity
-					if self.placeholder.type == .animated && self.placeholderLabel.transform == .identity {
+					if placeholder.type == .animated && self.placeholderLabel.transform == .identity {
 						self.placeholderLabel.transform = .init(sourceRect: self.placeholderLabel.frame, destinationRect: self.titleLabel.frame)
 					}
 				}
 			} else {
-				attributes = isError ? self.style.errorInactive.titleAttributes : self.style.normalInactive.titleAttributes
+				attributes = isError ? self.viewModel.style.errorInactive.titleAttributes : self.viewModel.style.normalInactive.titleAttributes
 				animation = {
-					self.titleLabel.alpha = self.placeholder.type == .animated && (!formattedText.isEmpty || !self.text.isEmpty) ? 1 : 0
-					self.placeholderLabel.alpha = formattedText.isEmpty && self.text.isEmpty ? 1 : 0
-					if self.placeholder.type == .animated && formattedText.isEmpty && self.text.isEmpty && self.titleLabel.bounds.width > 0 {
+					self.titleLabel.alpha = placeholder.type == .animated && (!formattedText.isEmpty || !self.viewModel.text.isEmpty) ? 1 : 0
+					self.placeholderLabel.alpha = formattedText.isEmpty && self.viewModel.text.isEmpty ? 1 : 0
+					if placeholder.type == .animated && formattedText.isEmpty && self.viewModel.text.isEmpty && self.titleLabel.bounds.width > 0 {
 						self.placeholderLabel.transform = .identity
 						self.titleLabel.transform = .init(sourceRect: self.titleLabel.frame, destinationRect: self.placeholderLabel.frame)
 					} else {
@@ -120,36 +110,44 @@ public final class MaterialTextView: UIView {
 				}
 			}
 		case .alwaysOnTop:
-			if isActive {
-				attributes = isError ? self.style.errorActive.titleAttributes : self.style.normalActive.titleAttributes
+			if viewModel.isActive {
+				attributes = isError ? self.viewModel.style.errorActive.titleAttributes : self.viewModel.style.normalActive.titleAttributes
 			} else {
-				attributes = isError ? self.style.errorInactive.titleAttributes : self.style.normalInactive.titleAttributes
+				attributes = isError ? self.viewModel.style.errorInactive.titleAttributes : self.viewModel.style.normalInactive.titleAttributes
 			}
 			self.titleLabel.transform = .identity
 			self.titleLabel.alpha = 1
 			self.placeholderLabel.alpha = 0
 			self.placeholderLabel.transform = .identity
 		}
-		self.titleLabel.attributedText = NSAttributedString(string: self.placeholder.text, attributes: attributes)
+		self.titleLabel.attributedText = NSAttributedString(string: placeholder.text, attributes: attributes)
 		UIView.animate(withDuration: hadInput ? placeholderAnimationDuration : 0) {
 			animation?()
 		}
-		UIView.animate(withDuration: hadInput ? self.lineAnimationDuration : 0) {
-			self.line.backgroundColor = self.visualState.lineColor
-			self.lineHeightConstraint.constant = self.visualState.lineHeight
-			self.layoutIfNeeded()
+		if hadInput {
+			UIView.animate(withDuration: self.lineAnimationDuration) {
+				self.changeLineStyle()
+				self.layoutIfNeeded()
+			}
+		} else {
+			self.changeLineStyle()
 		}
 
-		helpLabel.attributedText = NSAttributedString(string: helpText, attributes: visualState.helpAttributes)
+		helpLabel.attributedText = NSAttributedString(string: helpText, attributes: viewModel.visualState.helpAttributes)
 		updateAccessibilityValue()
 	}
 	
+	private func changeLineStyle() {
+		self.line.backgroundColor = self.viewModel.visualState.lineColor
+		self.lineHeightConstraint.constant = self.viewModel.visualState.lineHeight
+	}
+	
 	private func updateAccessibilityValue() {
-		self.textComponentInternal.accessibilityValue = text
+		self.textComponentInternal.accessibilityValue = viewModel.text
 	}
 	
 	private func updateAccessibilityLabelAndIdentifier() {
-		let accessibilityLabel = placeholder.text
+		let accessibilityLabel = viewModel.placeholder.text
 		self.textComponentInternal.accessibilityLabel = accessibilityLabel
 		let type = (textComponent is UITextField) ? "tf" : "tv"
 		self.textComponentInternal.isAccessibilityElement = true
@@ -158,25 +156,6 @@ public final class MaterialTextView: UIView {
 		self.textComponentInternal.accessibilityIdentifier = identifier
 		self.rightButton.accessibilityIdentifier = "\(identifier)_button"
 		self.helpLabel.accessibilityIdentifier = "\(identifier)_help"
-	}
-	
-	private var _style: Style = .defaultStyle
-	private var _styleWithoutTintColor: Style = .defaultStyle
-	public var style: Style {
-		get {
-			return _style
-		}
-		set {
-			if _style == newValue { return }
-			_style = newValue
-			_styleWithoutTintColor = newValue
-			didUpdateStyle()
-		}
-	}
-	
-	private func didUpdateStyle() {
-		styleChanged()
-		updateTintColor()
 	}
 	
 	public var maskAppearance: MaskAppearance {
@@ -188,54 +167,13 @@ public final class MaterialTextView: UIView {
 		}
 	}
 	
-	public var maxNumberOfLinesWithoutScrolling: CGFloat = 3
-
-	private var _text: String = ""
-	public var text: String {
-		get {
-			return _text
-		}
-		set {
-			if _text == newValue { return }
-			let oldValue = _text
-			_text = newValue
-			if let inputValidator = inputValidator {
-				errorState = self.validate(validator: inputValidator)
-			}
-			wasInputValid = !errorState.isError
-			if oldValue.isEmpty || newValue.isEmpty {
-				stateChanged(placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
-			}
-			textChanged()
-		}
-	}
-	
-	public var formattedText: String {
+	internal var formattedText: String {
 		textComponent.formattedText
-	}
-
-	public var help: String = "" {
-		didSet {
-			if !errorState.isError {
-				helpChanged(newHelp: help)
-			}
-		}
 	}
 	
 	internal func helpChanged(newHelp: String) {
-		helpLabel.attributedText = NSAttributedString(string: newHelp, attributes: visualState.helpAttributes)
+		helpLabel.attributedText = NSAttributedString(string: newHelp, attributes: viewModel.visualState.helpAttributes)
 		self.layoutIfNeeded()
-	}
-	
-	private var _textComponentMode: TextComponentMode = .textField
-	public var textComponentMode: TextComponentMode {
-		get { return _textComponentMode }
-		set {
-			if _textComponentMode == newValue { return }
-			_textComponentMode = newValue
-			replaceTextComponent()
-			updateAccessibilityLabelAndIdentifier()
-		}
 	}
 	
 	public var maskAttributes: [NSAttributedString.Key: Any] {
@@ -247,14 +185,8 @@ public final class MaterialTextView: UIView {
 		}
 	}
 	
-	public var rightButtonInfo: ButtonInfo? {
-		didSet {
-			rightButtonChanged()
-		}
-	}
-	
 	private func rightButtonChanged() {
-		if let info = rightButtonInfo {
+		if let info = viewModel.rightButtonInfo {
 			rightButton.setImage(UIImage(named: info.imageName), for: .normal)
 			showRightButton()
 		} else {
@@ -274,112 +206,22 @@ public final class MaterialTextView: UIView {
 		textViewToRightConstraint.isActive = true
 	}
 	
-	public var formats: [String] = [] {
-		didSet {
-			formatsChanged(formats: formats)
-		}
-	}
-	
-	public var useTintColorForActiveLine = true
-	public var useTintColorForActiveTitle = true
-	
-	private func updateTintColor() {
-		if useTintColorForActiveLine {
-			_style.normalActive.lineColor = tintColor
-		} else {
-			_style.normalActive.lineColor = _styleWithoutTintColor.normalActive.lineColor
-		}
-		
-		if useTintColorForActiveTitle {
-			_style.normalActive.titleAttributes[.foregroundColor] = tintColor
-		} else {
-			_style.normalActive.titleAttributes[.foregroundColor] = _styleWithoutTintColor.normalActive.titleAttributes[.foregroundColor]
-		}
-	}
-	
-	public enum TextComponentMode {
-		case textField
-		case textView
-	}
-	
-	private var _formatSymbols: [Character: CharacterSet] = ["d": CharacterSet.decimalDigits,
-															 "w": CharacterSet.letters,
-															 "*": CharacterSet.init(charactersIn: "").inverted]
-	public var formatSymbols: [Character: CharacterSet] {
-		get {
-			return _formatSymbols
-		}
-		set {
-			if _formatSymbols == newValue { return }
-			_formatSymbols = newValue
-			textComponentInternal.formatSymbols = newValue
-		}
-	}
-	
-	public var isActive: Bool = false {
-		didSet {
-			if isActive {
-				hadInput = true
-			}
-			stateChanged(placeholderTypeIsChanged: false)
-		}
-	}
-
-	private var _errorState: ErrorState = .normal
-	public var errorState: ErrorState {
-		get {
-			return _errorState
-		}
-		set {
-			if _errorState != newValue {
-				_errorState = newValue
-				stateChanged(placeholderTypeIsChanged: false)
-			}
-		}
-	}
-	
-	public var visualState: VisualState {
-		switch errorState {
-		case .normal:
-			return isActive ? style.normalActive : style.normalInactive
-		case .error(_):
-			return isActive ? style.errorActive : style.errorInactive
-		}
-	}
-
-	// Вызывается по validate()
-	public var actionValidator: Validator<String>?
-	// Вызывается при каждом изменении текста
-	public var inputValidator: Validator<String>? {
-		didSet {
-			if let inputValidator = inputValidator {
-				errorState = self.validate(validator: inputValidator)
-			}
-			wasInputValid = !errorState.isError
-			stateChanged(placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
-		}
-	}
-
-	/// Результат последней валидации
-	public var wasInputValid = true
-	public var wasActionValid = false
-	
 	@objc private func rightButtonAction(_ sender: UIButton) {
-		rightButtonInfo?.action?()
+		viewModel.rightButtonInfo?.action?()
 	}
 	
-	public var currentFormat: String? {
+	internal var currentFormat: String? {
 		textComponentInternal.currentFormat
 	}
 	
 	internal func updateAttributedText() {
 		self.shouldUpdate = false
-		textComponentInternal.inputAttributes = style.textAttributes
+		textComponentInternal.inputAttributes = viewModel.style.textAttributes
 		textComponentInternal.maskAttributes = textComponentInternal.inputAttributes
 		self.shouldUpdate = true
 		
-		if textComponentInternal.inputText != text {
-			textComponentInternal.inputText = text
+		if textComponentInternal.inputText != viewModel.text {
+			textComponentInternal.inputText = viewModel.text
 			self.textComponentDidChange()
 		}
 	}
@@ -395,17 +237,20 @@ public final class MaterialTextView: UIView {
 	}
 	
 	private func defaultInit() {
+		setupViewModel()
 		customInit()
 		updateAttributedText()
+		styleChanged()
 	}
 	
-	public convenience init() {
+	public convenience init(_ viewModel: MaterialTextViewModel = .init()) {
 		self.init(frame: CGRect.zero)
-	}
-	
-	private func textChanged() {
-		updateAccessibilityValue()
-		updateAttributes()
+		if self.viewModel != viewModel {
+			self.viewModel = viewModel
+			setupViewModel()
+			styleChanged()
+			formatsChanged(formats: viewModel.formats)
+		}
 	}
 	
 	private func updateAttributes() {
@@ -417,7 +262,7 @@ public final class MaterialTextView: UIView {
 	
 	private func styleChanged() {
 		updateAttributedText()
-		placeholderChanged(newPlaceholder: placeholder, typeIsChanged: false)
+		placeholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: false)
 	}
 	
 	private func formatsChanged(formats: [String]) {
@@ -428,9 +273,9 @@ public final class MaterialTextView: UIView {
 		updateTextViewHeight()
 		changeTextStates(placeholderTypeIsChanged: placeholderTypeIsChanged)
 		
-		if isActive && !textComponentInternal.isFirstResponder {
+		if viewModel.isActive && !textComponentInternal.isFirstResponder {
 			textComponentInternal.becomeFirstResponder()
-		} else if !isActive && textComponent.isFirstResponder {
+		} else if !viewModel.isActive && textComponent.isFirstResponder {
 			textComponentInternal.resignFirstResponder()
 		}
 	}
@@ -438,12 +283,12 @@ public final class MaterialTextView: UIView {
 	private func updateTextViewHeight() {
 		let attributedText = getAttributedText()
 		let size = attributedText.boundingRect(with: CGSize(width: textComponent.bounds.width, height: CGFloat.infinity), options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil)
-		let para = style.textAttributes[.paragraphStyle] as? NSParagraphStyle ?? NSParagraphStyle.materialTextViewDefault
+		let para = viewModel.style.textAttributes[.paragraphStyle] as? NSParagraphStyle ?? NSParagraphStyle.materialTextViewDefault
 		let lineHeight = para.minimumLineHeight + para.lineSpacing
-		if textComponentMode == .textField {
+		if viewModel.textComponentMode == .textField {
 			self.textViewHeightConstraint.constant = lineHeight+1
 		} else {
-			self.textViewHeightConstraint.constant = max(min(size.height, lineHeight * maxNumberOfLinesWithoutScrolling - lineHeight/6), lineHeight)
+			self.textViewHeightConstraint.constant = max(min(size.height, lineHeight * viewModel.maxNumberOfLinesWithoutScrolling - lineHeight/6), lineHeight)
 		}
 		
 		self.superview?.layoutIfNeeded()
@@ -458,12 +303,12 @@ public final class MaterialTextView: UIView {
 	}
 	
 	private func getAttributedText() -> NSAttributedString {
-		let text = self.currentFormat == nil ? textComponentInternal.inputText : text
+		let text = self.currentFormat == nil ? textComponentInternal.inputText : viewModel.text
 		var attributedText: NSAttributedString
 		if text.isEmpty {
-			attributedText = NSAttributedString(string: " ", attributes: style.textAttributes)
+			attributedText = NSAttributedString(string: " ", attributes: viewModel.style.textAttributes)
 		} else {
-			attributedText = self.currentFormat == nil ? textComponentInternal.inputAttributedText : NSAttributedString(string: text, attributes: style.textAttributes)
+			attributedText = self.currentFormat == nil ? textComponentInternal.inputAttributedText : NSAttributedString(string: text, attributes: viewModel.style.textAttributes)
 		}
 		return attributedText
 	}
@@ -532,16 +377,16 @@ public final class MaterialTextView: UIView {
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(becomeFirstResponder))
 		addGestureRecognizer(tapGesture)
 		
-		titleLabel.attributedText = NSAttributedString(string: placeholder.text,
-													   attributes: style.normalInactive.titleAttributes)
-		placeholderLabel.attributedText = NSAttributedString(string: placeholder.text,
-															 attributes: style.placeholderAttributes)
+		titleLabel.attributedText = NSAttributedString(string: viewModel.placeholder.text,
+													   attributes: viewModel.style.normalInactive.titleAttributes)
+		placeholderLabel.attributedText = NSAttributedString(string: viewModel.placeholder.text,
+															 attributes: viewModel.style.placeholderAttributes)
 		makeLayout()
 		
 		rightButton.addTarget(self, action: #selector(rightButtonAction(_:)), for: .touchUpInside)
 		replaceTextComponent()
 		
-		placeholderChanged(newPlaceholder: self.placeholder, typeIsChanged: true)
+		placeholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: true)
 	}
 	
 	internal func replaceTextComponent() {
@@ -549,7 +394,7 @@ public final class MaterialTextView: UIView {
 			textComponentInternal.removeFromSuperview()
 		}
 		
-		switch textComponentMode {
+		switch viewModel.textComponentMode {
 		case .textField:
 			textComponentInternal = FormattableTextField()
 			if let tf = textComponentInternal as? UITextField {
@@ -566,15 +411,60 @@ public final class MaterialTextView: UIView {
 		}
 		textComponentInternal.insetX = 0
 		addTextComponent()
-		let text = self.text
-		textComponentInternal.formatSymbols = formatSymbols
-		textComponentInternal.formats = formats
-		self.text = text
+		let text = self.viewModel.text
+		textComponentInternal.formatSymbols = viewModel.formatSymbols
+		textComponentInternal.formats = viewModel.formats
+		self.viewModel.text = text
 		updateAttributes()
 	}
 	
     @discardableResult
 	override public func becomeFirstResponder() -> Bool {
 		return textComponentInternal.becomeFirstResponder()
+	}
+}
+
+extension MaterialTextView: MaterialTextViewProtocol {
+	
+	public func viewModelTextChanged(viewModel: MaterialTextViewModel) {
+		updateAccessibilityValue()
+		updateAttributes()
+	}
+	
+	public func viewModelHelpChanged(newHelp: String) {
+		helpChanged(newHelp: newHelp)
+	}
+	
+	public func viewModelStateChanged(viewModel: MaterialTextViewModel, placeholderTypeIsChanged: Bool) {
+		if viewModel.isActive {
+			hadInput = true
+		}
+		stateChanged(placeholderTypeIsChanged: placeholderTypeIsChanged)
+	}
+	
+	public func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool) {
+		placeholderChanged(newPlaceholder: newPlaceholder, typeIsChanged: typeIsChanged)
+	}
+	
+	public func viewModelStyleChanged() {
+		styleChanged()
+	}
+	
+	public func viewModelFormatSymbolsChanged(formatSymbols: [Character : CharacterSet]) {
+		textComponentInternal.formatSymbols = formatSymbols
+	}
+	
+	public func viewModelFormatsChanged(formats: [String]) {
+		formatsChanged(formats: formats)
+	}
+	
+	public func viewModelTextComponentModeChanged() {
+		replaceTextComponent()
+		updateAccessibilityLabelAndIdentifier()
+	}
+	
+	public func viewModelRightButtonChanged() {
+		replaceTextComponent()
+		updateAccessibilityLabelAndIdentifier()
 	}
 }
