@@ -28,9 +28,9 @@ public final class MaterialTextView: UIView {
 	internal var titleLabel = UILabel()
 	internal var line = UIView()
 	internal var shouldUpdate: Bool = true
+	internal var hadInput: Bool = false
 	private let textFieldHeightOffset: CGFloat = 1
 	private var attributedPlaceholder: NSAttributedString!
-	private var hadInput: Bool = false
 	private var isFirstInput: Bool = true
 	
 	internal var textViewToRightConstraint: NSLayoutConstraint!
@@ -98,9 +98,12 @@ public final class MaterialTextView: UIView {
 				}
 			} else {
 				attributes = isError ? self.viewModel.style.errorInactive.titleAttributes : self.viewModel.style.normalInactive.titleAttributes
+				
 				animation = {
 					self.titleLabel.alpha = placeholder.type == .animated && (!formattedText.isEmpty || !self.viewModel.text.isEmpty) ? 1 : 0
 					self.placeholderLabel.alpha = formattedText.isEmpty && self.viewModel.text.isEmpty ? 1 : 0
+					self.setNeedsLayout()
+					self.layoutIfNeeded()
 					if placeholder.type == .animated && formattedText.isEmpty && self.viewModel.text.isEmpty && self.titleLabel.bounds.width > 0 {
 						self.placeholderLabel.transform = .identity
 						self.titleLabel.transform = .init(sourceRect: self.titleLabel.frame, destinationRect: self.placeholderLabel.frame)
@@ -436,9 +439,6 @@ extension MaterialTextView: MaterialTextViewProtocol {
 	}
 	
 	public func viewModelStateChanged(viewModel: MaterialTextViewModel, placeholderTypeIsChanged: Bool) {
-		if viewModel.isActive {
-			hadInput = true
-		}
 		stateChanged(placeholderTypeIsChanged: placeholderTypeIsChanged)
 	}
 	

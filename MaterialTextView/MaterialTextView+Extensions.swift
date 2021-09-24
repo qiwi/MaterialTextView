@@ -53,6 +53,7 @@ extension MaterialTextView {
 	}
 	
 	func textComponentDidBeginEditing() {
+		hadInput = true
 		viewModel.isActive = true
 		viewModel.didBeginEditing?()
 		delegate?.materialTextViewDidBeginEditing(self)
