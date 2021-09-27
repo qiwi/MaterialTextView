@@ -48,6 +48,7 @@ public final class MaterialTextView: UIView {
 			setupViewModel()
 			styleChanged()
 			formatsChanged(formats: viewModel.formats)
+			viewModelRightButtonChanged()
 		}
 	}
 	
@@ -244,6 +245,7 @@ public final class MaterialTextView: UIView {
 		customInit()
 		updateAttributedText()
 		styleChanged()
+		viewModelRightButtonChanged()
 	}
 	
 	public convenience init(_ viewModel: MaterialTextViewModel = .init()) {
@@ -253,6 +255,7 @@ public final class MaterialTextView: UIView {
 			setupViewModel()
 			styleChanged()
 			formatsChanged(formats: viewModel.formats)
+			viewModelRightButtonChanged()
 		}
 	}
 	
@@ -464,7 +467,7 @@ extension MaterialTextView: MaterialTextViewProtocol {
 	}
 	
 	public func viewModelRightButtonChanged() {
-		replaceTextComponent()
+		rightButtonChanged()
 		updateAccessibilityLabelAndIdentifier()
 	}
 }
