@@ -49,6 +49,7 @@ public final class MaterialTextView: UIView {
 			styleChanged()
 			formatsChanged(formats: viewModel.formats)
 			viewModelRightButtonChanged()
+			viewModel.validateInput()
 		}
 	}
 	

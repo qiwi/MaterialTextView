@@ -18,7 +18,7 @@ class FormatsViewController: UIViewController {
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
-		self.tv.viewModel = .init(text: "123456", help: "Max length is 5 symbols", textComponentMode: .textView, placeholder: .init(type: .animated, text: "Digits (TextView, animated)"), inputValidator: { $0.count > 5 ? .invalid(text: "Too long") : .valid }, formats: ["ddddddd"], rightButtonInfo: .init(imageName: "icon", action: nil))
+		self.tv.viewModel = .init(text: "", help: "Max length is 5 symbols", textComponentMode: .textView, placeholder: .init(type: .animated, text: "Digits (TextView, animated)"), inputValidator: { $0.count > 5 ? .invalid(text: "Too long") : .valid }, formats: ["ddddddd"], rightButtonInfo: .init(imageName: "icon", action: nil))
 		
 		self.tf.viewModel = .init(textComponentMode: .textField, placeholder: .init(type: .normal, text: "Alphabet symbols only (TextField)"), inputValidator: { $0.count > 5 ? .invalid(text: "Too long") : .valid }, formats: ["wwwwwwwwwwwwwwwwww"], rightButtonInfo: .init(imageName: "icon", action: nil))
 		
@@ -49,7 +49,9 @@ class FormatsViewController: UIViewController {
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		self.tv.viewModel.text = ""
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			self.tv.viewModel.text = "1234567"
+		}
 	}
 
 }
