@@ -46,5 +46,10 @@ class FormatsViewController: UIViewController {
 		}
 		stack.addArrangedSubview(tv4)
     }
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		self.tv.viewModel.text = ""
+	}
 
 }

@@ -435,6 +435,7 @@ extension MaterialTextView: MaterialTextViewProtocol {
 	public func viewModelTextChanged(viewModel: MaterialTextViewModel) {
 		updateAccessibilityValue()
 		updateAttributes()
+		placeholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: false)
 	}
 	
 	public func viewModelHelpChanged(newHelp: String) {
