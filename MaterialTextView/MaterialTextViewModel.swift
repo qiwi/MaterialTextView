@@ -219,36 +219,37 @@ public final class MaterialTextViewModel {
 	
 	public var maxNumberOfLinesWithoutScrolling: CGFloat = 3
 	
-	internal var internalText: String {
-		get { return _text }
-		set {
-			let oldValue = _text
-			_text = newValue
-			if oldValue.isEmpty || newValue.isEmpty {
-				view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
-				delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
-			}
-			self.delegate?.viewModelTextChanged(viewModel: self)
-		}
-	}
+//	internal var internalText: String {
+//		get { return _text }
+//		set {
+//			let oldValue = _text
+//			_text = newValue
+//			if oldValue.isEmpty || newValue.isEmpty {
+//				view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
+//				delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
+//			}
+//			self.delegate?.viewModelTextChanged(viewModel: self)
+//		}
+//	}
 
 	private var _text: String
+	internal func validateInput() {
+		if let inputValidator = inputValidator {
+			errorState = validate(validator: inputValidator)
+		}
+		wasInputValid = !errorState.isError
+	}
+	
 	public var text: String {
 		get {
 			return _text
 		}
 		set {
 			if _text == newValue { return }
-			let oldValue = _text
 			_text = newValue
-			if let inputValidator = inputValidator {
-				errorState = validate(validator: inputValidator)
-			}
-			wasInputValid = !errorState.isError
-			if oldValue.isEmpty || newValue.isEmpty {
-				view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
-				delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
-			}
+			validateInput()
+			view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
+			delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
 			self.view?.viewModelTextChanged(viewModel: self)
 			self.delegate?.viewModelTextChanged(viewModel: self)
 			self.textDidChange?(newValue)

@@ -28,7 +28,7 @@ class FormatsViewController: UIViewController {
 		tv.textComponent.keyboardType = .numberPad
 		stack.addArrangedSubview(tv)
 		
-		let tv2 = MaterialTextView(MaterialTextViewModel(placeholder: .init(type: .animated, text: "Animated")))
+		let tv2 = MaterialTextView(MaterialTextViewModel(text: "Error", placeholder: .init(type: .animated, text: "Animated"), inputValidator: { text in return text.count < 4 ? .valid : .invalid(text: "Max length is 3") }))
 		tv2.translatesAutoresizingMaskIntoConstraints = false
 		stack.addArrangedSubview(tv2)
 		
