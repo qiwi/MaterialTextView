@@ -393,8 +393,6 @@ public final class MaterialTextView: UIView {
 		
 		rightButton.addTarget(self, action: #selector(rightButtonAction(_:)), for: .touchUpInside)
 		replaceTextComponent()
-		
-		placeholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: true)
 	}
 	
 	internal func replaceTextComponent() {

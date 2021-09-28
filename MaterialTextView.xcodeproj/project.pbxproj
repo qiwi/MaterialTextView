@@ -220,7 +220,7 @@
 		7C2110EB222FFC5A00D74B90 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1010;
+				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = QIWI;
 				TargetAttributes = {
