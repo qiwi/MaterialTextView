@@ -53,10 +53,13 @@ public final class MaterialTextView: UIView {
 		}
 	}
 	
-	private func placeholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool) {
-		placeholderLabel.attributedText = NSAttributedString(string: newPlaceholder.text,
+	private func placeholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool, styleIsChanged: Bool) {
+		if styleIsChanged {
+			placeholderLabel.attributedText = NSAttributedString(string: newPlaceholder.text,
 															 attributes: viewModel.style.placeholderAttributes)
-		updateAccessibilityLabelAndIdentifier()
+			updateAccessibilityLabelAndIdentifier()
+		}
+		
 		stateChanged(placeholderTypeIsChanged: true)
 	}
 	
@@ -270,7 +273,7 @@ public final class MaterialTextView: UIView {
 	
 	private func styleChanged() {
 		updateAttributedText()
-		placeholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: false)
+		placeholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: false, styleIsChanged: true)
 	}
 	
 	private func formatsChanged(formats: [String]) {
@@ -435,7 +438,7 @@ extension MaterialTextView: MaterialTextViewProtocol {
 	public func viewModelTextChanged(viewModel: MaterialTextViewModel) {
 		updateAccessibilityValue()
 		updateAttributes()
-		placeholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: false)
+		placeholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: false, styleIsChanged: false)
 	}
 	
 	public func viewModelHelpChanged(newHelp: String) {
@@ -447,7 +450,7 @@ extension MaterialTextView: MaterialTextViewProtocol {
 	}
 	
 	public func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool) {
-		placeholderChanged(newPlaceholder: newPlaceholder, typeIsChanged: typeIsChanged)
+		placeholderChanged(newPlaceholder: newPlaceholder, typeIsChanged: typeIsChanged, styleIsChanged: true)
 	}
 	
 	public func viewModelStyleChanged() {
