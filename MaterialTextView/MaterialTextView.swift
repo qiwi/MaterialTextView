@@ -48,7 +48,7 @@ public final class MaterialTextView: UIView {
 			setupViewModel()
 			styleChanged()
 			formatsChanged(formats: viewModel.formats)
-			viewModelRightButtonChanged()
+			viewModelRightButtonChanged(viewModel: self.viewModel)
 			viewModel.validateInput()
 		}
 	}
@@ -249,7 +249,7 @@ public final class MaterialTextView: UIView {
 		customInit()
 		updateAttributedText()
 		styleChanged()
-		viewModelRightButtonChanged()
+		viewModelRightButtonChanged(viewModel: self.viewModel)
 	}
 	
 	public convenience init(_ viewModel: MaterialTextViewModel = .init()) {
@@ -259,7 +259,7 @@ public final class MaterialTextView: UIView {
 			setupViewModel()
 			styleChanged()
 			formatsChanged(formats: viewModel.formats)
-			viewModelRightButtonChanged()
+			viewModelRightButtonChanged(viewModel: self.viewModel)
 			viewModel.validateInput()
 		}
 	}
@@ -441,36 +441,36 @@ extension MaterialTextView: MaterialTextViewProtocol {
 		placeholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: false, styleIsChanged: false)
 	}
 	
-	public func viewModelHelpChanged(newHelp: String) {
-		helpChanged(newHelp: newHelp)
+	public func viewModelHelpChanged(viewModel: MaterialTextViewModel) {
+		helpChanged(newHelp: viewModel.help)
 	}
 	
 	public func viewModelStateChanged(viewModel: MaterialTextViewModel, placeholderTypeIsChanged: Bool) {
 		stateChanged(placeholderTypeIsChanged: placeholderTypeIsChanged)
 	}
 	
-	public func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool) {
-		placeholderChanged(newPlaceholder: newPlaceholder, typeIsChanged: typeIsChanged, styleIsChanged: true)
+	public func viewModelPlaceholderChanged(viewModel: MaterialTextViewModel, typeIsChanged: Bool) {
+		placeholderChanged(newPlaceholder: viewModel.placeholder, typeIsChanged: typeIsChanged, styleIsChanged: true)
 	}
 	
-	public func viewModelStyleChanged() {
+	public func viewModelStyleChanged(viewModel: MaterialTextViewModel) {
 		styleChanged()
 	}
 	
-	public func viewModelFormatSymbolsChanged(formatSymbols: [Character : CharacterSet]) {
-		textComponentInternal.formatSymbols = formatSymbols
+	public func viewModelFormatSymbolsChanged(viewModel: MaterialTextViewModel) {
+		textComponentInternal.formatSymbols = viewModel.formatSymbols
 	}
 	
-	public func viewModelFormatsChanged(formats: [String]) {
-		formatsChanged(formats: formats)
+	public func viewModelFormatsChanged(viewModel: MaterialTextViewModel) {
+		formatsChanged(formats: viewModel.formats)
 	}
 	
-	public func viewModelTextComponentModeChanged() {
+	public func viewModelTextComponentModeChanged(viewModel: MaterialTextViewModel) {
 		replaceTextComponent()
 		updateAccessibilityLabelAndIdentifier()
 	}
 	
-	public func viewModelRightButtonChanged() {
+	public func viewModelRightButtonChanged(viewModel: MaterialTextViewModel) {
 		rightButtonChanged()
 		updateAccessibilityLabelAndIdentifier()
 	}

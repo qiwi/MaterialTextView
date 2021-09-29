@@ -11,14 +11,14 @@ import UIKit
 
 public protocol MaterialTextViewModelBaseDelegate: AnyObject {
 	func viewModelTextChanged(viewModel: MaterialTextViewModel)
-	func viewModelHelpChanged(newHelp: String)
+	func viewModelHelpChanged(viewModel: MaterialTextViewModel)
 	func viewModelStateChanged(viewModel: MaterialTextViewModel, placeholderTypeIsChanged: Bool)
-	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool)
-	func viewModelStyleChanged()
-	func viewModelFormatSymbolsChanged(formatSymbols: [Character: CharacterSet])
-	func viewModelFormatsChanged(formats: [String])
-	func viewModelTextComponentModeChanged()
-	func viewModelRightButtonChanged()
+	func viewModelPlaceholderChanged(viewModel: MaterialTextViewModel, typeIsChanged: Bool)
+	func viewModelStyleChanged(viewModel: MaterialTextViewModel)
+	func viewModelFormatSymbolsChanged(viewModel: MaterialTextViewModel)
+	func viewModelFormatsChanged(viewModel: MaterialTextViewModel)
+	func viewModelTextComponentModeChanged(viewModel: MaterialTextViewModel)
+	func viewModelRightButtonChanged(viewModel: MaterialTextViewModel)
 }
 
 public protocol MaterialTextViewModelDelegate: MaterialTextViewModelBaseDelegate {
@@ -31,12 +31,12 @@ internal protocol MaterialTextViewViewModelDelegate: MaterialTextViewModelBaseDe
 
 public extension MaterialTextViewModelDelegate {
 	func viewModelTextChanged(viewModel: MaterialTextViewModel) {}
-	func viewModelHelpChanged(newHelp: String) {}
+	func viewModelHelpChanged(viewModel: MaterialTextViewModel) {}
 	func viewModelStateChanged(viewModel: MaterialTextViewModel, placeholderTypeIsChanged: Bool) {}
-	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool) {}
-	func viewModelStyleChanged() {}
-	func viewModelFormatSymbolsChanged(formatSymbols: [Character: CharacterSet]) {}
-	func viewModelFormatsChanged(formats: [String]) {}
+	func viewModelPlaceholderChanged(viewModel: MaterialTextViewModel, typeIsChanged: Bool) {}
+	func viewModelStyleChanged(viewModel: MaterialTextViewModel) {}
+	func viewModelFormatSymbolsChanged(viewModel: MaterialTextViewModel) {}
+	func viewModelFormatsChanged(viewModel: MaterialTextViewModel) {}
 	func viewModelTextComponentModeChanged(viewModel: MaterialTextViewModel) {}
 	func viewModelRightButtonChanged(viewModel: MaterialTextViewModel) {}
 }
@@ -109,8 +109,8 @@ public final class MaterialTextViewModel {
 			if _placeholder == newValue { return }
 			let oldPlaceholder = _placeholder
 			_placeholder = newValue
-			self.view?.viewModelPlaceholderChanged(newPlaceholder: placeholder, typeIsChanged: newValue.type != oldPlaceholder.type)
-			self.delegate?.viewModelPlaceholderChanged(newPlaceholder: placeholder, typeIsChanged: newValue != oldPlaceholder)
+			self.view?.viewModelPlaceholderChanged(viewModel: self, typeIsChanged: newValue.type != oldPlaceholder.type)
+			self.delegate?.viewModelPlaceholderChanged(viewModel: self, typeIsChanged: newValue != oldPlaceholder)
 		}
 	}
 	
@@ -129,8 +129,8 @@ public final class MaterialTextViewModel {
 	}
 	
 	private func didUpdateStyle() {
-		view?.viewModelStyleChanged()
-		delegate?.viewModelStyleChanged()
+		view?.viewModelStyleChanged(viewModel: self)
+		delegate?.viewModelStyleChanged(viewModel: self)
 		updateTintColor()
 	}
 	
@@ -170,8 +170,8 @@ public final class MaterialTextViewModel {
 		set {
 			if _formatSymbols == newValue { return }
 			_formatSymbols = newValue
-			view?.viewModelFormatSymbolsChanged(formatSymbols: newValue)
-			delegate?.viewModelFormatSymbolsChanged(formatSymbols: newValue)
+			view?.viewModelFormatSymbolsChanged(viewModel: self)
+			delegate?.viewModelFormatSymbolsChanged(viewModel: self)
 		}
 	}
 	
@@ -258,8 +258,8 @@ public final class MaterialTextViewModel {
 
 	public var help: String = "" {
 		didSet {
-			self.view?.viewModelHelpChanged(newHelp: help)
-			self.delegate?.viewModelHelpChanged(newHelp: help)
+			self.view?.viewModelHelpChanged(viewModel: self)
+			self.delegate?.viewModelHelpChanged(viewModel: self)
 		}
 	}
 	
@@ -269,21 +269,21 @@ public final class MaterialTextViewModel {
 		set {
 			if _textComponentMode == newValue { return }
 			_textComponentMode = newValue
-			view?.viewModelTextComponentModeChanged()
+			view?.viewModelTextComponentModeChanged(viewModel: self)
 			delegate?.viewModelTextComponentModeChanged(viewModel: self)
 		}
 	}
 	
 	public var rightButtonInfo: ButtonInfo? {
 		didSet {
-			view?.viewModelRightButtonChanged()
+			view?.viewModelRightButtonChanged(viewModel: self)
 			delegate?.viewModelRightButtonChanged(viewModel: self)
 		}
 	}
 	public var formats: [String] {
 		didSet {
-			view?.viewModelFormatsChanged(formats: formats)
-			delegate?.viewModelFormatsChanged(formats: formats)
+			view?.viewModelFormatsChanged(viewModel: self)
+			delegate?.viewModelFormatsChanged(viewModel: self)
 		}
 	}
 	
