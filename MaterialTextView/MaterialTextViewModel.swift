@@ -331,6 +331,7 @@ public final class MaterialTextViewModel {
 		self.formatSymbols = formatSymbols
 		self.rightButtonInfo = rightButtonInfo
 		_style = style
+		_styleWithoutTintColor = style
 		didUpdateStyle()
 	}
 }
