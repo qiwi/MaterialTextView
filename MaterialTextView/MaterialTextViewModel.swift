@@ -134,8 +134,16 @@ public final class MaterialTextViewModel {
 		updateTintColor()
 	}
 	
-	public var useTintColorForActiveLine = true
-	public var useTintColorForActiveTitle = true
+	public var useTintColorForActiveLine = true {
+		didSet {
+			updateTintColor()
+		}
+	}
+	public var useTintColorForActiveTitle = true {
+		didSet {
+			updateTintColor()
+		}
+	}
 	
 	func updateTintColor() {
 		guard let view = view else { return }
