@@ -129,19 +129,27 @@ public final class MaterialTextViewModel {
 	}
 	
 	private func didUpdateStyle() {
+		updateTintColor()
 		view?.viewModelStyleChanged(viewModel: self)
 		delegate?.viewModelStyleChanged(viewModel: self)
-		updateTintColor()
 	}
 	
-	public var useTintColorForActiveLine = true {
-		didSet {
-			updateTintColor()
+	private var _useTintColorForActiveLine = true
+	public var useTintColorForActiveLine: Bool {
+		get { _useTintColorForActiveLine }
+		set {
+			if _useTintColorForActiveLine == newValue { return }
+			_useTintColorForActiveLine = newValue
+			didUpdateStyle()
 		}
 	}
-	public var useTintColorForActiveTitle = true {
-		didSet {
-			updateTintColor()
+	private var _useTintColorForActiveTitle = true
+	public var useTintColorForActiveTitle: Bool {
+		get { _useTintColorForActiveTitle }
+		set {
+			if _useTintColorForActiveTitle == newValue { return }
+			_useTintColorForActiveTitle = newValue
+			didUpdateStyle()
 		}
 	}
 	
