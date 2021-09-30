@@ -60,7 +60,7 @@ protocol MaterialTextViewProtocol: MaterialTextViewViewModelDelegate {
 extension MaterialTextViewProtocol where Self: UIView {
 	func setupViewModel() {
 		self.viewModel.view = self
-		self.viewModel.updateTintColor()
+		self.viewModel.didUpdateStyle()
 	}
 }
 
@@ -128,7 +128,7 @@ public final class MaterialTextViewModel {
 		}
 	}
 	
-	private func didUpdateStyle() {
+	internal func didUpdateStyle() {
 		updateTintColor()
 		view?.viewModelStyleChanged(viewModel: self)
 		delegate?.viewModelStyleChanged(viewModel: self)
@@ -153,7 +153,7 @@ public final class MaterialTextViewModel {
 		}
 	}
 	
-	func updateTintColor() {
+	private func updateTintColor() {
 		guard let view = view else { return }
 		var newStyle = _style
 		if useTintColorForActiveLine {
