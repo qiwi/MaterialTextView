@@ -368,7 +368,7 @@ public final class MaterialTextView: UIView {
 		textViewToRightConstraint = textComponentInternal.trailingAnchor.constraint(equalTo: self.trailingAnchor)
 		textViewToRightConstraint.priority = .required
 		let textViewBottom = textComponentInternal.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-		textViewBottom.priority = .defaultHigh
+		textViewBottom.priority = .required
 		textViewHeightConstraint = textComponentInternal.heightAnchor.constraint(equalToConstant: 44)
 
 		NSLayoutConstraint.activate([textComponentInternal.leadingAnchor.constraint(equalTo: self.leadingAnchor),
