@@ -175,10 +175,9 @@ public final class MaterialTextViewModel {
 		case textView
 	}
 	
-	public static let defaultFormatSymbols: [Character: CharacterSet] = ["d": CharacterSet.decimalDigits,
-																		  "w": CharacterSet.letters,
-																		  "*": CharacterSet.init(charactersIn: "").inverted]
-	private var _formatSymbols: [Character: CharacterSet] = MaterialTextViewModel.defaultFormatSymbols
+	private var _formatSymbols: [Character: CharacterSet] = ["d": CharacterSet.decimalDigits,
+															 "w": CharacterSet.letters,
+															 "*": CharacterSet.init(charactersIn: "").inverted]
 	public var formatSymbols: [Character: CharacterSet] {
 		get {
 			return _formatSymbols
@@ -319,7 +318,7 @@ public final class MaterialTextViewModel {
 				  actionValidator: @escaping Validator<String> = { _ in return .valid },
 				  inputValidator: Validator<String>? = nil,
 				  formats: [String] = [],
-				  formatSymbols: [Character: CharacterSet] = MaterialTextViewModel.defaultFormatSymbols,
+				  formatSymbols: [Character: CharacterSet]? = nil,
 				  rightButtonInfo: ButtonInfo? = nil) {
 		self._text = text
 		self.help = help
@@ -328,7 +327,9 @@ public final class MaterialTextViewModel {
 		self.inputValidator = inputValidator
 		self._placeholder = placeholder
 		self.formats = formats
-		self.formatSymbols = formatSymbols
+		if let formatSymbols = formatSymbols {
+			self.formatSymbols = formatSymbols
+		}
 		self.rightButtonInfo = rightButtonInfo
 		_style = style
 		_styleWithoutTintColor = style
