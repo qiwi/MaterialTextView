@@ -45,12 +45,17 @@ public final class MaterialTextView: UIView {
 	
 	public var viewModel: MaterialTextViewModel = .init() {
 		didSet {
-			setupViewModel()
-			styleChanged()
-			formatsChanged(formats: viewModel.formats)
-			viewModelRightButtonChanged(viewModel: self.viewModel)
-			viewModel.validateInput()
+			didSetViewModel()
 		}
+	}
+	
+	private func didSetViewModel() {
+		setupViewModel()
+		replaceTextComponent()
+		styleChanged()
+		formatsChanged(formats: viewModel.formats)
+		viewModelRightButtonChanged(viewModel: self.viewModel)
+		viewModel.validateInput()
 	}
 	
 	private func placeholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool, styleIsChanged: Bool) {
@@ -256,11 +261,7 @@ public final class MaterialTextView: UIView {
 		self.init(frame: CGRect.zero)
 		if self.viewModel != viewModel {
 			self.viewModel = viewModel
-			setupViewModel()
-			styleChanged()
-			formatsChanged(formats: viewModel.formats)
-			viewModelRightButtonChanged(viewModel: self.viewModel)
-			viewModel.validateInput()
+			self.didSetViewModel()
 		}
 	}
 	
