@@ -53,7 +53,6 @@ public final class MaterialTextView: UIView {
 		setupViewModel()
 		replaceTextComponent()
 		styleChanged()
-		formatsChanged(formats: viewModel.formats)
 		viewModelRightButtonChanged(viewModel: self.viewModel)
 		viewModel.validateInput()
 	}
