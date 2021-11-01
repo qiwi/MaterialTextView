@@ -7,37 +7,60 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7C1003B8223955AA007C0D50 /* NSAttributedString+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1003B7223955AA007C0D50 /* NSAttributedString+Extensions.swift */; };
+		7C1003B8223955AA007C0D50 /* NSParagraphStyle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1003B7223955AA007C0D50 /* NSParagraphStyle+Extensions.swift */; };
 		7C1FFE0622FAC3E9000C378A /* FormatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1FFE0522FAC3E9000C378A /* FormatsViewController.swift */; };
 		7C2110F9222FFC5A00D74B90 /* MaterialTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C2110F7222FFC5A00D74B90 /* MaterialTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C211105222FFC8B00D74B90 /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2110FF222FFC8B00D74B90 /* Validator.swift */; };
 		7C211106222FFC8B00D74B90 /* MaterialTextView-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C211100222FFC8B00D74B90 /* MaterialTextView-Bridging-Header.h */; };
-		7C211108222FFC8B00D74B90 /* MaterialTextViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C211102222FFC8B00D74B90 /* MaterialTextViewModel.swift */; };
 		7C211109222FFC8B00D74B90 /* MaterialTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C211103222FFC8B00D74B90 /* MaterialTextView.swift */; };
-		7C21110A222FFC8B00D74B90 /* CALayer+Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C211104222FFC8B00D74B90 /* CALayer+Extentions.swift */; };
 		7C2111182230F01500D74B90 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2111172230F01500D74B90 /* AppDelegate.swift */; };
 		7C21111A2230F01500D74B90 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2111192230F01500D74B90 /* ViewController.swift */; };
 		7C21111D2230F01500D74B90 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C21111B2230F01500D74B90 /* Main.storyboard */; };
 		7C21111F2230F01500D74B90 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C21111E2230F01500D74B90 /* Assets.xcassets */; };
 		7C2111222230F01500D74B90 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C2111202230F01500D74B90 /* LaunchScreen.storyboard */; };
 		7C21112922311D5500D74B90 /* Imports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C21112822311D5500D74B90 /* Imports.swift */; };
-		7C5A89B123509CBF007A5535 /* UIFont+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5A89B023509CBF007A5535 /* UIFont+Extensions.swift */; };
+		7C33246F26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33246E26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift */; };
+		7C33248B26D635B100E69DB4 /* MaterialTextView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */; };
+		7C33248C26D635B100E69DB4 /* MaterialTextView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7C3324A326E23EA800E69DB4 /* MaterialTextViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3324A226E23EA700E69DB4 /* MaterialTextViewModel.swift */; };
+		7C3DDA1826C67B3D005F1691 /* MaterialTextView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3DDA1726C67B3D005F1691 /* MaterialTextView+Extensions.swift */; };
+		7C3DDA1B26CBA87F005F1691 /* FormattableTextView in Frameworks */ = {isa = PBXBuildFile; productRef = 7C3DDA1A26CBA87F005F1691 /* FormattableTextView */; };
 		7C7C07B52281762300E50181 /* MaterialTextComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7C07B42281762300E50181 /* MaterialTextComponent.swift */; };
-		7C8F6632242D1743004285F8 /* MaterialTextView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */; };
-		7C9A74632657EA0B00C1FF52 /* FormattableTextView in Frameworks */ = {isa = PBXBuildFile; productRef = 7C9A74622657EA0B00C1FF52 /* FormattableTextView */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		7C33248D26D635B100E69DB4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7C2110EB222FFC5A00D74B90 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C2110F3222FFC5A00D74B90;
+			remoteInfo = MaterialTextView;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7C33248F26D635B100E69DB4 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7C33248C26D635B100E69DB4 /* MaterialTextView.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		7C1003B7223955AA007C0D50 /* NSAttributedString+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extensions.swift"; sourceTree = "<group>"; };
+		7C1003B7223955AA007C0D50 /* NSParagraphStyle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSParagraphStyle+Extensions.swift"; sourceTree = "<group>"; };
 		7C1FFE0522FAC3E9000C378A /* FormatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatsViewController.swift; sourceTree = "<group>"; };
 		7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MaterialTextView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C2110F7222FFC5A00D74B90 /* MaterialTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MaterialTextView.h; sourceTree = "<group>"; };
 		7C2110F8222FFC5A00D74B90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C2110FF222FFC8B00D74B90 /* Validator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
 		7C211100222FFC8B00D74B90 /* MaterialTextView-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MaterialTextView-Bridging-Header.h"; sourceTree = "<group>"; };
-		7C211102222FFC8B00D74B90 /* MaterialTextViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaterialTextViewModel.swift; sourceTree = "<group>"; };
 		7C211103222FFC8B00D74B90 /* MaterialTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaterialTextView.swift; sourceTree = "<group>"; };
-		7C211104222FFC8B00D74B90 /* CALayer+Extentions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CALayer+Extentions.swift"; sourceTree = "<group>"; };
 		7C21110B222FFC9400D74B90 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		7C21110E222FFD3C00D74B90 /* FormattableTextView.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FormattableTextView.framework; path = Carthage/Build/iOS/Static/FormattableTextView.framework; sourceTree = "<group>"; };
 		7C2111152230F01400D74B90 /* MaterialTextViewExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MaterialTextViewExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -48,7 +71,9 @@
 		7C2111212230F01500D74B90 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7C2111232230F01500D74B90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C21112822311D5500D74B90 /* Imports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imports.swift; sourceTree = "<group>"; };
-		7C5A89B023509CBF007A5535 /* UIFont+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extensions.swift"; sourceTree = "<group>"; };
+		7C33246E26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGAffineTransform+Extensions.swift"; sourceTree = "<group>"; };
+		7C3324A226E23EA700E69DB4 /* MaterialTextViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialTextViewModel.swift; sourceTree = "<group>"; };
+		7C3DDA1726C67B3D005F1691 /* MaterialTextView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MaterialTextView+Extensions.swift"; sourceTree = "<group>"; };
 		7C7C07B42281762300E50181 /* MaterialTextComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialTextComponent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -57,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C9A74632657EA0B00C1FF52 /* FormattableTextView in Frameworks */,
+				7C3DDA1B26CBA87F005F1691 /* FormattableTextView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,7 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C8F6632242D1743004285F8 /* MaterialTextView.framework in Frameworks */,
+				7C33248B26D635B100E69DB4 /* MaterialTextView.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,17 +120,17 @@
 		7C2110F6222FFC5A00D74B90 /* MaterialTextView */ = {
 			isa = PBXGroup;
 			children = (
-				7C211104222FFC8B00D74B90 /* CALayer+Extentions.swift */,
 				7C211100222FFC8B00D74B90 /* MaterialTextView-Bridging-Header.h */,
 				7C211103222FFC8B00D74B90 /* MaterialTextView.swift */,
-				7C211102222FFC8B00D74B90 /* MaterialTextViewModel.swift */,
+				7C3DDA1726C67B3D005F1691 /* MaterialTextView+Extensions.swift */,
+				7C3324A226E23EA700E69DB4 /* MaterialTextViewModel.swift */,
 				7C2110FF222FFC8B00D74B90 /* Validator.swift */,
 				7C2110F7222FFC5A00D74B90 /* MaterialTextView.h */,
 				7C2110F8222FFC5A00D74B90 /* Info.plist */,
 				7C21112822311D5500D74B90 /* Imports.swift */,
-				7C1003B7223955AA007C0D50 /* NSAttributedString+Extensions.swift */,
+				7C1003B7223955AA007C0D50 /* NSParagraphStyle+Extensions.swift */,
 				7C7C07B42281762300E50181 /* MaterialTextComponent.swift */,
-				7C5A89B023509CBF007A5535 /* UIFont+Extensions.swift */,
+				7C33246E26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift */,
 			);
 			path = MaterialTextView;
 			sourceTree = "<group>";
@@ -162,7 +187,7 @@
 			);
 			name = MaterialTextView;
 			packageProductDependencies = (
-				7C9A74622657EA0B00C1FF52 /* FormattableTextView */,
+				7C3DDA1A26CBA87F005F1691 /* FormattableTextView */,
 			);
 			productName = MaterialTextView;
 			productReference = 7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */;
@@ -175,12 +200,16 @@
 				7C2111112230F01400D74B90 /* Sources */,
 				7C2111122230F01400D74B90 /* Frameworks */,
 				7C2111132230F01400D74B90 /* Resources */,
+				7C33248F26D635B100E69DB4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				7C33248E26D635B100E69DB4 /* PBXTargetDependency */,
 			);
 			name = MaterialTextViewExample;
+			packageProductDependencies = (
+			);
 			productName = MaterialTextViewExample;
 			productReference = 7C2111152230F01400D74B90 /* MaterialTextViewExample.app */;
 			productType = "com.apple.product-type.application";
@@ -191,7 +220,7 @@
 		7C2110EB222FFC5A00D74B90 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1010;
+				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = QIWI;
 				TargetAttributes = {
@@ -215,7 +244,7 @@
 			);
 			mainGroup = 7C2110EA222FFC5A00D74B90;
 			packageReferences = (
-				7C9A74612657EA0B00C1FF52 /* XCRemoteSwiftPackageReference "FormattableTextView" */,
+				7C3DDA1926CBA87F005F1691 /* XCRemoteSwiftPackageReference "FormattableTextView" */,
 			);
 			productRefGroup = 7C2110F5222FFC5A00D74B90 /* Products */;
 			projectDirPath = "";
@@ -252,13 +281,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C21110A222FFC8B00D74B90 /* CALayer+Extentions.swift in Sources */,
-				7C1003B8223955AA007C0D50 /* NSAttributedString+Extensions.swift in Sources */,
-				7C5A89B123509CBF007A5535 /* UIFont+Extensions.swift in Sources */,
+				7C1003B8223955AA007C0D50 /* NSParagraphStyle+Extensions.swift in Sources */,
 				7C211109222FFC8B00D74B90 /* MaterialTextView.swift in Sources */,
 				7C7C07B52281762300E50181 /* MaterialTextComponent.swift in Sources */,
 				7C21112922311D5500D74B90 /* Imports.swift in Sources */,
-				7C211108222FFC8B00D74B90 /* MaterialTextViewModel.swift in Sources */,
+				7C3DDA1826C67B3D005F1691 /* MaterialTextView+Extensions.swift in Sources */,
+				7C33246F26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift in Sources */,
+				7C3324A326E23EA800E69DB4 /* MaterialTextViewModel.swift in Sources */,
 				7C211105222FFC8B00D74B90 /* Validator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -274,6 +303,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7C33248E26D635B100E69DB4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C2110F3222FFC5A00D74B90 /* MaterialTextView */;
+			targetProxy = 7C33248D26D635B100E69DB4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		7C21111B2230F01500D74B90 /* Main.storyboard */ = {
@@ -561,9 +598,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7C9A74612657EA0B00C1FF52 /* XCRemoteSwiftPackageReference "FormattableTextView" */ = {
+		7C3DDA1926CBA87F005F1691 /* XCRemoteSwiftPackageReference "FormattableTextView" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/qiwi/FormattableTextView.git";
+			repositoryURL = "https://github.com/qiwi/FormattableTextView";
 			requirement = {
 				branch = master;
 				kind = branch;
@@ -572,9 +609,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7C9A74622657EA0B00C1FF52 /* FormattableTextView */ = {
+		7C3DDA1A26CBA87F005F1691 /* FormattableTextView */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7C9A74612657EA0B00C1FF52 /* XCRemoteSwiftPackageReference "FormattableTextView" */;
+			package = 7C3DDA1926CBA87F005F1691 /* XCRemoteSwiftPackageReference "FormattableTextView" */;
 			productName = FormattableTextView;
 		};
 /* End XCSwiftPackageProductDependency section */

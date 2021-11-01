@@ -11,12 +11,12 @@ import UIKit
 
 public protocol MaterialTextViewModelBaseDelegate: AnyObject {
 	func viewModelTextChanged(viewModel: MaterialTextViewModel)
-	func viewModelHelpChanged(newHelp: String)
+	func viewModelHelpChanged(viewModel: MaterialTextViewModel)
 	func viewModelStateChanged(viewModel: MaterialTextViewModel, placeholderTypeIsChanged: Bool)
-	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool)
-	func viewModelStyleChanged()
-	func viewModelFormatSymbolsChanged(formatSymbols: [Character: CharacterSet])
-	func viewModelFormatsChanged(formats: [String])
+	func viewModelPlaceholderChanged(viewModel: MaterialTextViewModel, typeIsChanged: Bool)
+	func viewModelStyleChanged(viewModel: MaterialTextViewModel)
+	func viewModelFormatSymbolsChanged(viewModel: MaterialTextViewModel)
+	func viewModelFormatsChanged(viewModel: MaterialTextViewModel)
 	func viewModelTextComponentModeChanged(viewModel: MaterialTextViewModel)
 	func viewModelRightButtonChanged(viewModel: MaterialTextViewModel)
 }
@@ -26,41 +26,42 @@ public protocol MaterialTextViewModelDelegate: MaterialTextViewModelBaseDelegate
 
 internal protocol MaterialTextViewViewModelDelegate: MaterialTextViewModelBaseDelegate {
 	var currentFormat: String? { get }
-	var formattedText: String? { get }
+	var formattedText: String { get }
 }
 
 public extension MaterialTextViewModelDelegate {
 	func viewModelTextChanged(viewModel: MaterialTextViewModel) {}
-	func viewModelHelpChanged(newHelp: String) {}
+	func viewModelHelpChanged(viewModel: MaterialTextViewModel) {}
 	func viewModelStateChanged(viewModel: MaterialTextViewModel, placeholderTypeIsChanged: Bool) {}
-	func viewModelPlaceholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool) {}
-	func viewModelStyleChanged() {}
-	func viewModelFormatSymbolsChanged(formatSymbols: [Character: CharacterSet]) {}
-	func viewModelFormatsChanged(formats: [String]) {}
+	func viewModelPlaceholderChanged(viewModel: MaterialTextViewModel, typeIsChanged: Bool) {}
+	func viewModelStyleChanged(viewModel: MaterialTextViewModel) {}
+	func viewModelFormatSymbolsChanged(viewModel: MaterialTextViewModel) {}
+	func viewModelFormatsChanged(viewModel: MaterialTextViewModel) {}
 	func viewModelTextComponentModeChanged(viewModel: MaterialTextViewModel) {}
 	func viewModelRightButtonChanged(viewModel: MaterialTextViewModel) {}
 }
 
 public struct ButtonInfo {
 
-    let imageName: String
-    let action: EmptyClosure?
+	let imageName: String
+	let action: EmptyClosure?
 
-    public init(imageName: String, action: (() -> Void)?) {
-        self.imageName = imageName
-        self.action = action
-    }
+	public init(imageName: String, action: (() -> Void)?) {
+		self.imageName = imageName
+		self.action = action
+	}
 }
 
 protocol MaterialTextViewProtocol: MaterialTextViewViewModelDelegate {
-    func setupViewModel()
-    var viewModel: MaterialTextViewModel? { get set }
+	func setupViewModel()
+	var viewModel: MaterialTextViewModel { get set }
 }
 
 extension MaterialTextViewProtocol where Self: UIView {
-    func setupViewModel() {
-        self.viewModel?.view = self
-    }
+	func setupViewModel() {
+		self.viewModel.view = self
+		self.viewModel.updateTintColor()
+	}
 }
 
 public final class MaterialTextViewModel {
@@ -79,35 +80,42 @@ public final class MaterialTextViewModel {
 		}
 	}
 
-    public enum PlaceholderType {
-        case normal
-        case animated
+	public enum PlaceholderType {
+		case normal
+		case animated
 		case alwaysOnTop
-    }
+	}
 
 	public struct Placeholder: Equatable {
-        public var type: PlaceholderType
-        public var text: String
+		public var type: PlaceholderType
+		public var text: String
 		
 		public init(type: PlaceholderType, text: String) {
 			self.type = type
 			self.text = text
 		}
-    }
+	}
+	
+	public var textDidChange: ((String) -> Void)?
+	public var didBeginEditing: EmptyClosure?
+	public var didEndEditing: EmptyClosure?
+	public var shouldChangeText: ((NSRange, String) -> Bool)?
+	public var stateDidChange: ((ErrorState) -> Void)?
 
 	private var _placeholder: Placeholder
-    public var placeholder: Placeholder {
+	public var placeholder: Placeholder {
 		get { return _placeholder }
-        set {
+		set {
 			if _placeholder == newValue { return }
 			let oldPlaceholder = _placeholder
 			_placeholder = newValue
-            self.view?.viewModelPlaceholderChanged(newPlaceholder: placeholder, typeIsChanged: newValue.type != oldPlaceholder.type)
-            self.delegate?.viewModelPlaceholderChanged(newPlaceholder: placeholder, typeIsChanged: newValue != oldPlaceholder)
-        }
-    }
+			self.view?.viewModelPlaceholderChanged(viewModel: self, typeIsChanged: newValue.type != oldPlaceholder.type)
+			self.delegate?.viewModelPlaceholderChanged(viewModel: self, typeIsChanged: newValue != oldPlaceholder)
+		}
+	}
 	
 	private var _style: Style = .defaultStyle
+	private var _styleWithoutTintColor: Style = .defaultStyle
 	public var style: Style {
 		get {
 			return _style
@@ -115,27 +123,49 @@ public final class MaterialTextViewModel {
 		set {
 			if _style == newValue { return }
 			_style = newValue
+			_styleWithoutTintColor = newValue
 			didUpdateStyle()
 		}
 	}
 	
 	private func didUpdateStyle() {
-		view?.viewModelStyleChanged()
-		delegate?.viewModelStyleChanged()
 		updateTintColor()
+		view?.viewModelStyleChanged(viewModel: self)
+		delegate?.viewModelStyleChanged(viewModel: self)
 	}
 	
-	public var useTintColorForActiveLine = true
-	public var useTintColorForActiveTitle = true
+	private var _useTintColorForActiveLine = true
+	public var useTintColorForActiveLine: Bool {
+		get { _useTintColorForActiveLine }
+		set {
+			if _useTintColorForActiveLine == newValue { return }
+			_useTintColorForActiveLine = newValue
+			didUpdateStyle()
+		}
+	}
+	private var _useTintColorForActiveTitle = true
+	public var useTintColorForActiveTitle: Bool {
+		get { _useTintColorForActiveTitle }
+		set {
+			if _useTintColorForActiveTitle == newValue { return }
+			_useTintColorForActiveTitle = newValue
+			didUpdateStyle()
+		}
+	}
 	
-	private func updateTintColor() {
+	internal func updateTintColor() {
 		guard let view = view else { return }
 		var newStyle = _style
 		if useTintColorForActiveLine {
 			newStyle.normalActive.lineColor = view.tintColor
+		} else {
+			newStyle.normalActive.lineColor = _styleWithoutTintColor.normalActive.lineColor
 		}
+		
 		if useTintColorForActiveTitle {
-			newStyle.normalActive.titleColor = view.tintColor
+			newStyle.normalActive.titleAttributes[.foregroundColor] = view.tintColor
+		} else {
+			newStyle.normalActive.titleAttributes[.foregroundColor] = _styleWithoutTintColor.normalActive.titleAttributes[.foregroundColor]
 		}
 		_style = newStyle
 	}
@@ -155,8 +185,8 @@ public final class MaterialTextViewModel {
 		set {
 			if _formatSymbols == newValue { return }
 			_formatSymbols = newValue
-			view?.viewModelFormatSymbolsChanged(formatSymbols: newValue)
-			delegate?.viewModelFormatSymbolsChanged(formatSymbols: newValue)
+			view?.viewModelFormatSymbolsChanged(viewModel: self)
+			delegate?.viewModelFormatSymbolsChanged(viewModel: self)
 		}
 	}
 	
@@ -168,7 +198,7 @@ public final class MaterialTextViewModel {
 	}
 
 	private var _errorState: ErrorState = .normal
-    public var errorState: ErrorState {
+	public var errorState: ErrorState {
 		get {
 			return _errorState
 		}
@@ -177,9 +207,10 @@ public final class MaterialTextViewModel {
 				_errorState = newValue
 				view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
 				delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
+				stateDidChange?(newValue)
 			}
 		}
-    }
+	}
 	
 	public var visualState: VisualState {
 		switch errorState {
@@ -190,60 +221,62 @@ public final class MaterialTextViewModel {
 		}
 	}
 
-    // Вызывается по viewModel.validate()
-    public var actionValidator: Validator<String>
-    // Вызывается при каждом изменении текста
-    public var inputValidator: Validator<String>?
+	// Вызывается по viewModel.validate()
+	public var actionValidator: Validator<String>
+	// Вызывается при каждом изменении текста
+	public var inputValidator: Validator<String>?
 
-    /// Результат последней валидации
-    public var wasInputValid = true
+	/// Результат последней валидации
+	public var wasInputValid = true
 	public var wasActionValid = false
-    fileprivate weak var view: (UIView & MaterialTextViewViewModelDelegate)?
-    public weak var delegate: MaterialTextViewModelDelegate?
+	fileprivate weak var view: (UIView & MaterialTextViewViewModelDelegate)?
+	public weak var delegate: MaterialTextViewModelDelegate?
 	
 	public var maxNumberOfLinesWithoutScrolling: CGFloat = 3
 	
-	internal var internalText: String {
-		get { return _text }
-		set {
-			let oldValue = _text
-			_text = newValue
-			if oldValue.isEmpty || newValue.isEmpty {
-				view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
-				delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
-			}
-			self.delegate?.viewModelTextChanged(viewModel: self)
-		}
-	}
+//	internal var internalText: String {
+//		get { return _text }
+//		set {
+//			let oldValue = _text
+//			_text = newValue
+//			if oldValue.isEmpty || newValue.isEmpty {
+//				view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
+//				delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
+//			}
+//			self.delegate?.viewModelTextChanged(viewModel: self)
+//		}
+//	}
 
 	private var _text: String
-    public var text: String {
+	internal func validateInput() {
+		if let inputValidator = inputValidator {
+			errorState = validate(validator: inputValidator)
+		}
+		wasInputValid = !errorState.isError
+	}
+	
+	public var text: String {
 		get {
 			return _text
 		}
-        set {
+		set {
 			if _text == newValue { return }
-			let oldValue = _text
 			_text = newValue
-			if let inputValidator = inputValidator {
-				errorState = validate(validator: inputValidator)
-			}
-			wasInputValid = !errorState.isError
-			if oldValue.isEmpty || newValue.isEmpty {
-				view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
-				delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
-			}
+			validateInput()
+			view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
+			delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
 			self.view?.viewModelTextChanged(viewModel: self)
 			self.delegate?.viewModelTextChanged(viewModel: self)
-        }
-    }
+			self.textDidChange?(newValue)
+		}
+	}
 
-    public var help: String = "" {
-        didSet {
-            self.view?.viewModelHelpChanged(newHelp: help)
-            self.delegate?.viewModelHelpChanged(newHelp: help)
-        }
-    }
+	public var help: String = "" {
+		didSet {
+			self.view?.viewModelHelpChanged(viewModel: self)
+			self.delegate?.viewModelHelpChanged(viewModel: self)
+		}
+	}
 	
 	private var _textComponentMode: TextComponentMode = .textField
 	public var textComponentMode: TextComponentMode {
@@ -264,8 +297,8 @@ public final class MaterialTextViewModel {
 	}
 	public var formats: [String] {
 		didSet {
-			view?.viewModelFormatsChanged(formats: formats)
-			delegate?.viewModelFormatsChanged(formats: formats)
+			view?.viewModelFormatsChanged(viewModel: self)
+			delegate?.viewModelFormatsChanged(viewModel: self)
 		}
 	}
 	
@@ -277,7 +310,7 @@ public final class MaterialTextViewModel {
 		view?.formattedText
 	}
 
-    public required init(text: String = "",
+	public required init(text: String = "",
 				  help: String = "",
 				  style: Style = .defaultStyle,
 				  textComponentMode: TextComponentMode = .textField,
@@ -285,77 +318,82 @@ public final class MaterialTextViewModel {
 				  actionValidator: @escaping Validator<String> = { _ in return .valid },
 				  inputValidator: Validator<String>? = nil,
 				  formats: [String] = [],
+				  formatSymbols: [Character: CharacterSet]? = nil,
 				  rightButtonInfo: ButtonInfo? = nil) {
-        self._text = text
-        self.help = help
+		self._text = text
+		self.help = help
 		_textComponentMode = textComponentMode
-        self.actionValidator = actionValidator
-        self.inputValidator = inputValidator
-        self._placeholder = placeholder
-        self.formats = formats
-        self.rightButtonInfo = rightButtonInfo
+		self.actionValidator = actionValidator
+		self.inputValidator = inputValidator
+		self._placeholder = placeholder
+		self.formats = formats
+		if let formatSymbols = formatSymbols {
+			self.formatSymbols = formatSymbols
+		}
+		self.rightButtonInfo = rightButtonInfo
 		_style = style
+		_styleWithoutTintColor = style
 		didUpdateStyle()
-    }
+	}
 }
 
 extension MaterialTextViewModel: Validatable {
-    @discardableResult
+	@discardableResult
 	public func validate() -> Bool {
 		errorState = validate(validator: actionValidator)
 		wasActionValid = !errorState.isError
 		view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
 		delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
-        return wasActionValid
-    }
+		return wasActionValid
+	}
 
-    @discardableResult
-    fileprivate func validate(validator: Validator<String>) -> ErrorState {
-        switch validator(text) {
-        case .valid:
+	@discardableResult
+	fileprivate func validate(validator: Validator<String>) -> ErrorState {
+		switch validator(text) {
+		case .valid:
 			return .normal
-        case .invalid(let text):
-            return .error(text)
-        }
-    }
+		case .invalid(let text):
+			return .error(text)
+		}
+	}
 }
 
-extension MaterialTextViewModel {
+public extension MaterialTextViewModel {
 	
-	public struct VisualState: Equatable {
+	struct VisualState: Equatable {
 		
 		public static func == (lhs: VisualState, rhs: VisualState) -> Bool {
 			return  lhs.lineHeight == rhs.lineHeight &&
 				lhs.lineColor == rhs.lineColor &&
-				lhs.placeholderColor == rhs.placeholderColor &&
-				lhs.titleColor == rhs.titleColor &&
+				areAttributesEqual(lhs.titleAttributes, rhs.titleAttributes) &&
 				areAttributesEqual(lhs.helpAttributes, rhs.helpAttributes)
 		}
 		
 		public var helpAttributes: [NSAttributedString.Key: Any]
-		public var titleColor: UIColor
-		public var placeholderColor: UIColor
+		public var titleAttributes: [NSAttributedString.Key: Any]
 		public var lineColor: UIColor
 		public var lineHeight: CGFloat
 		
-		public init(helpAttributes: [NSAttributedString.Key: Any], titleColor: UIColor, placeholderColor: UIColor, lineColor: UIColor, lineHeight: CGFloat) {
+		public init(helpAttributes: [NSAttributedString.Key: Any],
+					titleAttributes: [NSAttributedString.Key: Any],
+					lineColor: UIColor,
+					lineHeight: CGFloat) {
 			self.helpAttributes = helpAttributes
-			self.titleColor = titleColor
-			self.placeholderColor = placeholderColor
+			self.titleAttributes = titleAttributes
 			self.lineColor = lineColor
 			self.lineHeight = lineHeight
 		}
 	}
 	
-	public struct Style: Equatable {
+	struct Style: Equatable {
 		
 		public static func == (lhs: Style, rhs: Style) -> Bool {
 			return lhs.normalActive == rhs.normalActive &&
 				lhs.normalInactive == rhs.normalInactive &&
 				lhs.errorActive == rhs.errorActive &&
 				lhs.errorInactive == rhs.errorInactive &&
-				lhs.titleFontSize == rhs.titleFontSize &&
-				areAttributesEqual(lhs.textAttributes, rhs.textAttributes)
+				areAttributesEqual(lhs.textAttributes, rhs.textAttributes) &&
+				areAttributesEqual(lhs.placeholderAttributes, rhs.placeholderAttributes)
 		}
 		
 		public var normalActive: VisualState
@@ -363,45 +401,52 @@ extension MaterialTextViewModel {
 		public var errorActive: VisualState
 		public var errorInactive: VisualState
 		public var textAttributes: [NSAttributedString.Key: Any]
-		public var titleFontSize: CGFloat
+		public var placeholderAttributes: [NSAttributedString.Key: Any]
 		
-		public init(normalActive: VisualState, normalInactive: VisualState, errorActive: VisualState, errorInactive: VisualState, textAttributes: [NSAttributedString.Key: Any], titleFontSize: CGFloat) {
+		public init(normalActive: VisualState,
+					normalInactive: VisualState,
+					errorActive: VisualState,
+					errorInactive: VisualState,
+					textAttributes: [NSAttributedString.Key: Any],
+					placeholderAttributes: [NSAttributedString.Key: Any]) {
 			self.normalActive = normalActive
 			self.normalInactive = normalInactive
 			self.errorActive = errorActive
 			self.errorInactive = errorInactive
 			self.textAttributes = textAttributes
-			self.titleFontSize = titleFontSize
+			self.placeholderAttributes = placeholderAttributes
 		}
 		
 		public static var defaultStyle =
 			Style(normalActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															 .foregroundColor: UIColor.darkGray],
-											titleColor: UIColor.black,
-											placeholderColor: UIColor.lightGray,
+											titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
+															  .foregroundColor: UIColor.black],
 											lineColor: UIColor.blue,
 											lineHeight: 2),
 				  normalInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															   .foregroundColor: UIColor.darkGray],
-											  titleColor: UIColor.gray,
-											  placeholderColor: UIColor.lightGray,
+											  titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
+																.foregroundColor: UIColor.gray],
 											  lineColor: UIColor.black,
 											  lineHeight: 1),
 				  errorActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															.foregroundColor: UIColor.red],
-										   titleColor: UIColor.red,
-										   placeholderColor: UIColor.lightGray,
+										   titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
+															 .foregroundColor: UIColor.red],
 										   lineColor: UIColor.red,
 										   lineHeight: 2),
 				  errorInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															  .foregroundColor: UIColor.red],
-											 titleColor: UIColor.red,
-											 placeholderColor: UIColor.lightGray,
+											 titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
+															   .foregroundColor: UIColor.red],
 											 lineColor: UIColor.red,
 											 lineHeight: 1),
 				  textAttributes: [.font: UIFont.systemFont(ofSize: 16),
 								   .foregroundColor: UIColor.black],
-				  titleFontSize: 10)
+				  placeholderAttributes: [.font: UIFont.systemFont(ofSize: 16),
+										  .foregroundColor: UIColor.lightGray]
+			)
 	}
 }
 
@@ -418,4 +463,10 @@ private func areAttributesEqual(_ left: [NSAttributedString.Key: Any], _ right: 
 		leftColor == rightColor &&
 		leftKern == rightKern &&
 		leftPara == rightPara
+}
+
+extension MaterialTextViewModel: Equatable {
+	public static func == (lhs: MaterialTextViewModel, rhs: MaterialTextViewModel) -> Bool {
+		lhs.style == rhs.style && lhs.text == rhs.text && lhs.help == rhs.help && lhs.placeholder == rhs.placeholder && lhs.useTintColorForActiveLine == rhs.useTintColorForActiveLine && lhs.useTintColorForActiveTitle == rhs.useTintColorForActiveTitle
+	}
 }

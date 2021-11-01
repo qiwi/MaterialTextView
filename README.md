@@ -5,8 +5,8 @@
 ## Description
 This is QIWI's implementation of text field/view according to Material Design. It supports formattable input with masks since it uses [FormattableTextView](https://github.com/qiwi/FormattableTextView).
 
-This component uses MVVM pattern and it is highly customizable via styles in real time.
-You can check user input for validity manually by firing viewModel's `validate()` method (it checks the text according to `actionValidator` property) or automatically during user's input by setting `inputValidator` property.
+This component is highly customizable via styles in real time.
+You can check user input for validity manually by firing `validate()` method (it checks the text according to `actionValidator` property) or automatically during user's input by setting `inputValidator` property.
 
 Placeholder has 2 modes: animatable and normal.
 
@@ -30,11 +30,12 @@ git "https://github.com/qiwi/MaterialTextView" "master"
 
 ### Example
 ```swift
-let vm = MaterialTextViewModel(text: "Text", inputValidator: { text in
-			guard let text = text else { return .valid }
-			return text.count > 5 ? .invalid(text: "Text is too long") : .valid
-		})
-let view = MaterialTextView(viewModel: vm)
+let tv = MaterialTextView()
+tv.textComponentMode = .textView
+tv.placeholder = .init(type: .alwaysOnTop, text: "Amount (always on top)")
+tv.formats = ["ddddddddd $"]
+tv.text = "123"
+tv.textComponent.keyboardType = .numberPad
 ```
 
 ## License

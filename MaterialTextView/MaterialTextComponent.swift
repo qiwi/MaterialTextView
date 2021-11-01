@@ -10,7 +10,7 @@ import Foundation
 import FormattableTextView
 import UIKit
 
-public protocol MaterialTextComponent: AnyObject, UITextInput {
+public protocol MaterialTextComponent: UITextInput {
 	var keyboardType: UIKeyboardType { get set }
 	var keyboardAppearance: UIKeyboardAppearance { get set }
 	var returnKeyType: UIReturnKeyType { get set }
@@ -18,11 +18,13 @@ public protocol MaterialTextComponent: AnyObject, UITextInput {
 	var autocorrectionType: UITextAutocorrectionType { get set }
 	var inputView: UIView? { get set }
 	var inputAccessoryView: UIView? { get set }
-	var currentFormat: String? { get }
 	var allowSmartSuggestions: Bool { get set }
+	var formattedText: String { get }
 	
 	@available(iOS 10.0, *)
 	var textContentType: UITextContentType! { get set }
+	
+	func formatted(text: String) -> NSAttributedString
 }
 
 internal protocol MaterialTextComponentInternal: MaterialTextComponent, FormattableInput {
