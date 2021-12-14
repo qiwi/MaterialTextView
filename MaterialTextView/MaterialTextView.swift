@@ -57,6 +57,11 @@ public final class MaterialTextView: UIView {
 		viewModel.validateInput()
 	}
 	
+	public override func tintColorDidChange() {
+		super.tintColorDidChange()
+		viewModel.updateTintColor()
+	}
+	
 	private func placeholderChanged(newPlaceholder: MaterialTextViewModel.Placeholder, typeIsChanged: Bool, styleIsChanged: Bool) {
 		if styleIsChanged {
 			placeholderLabel.attributedText = NSAttributedString(string: newPlaceholder.text,
