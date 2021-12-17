@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import FormattableTextView
 
 public protocol MaterialTextViewModelBaseDelegate: AnyObject {
 	func viewModelTextChanged(viewModel: MaterialTextViewModel)
@@ -27,6 +28,7 @@ public protocol MaterialTextViewModelDelegate: MaterialTextViewModelBaseDelegate
 internal protocol MaterialTextViewViewModelDelegate: MaterialTextViewModelBaseDelegate {
 	var currentFormat: String? { get }
 	var formattedText: String { get }
+	var formatSelectionStrategy: FormatSelectionStrategy { get set }
 }
 
 public extension MaterialTextViewModelDelegate {
@@ -304,6 +306,18 @@ public final class MaterialTextViewModel {
 	
 	public var currentFormat: String? {
 		view?.currentFormat
+	}
+	
+	public var formatSelectionStrategy: FormatSelectionStrategy {
+		get {
+			guard let view = view else { return .startFromCurrent }
+			return view.formatSelectionStrategy
+		}
+		set {
+			guard let view = view else { return }
+			if view.formatSelectionStrategy == newValue { return }
+			view.formatSelectionStrategy = newValue
+		}
 	}
 	
 	public var formattedText: String? {

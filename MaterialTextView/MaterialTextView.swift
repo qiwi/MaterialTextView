@@ -231,6 +231,15 @@ public final class MaterialTextView: UIView {
 		textComponentInternal.currentFormat
 	}
 	
+	internal var formatSelectionStrategy: FormatSelectionStrategy {
+		get {
+			textComponentInternal.formatSelectionStrategy
+		}
+		set {
+			textComponentInternal.formatSelectionStrategy = newValue
+		}
+	}
+	
 	internal func updateAttributedText() {
 		self.shouldUpdate = false
 		textComponentInternal.inputAttributes = viewModel.style.textAttributes

@@ -54,6 +54,7 @@
 
 /* Begin PBXFileReference section */
 		7C1003B7223955AA007C0D50 /* NSParagraphStyle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSParagraphStyle+Extensions.swift"; sourceTree = "<group>"; };
+		7C1D2DDD276C9B4E00206D5D /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		7C1FFE0522FAC3E9000C378A /* FormatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatsViewController.swift; sourceTree = "<group>"; };
 		7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MaterialTextView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C2110F7222FFC5A00D74B90 /* MaterialTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MaterialTextView.h; sourceTree = "<group>"; };
@@ -99,6 +100,7 @@
 		7C2110EA222FFC5A00D74B90 = {
 			isa = PBXGroup;
 			children = (
+				7C1D2DDD276C9B4E00206D5D /* Package.swift */,
 				7C2110F6222FFC5A00D74B90 /* MaterialTextView */,
 				7C2111162230F01500D74B90 /* MaterialTextViewExample */,
 				7C2110F5222FFC5A00D74B90 /* Products */,
@@ -600,8 +602,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/qiwi/FormattableTextView";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMinorVersion;
+				minimumVersion = 2.7.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

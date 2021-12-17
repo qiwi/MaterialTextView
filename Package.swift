@@ -18,7 +18,7 @@ let package = Package(
     ],
     
     dependencies: [
-        .package(url: "https://github.com/qiwi/FormattableTextView.git", .branch("master"))
+		.package(url: "https://github.com/qiwi/FormattableTextView.git", from: "2.7")
     ],
     targets: [
         // Our package contains two targets, one for our library

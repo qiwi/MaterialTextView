@@ -37,7 +37,8 @@ class FormatsViewController: UIViewController {
 		stack.addArrangedSubview(tv3)
 		tv3.translatesAutoresizingMaskIntoConstraints = false
 		
-		let tv4 = MaterialTextView(MaterialTextViewModel(placeholder: .init(type: .alwaysOnTop, text: "Telephone number"), formats: ["+d (ddd) ddd-dd-dd"]))
+		let tv4 = MaterialTextView(MaterialTextViewModel(placeholder: .init(type: .alwaysOnTop, text: "Telephone number"), formats: ["+d (ddd) ddd-dd-dd", "+ddddddddddddd"]))
+		tv4.viewModel.formatSelectionStrategy = .startFromFirst
 		tv4.translatesAutoresizingMaskIntoConstraints = false
 		if #available(iOS 10.0, *) {
 			tv4.textComponent.textContentType = .telephoneNumber
