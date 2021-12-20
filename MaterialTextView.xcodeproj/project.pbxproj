@@ -62,7 +62,6 @@
 		7C2110FF222FFC8B00D74B90 /* Validator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
 		7C211100222FFC8B00D74B90 /* MaterialTextView-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MaterialTextView-Bridging-Header.h"; sourceTree = "<group>"; };
 		7C211103222FFC8B00D74B90 /* MaterialTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaterialTextView.swift; sourceTree = "<group>"; };
-		7C21110E222FFD3C00D74B90 /* FormattableTextView.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FormattableTextView.framework; path = Carthage/Build/iOS/Static/FormattableTextView.framework; sourceTree = "<group>"; };
 		7C2111152230F01400D74B90 /* MaterialTextViewExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MaterialTextViewExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C2111172230F01500D74B90 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C2111192230F01500D74B90 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -104,7 +103,6 @@
 				7C2110F6222FFC5A00D74B90 /* MaterialTextView */,
 				7C2111162230F01500D74B90 /* MaterialTextViewExample */,
 				7C2110F5222FFC5A00D74B90 /* Products */,
-				7C21110D222FFD3C00D74B90 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -133,14 +131,6 @@
 				7C33246E26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift */,
 			);
 			path = MaterialTextView;
-			sourceTree = "<group>";
-		};
-		7C21110D222FFD3C00D74B90 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				7C21110E222FFD3C00D74B90 /* FormattableTextView.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		7C2111162230F01500D74B90 /* MaterialTextViewExample */ = {
