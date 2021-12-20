@@ -602,7 +602,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/qiwi/FormattableTextView";
 			requirement = {
-				kind = upToNextMinorVersion;
+				kind = upToNextMajorVersion;
 				minimumVersion = 2.7.0;
 			};
 		};

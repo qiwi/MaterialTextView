@@ -5,9 +5,9 @@
         "package": "FormattableTextView",
         "repositoryURL": "https://github.com/qiwi/FormattableTextView",
         "state": {
-          "branch": "master",
+          "branch": null,
           "revision": "eb8fc43b505ef78ea2178f9a2203252c6893c107",
-          "version": null
+          "version": "2.7.0"
         }
       }
     ]
