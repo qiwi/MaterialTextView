@@ -52,7 +52,7 @@ class ViewController: UIViewController {
 	}
 	
 	private func setupMaterialTextView(textView: MaterialTextView, mode: MaterialTextViewModel.TextComponentMode) {
-		textView.viewModel = .init(help: helpField.text!, textComponentMode: mode, placeholder: .init(type: .animated, text: titleField.text!), rightButtonInfo: .init(imageName: "icon", action: {
+		textView.viewModel = .init(help: helpField.text!, style: .defaultStyle, textComponentMode: mode, placeholder: .init(type: .animated, text: titleField.text!), rightButtonInfo: .init(imageName: "icon", action: {
 			print("Button was touched")
 		}))
 		textView.viewModel.useTintColorForActiveLine = false

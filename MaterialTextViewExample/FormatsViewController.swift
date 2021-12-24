@@ -18,26 +18,26 @@ class FormatsViewController: UIViewController {
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
-		self.tv.viewModel = .init(text: "", help: "Max length is 5 symbols", textComponentMode: .textView, placeholder: .init(type: .animated, text: "Digits (TextView, animated)"), inputValidator: { $0.count > 5 ? .invalid(text: "Too long") : .valid }, formats: ["ddddddd"], rightButtonInfo: .init(imageName: "icon", action: nil))
+		self.tv.viewModel = .init(text: "", help: "Max length is 5 symbols", style: .defaultStyle, textComponentMode: .textView, placeholder: .init(type: .animated, text: "Digits (TextView, animated)"), inputValidator: { $0.count > 5 ? .invalid(text: "Too long") : .valid }, formats: ["ddddddd"], rightButtonInfo: .init(imageName: "icon", action: nil))
 		
-		self.tf.viewModel = .init(textComponentMode: .textField, placeholder: .init(type: .normal, text: "Alphabet symbols only (TextField)"), inputValidator: { $0.count > 5 ? .invalid(text: "Too long") : .valid }, formats: ["wwwwwwwwwwwwwwwwww"], rightButtonInfo: .init(imageName: "icon", action: nil))
+		self.tf.viewModel = .init(style: .defaultStyle, textComponentMode: .textField, placeholder: .init(type: .normal, text: "Alphabet symbols only (TextField)"), inputValidator: { $0.count > 5 ? .invalid(text: "Too long") : .valid }, formats: ["wwwwwwwwwwwwwwwwww"], rightButtonInfo: .init(imageName: "icon", action: nil))
 		
 		// Create MaterialTextView programmatically
-		let tv = MaterialTextView(MaterialTextViewModel(placeholder: .init(type: .animated, text: "Animated"), formats: ["ddddd $"], formatSymbols: ["d": CharacterSet.decimalDigits.union(CharacterSet(charactersIn: ",."))]))
+		let tv = MaterialTextView(MaterialTextViewModel(style: .defaultStyle, placeholder: .init(type: .animated, text: "Animated"), formats: ["ddddd $"], formatSymbols: ["d": CharacterSet.decimalDigits.union(CharacterSet(charactersIn: ",."))]))
 		tv.translatesAutoresizingMaskIntoConstraints = false
 		tv.textComponent.keyboardType = .numberPad
 		stack.addArrangedSubview(tv)
 		
-		let tv2 = MaterialTextView(MaterialTextViewModel(text: "Error", placeholder: .init(type: .animated, text: "Animated"), inputValidator: { text in return text.count < 4 ? .valid : .invalid(text: "Max length is 3") }))
+		let tv2 = MaterialTextView(MaterialTextViewModel(text: "Error", style: .defaultStyle, placeholder: .init(type: .animated, text: "Animated"), inputValidator: { text in return text.count < 4 ? .valid : .invalid(text: "Max length is 3") }))
 		tv2.translatesAutoresizingMaskIntoConstraints = false
 		stack.addArrangedSubview(tv2)
 		
-		let tv3 = MaterialTextView(MaterialTextViewModel(placeholder: .init(type: .alwaysOnTop, text: "Amount (always on top)"), formats: ["ddddddddddddddddddddddddd $"]))
+		let tv3 = MaterialTextView(MaterialTextViewModel(style: .defaultStyle, placeholder: .init(type: .alwaysOnTop, text: "Amount (always on top)"), formats: ["ddddddddddddddddddddddddd $"]))
 		tv3.textComponent.keyboardType = .numberPad
 		stack.addArrangedSubview(tv3)
 		tv3.translatesAutoresizingMaskIntoConstraints = false
 		
-		let tv4 = MaterialTextView(MaterialTextViewModel(placeholder: .init(type: .alwaysOnTop, text: "Telephone number"), formats: ["+d (ddd) ddd-dd-dd", "+ddddddddddddd"]))
+		let tv4 = MaterialTextView(MaterialTextViewModel(style: .defaultStyle, placeholder: .init(type: .alwaysOnTop, text: "Telephone number"), formats: ["+d (ddd) ddd-dd-dd", "+ddddddddddddddddd"]))
 		tv4.viewModel.formatSelectionStrategy = .startFromFirst
 		tv4.translatesAutoresizingMaskIntoConstraints = false
 		if #available(iOS 10.0, *) {

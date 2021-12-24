@@ -326,7 +326,7 @@ public final class MaterialTextViewModel {
 
 	public required init(text: String = "",
 				  help: String = "",
-				  style: Style = .defaultStyle,
+				  style: Style,
 				  textComponentMode: TextComponentMode = .textField,
 				  placeholder: Placeholder = Placeholder(type: .normal, text: ""),
 				  actionValidator: @escaping Validator<String> = { _ in return .valid },

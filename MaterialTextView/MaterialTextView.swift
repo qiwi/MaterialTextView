@@ -43,7 +43,7 @@ public final class MaterialTextView: UIView {
 	public var placeholderAnimationDuration: Double = 0.15
 	public var lineAnimationDuration: Double = 0.1
 	
-	public var viewModel: MaterialTextViewModel = .init() {
+	public var viewModel: MaterialTextViewModel = .init(style: .defaultStyle) {
 		didSet {
 			didSetViewModel()
 		}
@@ -270,7 +270,7 @@ public final class MaterialTextView: UIView {
 		viewModelRightButtonChanged(viewModel: self.viewModel)
 	}
 	
-	public convenience init(_ viewModel: MaterialTextViewModel = .init()) {
+	public convenience init(_ viewModel: MaterialTextViewModel = .init(style: .defaultStyle)) {
 		self.init(frame: CGRect.zero)
 		if self.viewModel != viewModel {
 			self.viewModel = viewModel
