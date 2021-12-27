@@ -28,15 +28,27 @@ git "https://github.com/qiwi/MaterialTextView" "master"
 
 ## Usage
 
-### Example
+### Example 1
 ```swift
-let tv = MaterialTextView()
-tv.textComponentMode = .textView
-tv.placeholder = .init(type: .alwaysOnTop, text: "Amount (always on top)")
-tv.formats = ["ddddddddd $"]
-tv.text = "123"
-tv.textComponent.keyboardType = .numberPad
+let tv = MaterialTextView(.init(style: .defaultStyle))
 ```
+
+### Example 2
+```swift
+let viewModel = MaterialTextViewModel(
+	style: .defaultStyle,
+	placeholder: .init(type: .alwaysOnTop, text: "Telephone number"),
+	formats: ["+d (ddd) ddd-dd-dd", "+ddddddddddddddddd"]
+)
+viewModel.formatSelectionStrategy = .startFromFirst
+let tv = MaterialTextView(viewModel)
+if #available(iOS 10.0, *) {
+	tv.textComponent.textContentType = .telephoneNumber
+	tv.textComponent.keyboardType = .numberPad
+	tv.textComponent.allowSmartSuggestions = true
+}
+```
+
 
 ## License
 Distributed under the MIT License.
