@@ -28,6 +28,16 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7CA67A0327AABD500018F7E1"
+               BuildableName = "MaterialTextViewSnapshotTests.xctest"
+               BlueprintName = "MaterialTextViewSnapshotTests"
+               ReferencedContainer = "container:MaterialTextView.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

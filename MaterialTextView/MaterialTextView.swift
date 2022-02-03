@@ -75,10 +75,10 @@ public final class MaterialTextView: UIView {
 	private func changeTextStates(placeholderTypeIsChanged: Bool) {
 		let placeholder = self.viewModel.placeholder
 		
-		var helpText = viewModel.help
+		var helpText = self.viewModel.help
 		var isError = false
 		
-		switch viewModel.errorState {
+		switch self.viewModel.errorState {
 		case .error(let text):
 			helpText = text
 			isError = true
@@ -86,11 +86,12 @@ public final class MaterialTextView: UIView {
 			break
 		}
 		
-		helpChanged(newHelp: helpText)
+		self.helpChanged(newHelp: helpText)
 		var animation: EmptyClosure?
 		var placeholderAnimationDuration = self.placeholderAnimationDuration
 		var attributes = [NSAttributedString.Key: Any]()
 		let formattedText = self.formattedText
+		self.backgroundColor = self.viewModel.visualState.backgroundColor
 		
 		switch placeholder.type {
 		case .animated, .normal:
@@ -204,7 +205,7 @@ public final class MaterialTextView: UIView {
 	
 	private func rightButtonChanged() {
 		if let info = viewModel.rightButtonInfo {
-			rightButton.setImage(UIImage(named: info.imageName), for: .normal)
+			rightButton.setImage(info.image, for: .normal)
 			showRightButton()
 		} else {
 			hideRightButton()

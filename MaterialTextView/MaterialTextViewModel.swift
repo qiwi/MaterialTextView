@@ -45,11 +45,16 @@ public extension MaterialTextViewModelDelegate {
 
 public struct ButtonInfo {
 
-	let imageName: String
+	let image: UIImage?
 	let action: EmptyClosure?
 
 	public init(imageName: String, action: (() -> Void)?) {
-		self.imageName = imageName
+		self.image = UIImage(named: imageName)
+		self.action = action
+	}
+	
+	public init(image: UIImage?, action: (() -> Void)?) {
+		self.image = image
 		self.action = action
 	}
 }
@@ -234,20 +239,11 @@ public final class MaterialTextViewModel {
 	fileprivate weak var view: (UIView & MaterialTextViewViewModelDelegate)?
 	public weak var delegate: MaterialTextViewModelDelegate?
 	
-	public var maxNumberOfLinesWithoutScrolling: CGFloat = 3
-	
-//	internal var internalText: String {
-//		get { return _text }
-//		set {
-//			let oldValue = _text
-//			_text = newValue
-//			if oldValue.isEmpty || newValue.isEmpty {
-//				view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
-//				delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: placeholder.type != .alwaysOnTop)
-//			}
-//			self.delegate?.viewModelTextChanged(viewModel: self)
-//		}
-//	}
+	public var maxNumberOfLinesWithoutScrolling: CGFloat = 3 {
+		didSet {
+			view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
+		}
+	}
 
 	private var _text: String
 	internal func validateInput() {
@@ -377,23 +373,27 @@ public extension MaterialTextViewModel {
 	struct VisualState: Equatable {
 		
 		public static func == (lhs: VisualState, rhs: VisualState) -> Bool {
-			return  lhs.lineHeight == rhs.lineHeight &&
-				lhs.lineColor == rhs.lineColor &&
-				areAttributesEqual(lhs.titleAttributes, rhs.titleAttributes) &&
-				areAttributesEqual(lhs.helpAttributes, rhs.helpAttributes)
+			return lhs.lineHeight == rhs.lineHeight &&
+			lhs.lineColor == rhs.lineColor &&
+			lhs.backgroundColor == rhs.backgroundColor &&
+			areAttributesEqual(lhs.titleAttributes, rhs.titleAttributes) &&
+			areAttributesEqual(lhs.helpAttributes, rhs.helpAttributes)
 		}
 		
 		public var helpAttributes: [NSAttributedString.Key: Any]
 		public var titleAttributes: [NSAttributedString.Key: Any]
+		public var backgroundColor: UIColor
 		public var lineColor: UIColor
 		public var lineHeight: CGFloat
 		
 		public init(helpAttributes: [NSAttributedString.Key: Any],
 					titleAttributes: [NSAttributedString.Key: Any],
+					backgroundColor: UIColor,
 					lineColor: UIColor,
 					lineHeight: CGFloat) {
 			self.helpAttributes = helpAttributes
 			self.titleAttributes = titleAttributes
+			self.backgroundColor = backgroundColor
 			self.lineColor = lineColor
 			self.lineHeight = lineHeight
 		}
@@ -436,24 +436,28 @@ public extension MaterialTextViewModel {
 															 .foregroundColor: UIColor.darkGray],
 											titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
 															  .foregroundColor: UIColor.black],
+											backgroundColor: UIColor.white,
 											lineColor: UIColor.blue,
 											lineHeight: 2),
 				  normalInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															   .foregroundColor: UIColor.darkGray],
 											  titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
 																.foregroundColor: UIColor.gray],
+											  backgroundColor: UIColor.white,
 											  lineColor: UIColor.black,
 											  lineHeight: 1),
 				  errorActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															.foregroundColor: UIColor.red],
 										   titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
 															 .foregroundColor: UIColor.red],
+										   backgroundColor: UIColor.white,
 										   lineColor: UIColor.red,
 										   lineHeight: 2),
 				  errorInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															  .foregroundColor: UIColor.red],
 											 titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
 															   .foregroundColor: UIColor.red],
+											 backgroundColor: UIColor.white,
 											 lineColor: UIColor.red,
 											 lineHeight: 1),
 				  textAttributes: [.font: UIFont.systemFont(ofSize: 16),
