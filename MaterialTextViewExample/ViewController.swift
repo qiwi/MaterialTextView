@@ -52,7 +52,7 @@ class ViewController: UIViewController {
 	}
 	
 	private func setupMaterialTextView(textView: MaterialTextView, mode: MaterialTextViewModel.TextComponentMode) {
-		textView.viewModel = .init(help: helpField.text!, style: .defaultStyle, textComponentMode: mode, placeholder: .init(type: .animated, text: titleField.text!), rightButtonInfo: .init(UIImage(named: "icon"), action: {
+		textView.viewModel = .init(help: helpField.text!, style: .defaultStyle, textComponentMode: mode, placeholder: .init(type: .animated, text: titleField.text!), rightButtonInfo: .init(image: UIImage(named: "icon"), action: {
 			print("Button was touched")
 		}))
 		textView.viewModel.useTintColorForActiveLine = false
@@ -73,7 +73,7 @@ class ViewController: UIViewController {
 	}
 	
 	@IBAction func rightButtonWasTapped(_ sender: UISwitch) {
-		fields.forEach { $0.viewModel.rightButtonInfo = sender.isOn ? .init(UIImage(named: "icon"), action: { print("Button was tapped") }) : nil }
+		fields.forEach { $0.viewModel.rightButtonInfo = sender.isOn ? .init(image: UIImage(named: "icon"), action: { print("Button was tapped") }) : nil }
 	}
 	
 	@IBAction func titleChanged(_ sender: UITextField) {
