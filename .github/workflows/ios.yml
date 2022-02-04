@@ -17,7 +17,7 @@ jobs:
       - name: Set Default Scheme
         run: |
           scheme_list=$(xcodebuild -list -json | tr -d "\n")
-          framework=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
+          snapshot=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][2]")
           example=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][1]")
       - name: Build
         env:
@@ -31,11 +31,11 @@ jobs:
           xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=iPhone 13 mini"
       - name: Test
         env:
-          scheme: ${{ 'MaterialTextView' }}
+          scheme: ${{ 'MaterialTextViewSnapshotTests' }}
           platform: ${{ 'iOS Simulator' }}
         run: |
           # xcrun xctrace returns via stderr, not the expected stdout (see https://developer.apple.com/forums/thread/663959)
-          if [ $scheme = framework ]; then scheme=$(cat framework); fi
+          if [ $scheme = snapshot ]; then scheme=$(cat snapshot); fi
           if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
           file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
           xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=iPhone 13 mini"
