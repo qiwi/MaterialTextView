@@ -30,7 +30,6 @@
 		7CA67A0827AABD510018F7E1 /* MaterialTextView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */; platformFilter = ios; };
 		7CA67A1027AABD820018F7E1 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 7CA67A0F27AABD820018F7E1 /* SnapshotTesting */; };
 		7CA67A1227AABFFB0018F7E1 /* SnapshotTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA67A1127AABFFB0018F7E1 /* SnapshotTestHelper.swift */; };
-		7CA67A1427ABDF8C0018F7E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CA67A1327ABDF8C0018F7E1 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,7 +88,6 @@
 		7CA67A0427AABD500018F7E1 /* MaterialTextViewSnapshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MaterialTextViewSnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA67A0627AABD510018F7E1 /* MaterialTextViewSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialTextViewSnapshotTests.swift; sourceTree = "<group>"; };
 		7CA67A1127AABFFB0018F7E1 /* SnapshotTestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotTestHelper.swift; sourceTree = "<group>"; };
-		7CA67A1327ABDF8C0018F7E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,7 +177,6 @@
 			children = (
 				7CA67A0627AABD510018F7E1 /* MaterialTextViewSnapshotTests.swift */,
 				7CA67A1127AABFFB0018F7E1 /* SnapshotTestHelper.swift */,
-				7CA67A1327ABDF8C0018F7E1 /* Assets.xcassets */,
 			);
 			path = MaterialTextViewSnapshotTests;
 			sourceTree = "<group>";
@@ -331,7 +328,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CA67A1427ABDF8C0018F7E1 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

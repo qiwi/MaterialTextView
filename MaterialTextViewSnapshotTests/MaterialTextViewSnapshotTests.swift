@@ -60,14 +60,14 @@ class MaterialTextViewSnapshotTests: XCTestCase {
 	}
 	
 	func testRightButton() throws {
-		let tv = MaterialTextView(.init(text: "Text", style: .defaultStyle, placeholder: .init(type: .alwaysOnTop, text: "Placeholder"), rightButtonInfo: .init(image: UIImage(named: "icon", in: Bundle(for: type(of:self)), compatibleWith: nil), action: nil)))
+		let tv = MaterialTextView(.init(text: "Text", style: .defaultStyle, placeholder: .init(type: .alwaysOnTop, text: "Placeholder"), rightButtonInfo: .init(image: "×".image(withAttributes: [.font: UIFont.systemFont(ofSize: 24)], size: nil), action: nil)))
 		tv.translatesAutoresizingMaskIntoConstraints = true
 		tv.frame = CGRect(x: 0, y: 0, width: 240, height: 48)
 		assert(tv)
 	}
 	
 	func testLongTextRightButton() throws {
-		let tv = MaterialTextView(.init(text: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", style: .defaultStyle, placeholder: .init(type: .alwaysOnTop, text: "Placeholder"), rightButtonInfo: .init(image: UIImage(named: "icon", in: Bundle(for: type(of:self)), compatibleWith: nil), action: nil)))
+		let tv = MaterialTextView(.init(text: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", style: .defaultStyle, placeholder: .init(type: .alwaysOnTop, text: "Placeholder"), rightButtonInfo: .init(image: "×".image(withAttributes: [.font: UIFont.systemFont(ofSize: 24)], size: nil), action: nil)))
 		tv.translatesAutoresizingMaskIntoConstraints = true
 		tv.frame = CGRect(x: 0, y: 0, width: 240, height: 48)
 		assert(tv)
