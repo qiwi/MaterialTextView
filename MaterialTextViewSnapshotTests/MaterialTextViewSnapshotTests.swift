@@ -42,7 +42,7 @@ class MaterialTextViewSnapshotTests: XCTestCase {
 			tv.widthAnchor.constraint(equalToConstant: 120)
 		])
 		tv.validate()
-		assert(tv)
+		assert(tv, precision: 0.995)
 	}
 	
 	func testNormalPlaceholder() throws {
