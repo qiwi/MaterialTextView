@@ -9,13 +9,13 @@
 import UIKit
 import CoreText
 
-public class ClickableLabel: UILabel {
+class ClickableLabel: UILabel {
     
     private var handlerDictionary = [NSRange: Link]()
     private var backupAttributedText: NSAttributedString?
     
     private var _clickableText: ClickableText?
-    public var clickableText: ClickableText? {
+    var clickableText: ClickableText? {
         get {
             return self._clickableText
         }
@@ -25,16 +25,16 @@ public class ClickableLabel: UILabel {
         }
     }
 	
-	public init() {
+	init() {
 		super.init(frame: CGRect.zero)
 	}
     
-    public init(item: ClickableText) {
+    init(item: ClickableText) {
         super.init(frame: CGRect.zero)
         self.clickableText = item
     }
 
-    required public init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -70,7 +70,7 @@ extension ClickableLabel {
     
     // MARK: Event Handler
     
-    override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let attrText = attributedText else { return }
         
         backupAttributedText = attributedText
@@ -92,14 +92,14 @@ extension ClickableLabel {
         super.touchesBegan(touches, with: event)
     }
     
-    override public func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         UIView.transition(with: self, duration: 0.15, options: .transitionCrossDissolve, animations: { [weak self] in
             self?.attributedText = self?.backupAttributedText
             }, completion: nil)
         super.touchesCancelled(touches, with: event)
     }
     
-    override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         UIView.transition(with: self, duration: 0.15, options: .transitionCrossDissolve, animations: { [weak self] in
             self?.attributedText = self?.backupAttributedText
             }, completion: nil)

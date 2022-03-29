@@ -9,10 +9,10 @@
 import Foundation
 import UIKit
 
-public struct Link {
-    public var text: NSAttributedString
-    public var highlightColor: UIColor?
-    public var action: () -> Void
+struct Link {
+    var text: NSAttributedString
+    var highlightColor: UIColor?
+    var action: () -> Void
     
     public init(text: NSAttributedString, highlightColor: UIColor?, action: @escaping () -> Void) {
         self.text = text
@@ -21,14 +21,14 @@ public struct Link {
     }
 }
 
-public struct ClickableText {
+struct ClickableText {
     
-    public static var empty = ClickableText(title: NSAttributedString(string: ""))
+    static var empty = ClickableText(title: NSAttributedString(string: ""))
     
-    public var title: NSAttributedString
-    public var links: [Link]
+    var title: NSAttributedString
+    var links: [Link]
     
-    public init(title: NSAttributedString, links: [Link] = []) {
+    init(title: NSAttributedString, links: [Link] = []) {
         self.title = title
         self.links = links
     }

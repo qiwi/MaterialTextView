@@ -22,7 +22,7 @@ public final class MaterialTextView: UIView {
 		}
 	}
 	
-	public var helpLabel = ClickableLabel()
+	internal var helpLabel = ClickableLabel()
 	internal var rightButton = UIButton(type: .system)
 	internal var placeholderLabel = UILabel()
 	internal var titleLabel = UILabel()
