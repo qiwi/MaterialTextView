@@ -22,7 +22,7 @@ public final class MaterialTextView: UIView {
 		}
 	}
 	
-	public var helpLabel = UILabel()
+	public var helpLabel = ClickableLabel()
 	internal var rightButton = UIButton(type: .system)
 	internal var placeholderLabel = UILabel()
 	internal var titleLabel = UILabel()
@@ -74,25 +74,30 @@ public final class MaterialTextView: UIView {
 	
 	private func changeTextStates(placeholderTypeIsChanged: Bool) {
 		let placeholder = self.viewModel.placeholder
-		
-		var helpText = self.viewModel.help
+
+		var helpInfo = self.viewModel.helpInfo
 		var isError = false
-		
+
 		switch self.viewModel.errorState {
 		case .error(let text):
-			helpText = text
+			helpInfo.text = text
+			isError = true
+		case .linkEror(let text, let linkText, let urlString):
+			helpInfo.text = text
+			helpInfo.linkText = linkText
+			helpInfo.urlString = urlString
 			isError = true
 		default:
 			break
 		}
-		
-		self.helpChanged(newHelp: helpText)
+
+		self.helpChanged(newHelp: viewModel.helpInfo)
 		var animation: EmptyClosure?
 		var placeholderAnimationDuration = self.placeholderAnimationDuration
 		var attributes = [NSAttributedString.Key: Any]()
 		let formattedText = self.formattedText
 		self.backgroundColor = self.viewModel.visualState.backgroundColor
-		
+
 		switch placeholder.type {
 		case .animated, .normal:
 			if placeholder.type == .normal {
@@ -113,7 +118,7 @@ public final class MaterialTextView: UIView {
 				}
 			} else {
 				attributes = isError ? self.viewModel.style.errorInactive.titleAttributes : self.viewModel.style.normalInactive.titleAttributes
-				
+
 				animation = {
 					self.titleLabel.alpha = placeholder.type == .animated && (!formattedText.isEmpty || !self.viewModel.text.isEmpty) ? 1 : 0
 					self.placeholderLabel.alpha = formattedText.isEmpty && self.viewModel.text.isEmpty ? 1 : 0
@@ -151,10 +156,10 @@ public final class MaterialTextView: UIView {
 			self.changeLineStyle()
 		}
 
-		helpLabel.attributedText = NSAttributedString(string: helpText, attributes: viewModel.visualState.helpAttributes)
+		helpChanged(newHelp: helpInfo)
 		updateAccessibilityValue()
 	}
-	
+
 	private func changeLineStyle() {
 		self.line.backgroundColor = self.viewModel.visualState.lineColor
 		self.lineHeightConstraint.constant = self.viewModel.visualState.lineHeight
@@ -189,11 +194,26 @@ public final class MaterialTextView: UIView {
 		textComponent.formattedText
 	}
 	
-	internal func helpChanged(newHelp: String) {
-		helpLabel.attributedText = NSAttributedString(string: newHelp, attributes: viewModel.visualState.helpAttributes)
+	internal func helpChanged(newHelp: HelpInfo) {
+		let attributedText = NSAttributedString(string: newHelp.text, attributes: viewModel.visualState.helpAttributes)
+
+		if let linkText = newHelp.linkText, let url = URL(string: newHelp.urlString ?? "") {
+			let linkAttributedText = NSAttributedString(string: linkText, attributes: viewModel.style.linkAttributes)
+
+			helpLabel.clickableText = ClickableText(title: attributedText, links: [
+				Link(text: linkAttributedText, highlightColor: nil, action: {
+					if #available(iOS 10.0, *) {
+						UIApplication.shared.open(url)
+					}
+				}),
+			])
+		} else {
+			helpLabel.clickableText = ClickableText(title: NSAttributedString(string: newHelp.text))
+		}
+
 		self.layoutIfNeeded()
 	}
-	
+
 	public var maskAttributes: [NSAttributedString.Key: Any] {
 		get {
 			textComponentInternal.maskAttributes
@@ -454,7 +474,7 @@ extension MaterialTextView: MaterialTextViewProtocol {
 	}
 	
 	public func viewModelHelpChanged(viewModel: MaterialTextViewModel) {
-		helpChanged(newHelp: viewModel.help)
+		helpChanged(newHelp: viewModel.helpInfo)
 	}
 	
 	public func viewModelStateChanged(viewModel: MaterialTextViewModel, placeholderTypeIsChanged: Bool) {

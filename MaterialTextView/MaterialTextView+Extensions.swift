@@ -108,7 +108,7 @@ extension MaterialTextView: Validatable {
 		case .valid:
 			return .normal
 		case .invalid(let text):
-			return .error(text)
+			return .error(text: text)
 		}
 	}
 }
