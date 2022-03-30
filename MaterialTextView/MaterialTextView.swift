@@ -418,6 +418,7 @@ public final class MaterialTextView: UIView {
 	
 	private func customInit() {
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(becomeFirstResponder))
+        tapGesture.cancelsTouchesInView = false
 		addGestureRecognizer(tapGesture)
 		
 		titleLabel.attributedText = NSAttributedString(string: viewModel.placeholder.text,
