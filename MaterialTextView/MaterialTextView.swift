@@ -208,7 +208,7 @@ public final class MaterialTextView: UIView {
 				}),
 			])
 		} else {
-			helpLabel.clickableText = ClickableText(title: NSAttributedString(string: newHelp.text))
+			helpLabel.clickableText = ClickableText(title: attributedText)
 		}
 
 		self.layoutIfNeeded()
