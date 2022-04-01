@@ -52,10 +52,22 @@ public struct ButtonInfo {
 		self.image = UIImage(named: imageName)
 		self.action = action
 	}
-	
+
 	public init(image: UIImage?, action: (() -> Void)?) {
 		self.image = image
 		self.action = action
+	}
+}
+
+struct HelpInfo {
+	var text: String
+	var linkText: String?
+	var urlString: String?
+
+	init(text: String, linkText: String? = nil, urlString: String? = nil) {
+		self.text = text
+		self.linkText = linkText
+		self.urlString = urlString
 	}
 }
 
@@ -72,16 +84,19 @@ extension MaterialTextViewProtocol where Self: UIView {
 }
 
 public final class MaterialTextViewModel {
-	
+
 	public enum ErrorState: Equatable {
 		case normal
-		case error(String)
-		
+		case error(text: String)
+        case linkError(text: String, linkText: String?, urlString: String?)
+
 		var isError: Bool {
 			switch self {
 			case .normal:
 				return false
 			case .error(_):
+				return true
+			case .linkError(_, _, _):
 				return true
 			}
 		}
@@ -96,18 +111,19 @@ public final class MaterialTextViewModel {
 	public struct Placeholder: Equatable {
 		public var type: PlaceholderType
 		public var text: String
-		
+
 		public init(type: PlaceholderType, text: String) {
 			self.type = type
 			self.text = text
 		}
 	}
-	
+
 	public var textDidChange: ((String) -> Void)?
 	public var didBeginEditing: EmptyClosure?
 	public var didEndEditing: EmptyClosure?
 	public var shouldChangeText: ((NSRange, String) -> Bool)?
 	public var stateDidChange: ((ErrorState) -> Void)?
+    public var linkAction: EmptyClosure?
 
 	private var _placeholder: Placeholder
 	public var placeholder: Placeholder {
@@ -120,7 +136,7 @@ public final class MaterialTextViewModel {
 			self.delegate?.viewModelPlaceholderChanged(viewModel: self, typeIsChanged: newValue != oldPlaceholder)
 		}
 	}
-	
+
 	private var _style: Style = .defaultStyle
 	private var _styleWithoutTintColor: Style = .defaultStyle
 	public var style: Style {
@@ -134,13 +150,13 @@ public final class MaterialTextViewModel {
 			didUpdateStyle()
 		}
 	}
-	
+
 	private func didUpdateStyle() {
 		updateTintColor()
 		view?.viewModelStyleChanged(viewModel: self)
 		delegate?.viewModelStyleChanged(viewModel: self)
 	}
-	
+
 	private var _useTintColorForActiveLine = true
 	public var useTintColorForActiveLine: Bool {
 		get { _useTintColorForActiveLine }
@@ -159,7 +175,7 @@ public final class MaterialTextViewModel {
 			didUpdateStyle()
 		}
 	}
-	
+
 	internal func updateTintColor() {
 		guard let view = view else { return }
 		var newStyle = _style
@@ -168,7 +184,7 @@ public final class MaterialTextViewModel {
 		} else {
 			newStyle.normalActive.lineColor = _styleWithoutTintColor.normalActive.lineColor
 		}
-		
+
 		if useTintColorForActiveTitle {
 			newStyle.normalActive.titleAttributes[.foregroundColor] = view.tintColor
 		} else {
@@ -176,12 +192,12 @@ public final class MaterialTextViewModel {
 		}
 		_style = newStyle
 	}
-	
+
 	public enum TextComponentMode {
 		case textField
 		case textView
 	}
-	
+
 	private var _formatSymbols: [Character: CharacterSet] = ["d": CharacterSet.decimalDigits,
 															 "w": CharacterSet.letters,
 															 "*": CharacterSet.init(charactersIn: "").inverted]
@@ -196,7 +212,7 @@ public final class MaterialTextViewModel {
 			delegate?.viewModelFormatSymbolsChanged(viewModel: self)
 		}
 	}
-	
+
 	public var isActive: Bool = false {
 		didSet {
 			view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
@@ -218,12 +234,14 @@ public final class MaterialTextViewModel {
 			}
 		}
 	}
-	
+
 	public var visualState: VisualState {
 		switch errorState {
 		case .normal:
 			return isActive ? style.normalActive : style.normalInactive
 		case .error(_):
+			return isActive ? style.errorActive : style.errorInactive
+		case .linkError(_, _, _):
 			return isActive ? style.errorActive : style.errorInactive
 		}
 	}
@@ -238,7 +256,7 @@ public final class MaterialTextViewModel {
 	public var wasActionValid = false
 	fileprivate weak var view: (UIView & MaterialTextViewViewModelDelegate)?
 	public weak var delegate: MaterialTextViewModelDelegate?
-	
+
 	public var maxNumberOfLinesWithoutScrolling: CGFloat = 3 {
 		didSet {
 			view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
@@ -252,7 +270,14 @@ public final class MaterialTextViewModel {
 		}
 		wasInputValid = !errorState.isError
 	}
-	
+
+	private(set) var helpInfo = HelpInfo(text: "") {
+		didSet {
+			self.view?.viewModelHelpChanged(viewModel: self)
+			self.delegate?.viewModelHelpChanged(viewModel: self)
+		}
+	}
+
 	public var text: String {
 		get {
 			return _text
@@ -269,13 +294,6 @@ public final class MaterialTextViewModel {
 		}
 	}
 
-	public var help: String = "" {
-		didSet {
-			self.view?.viewModelHelpChanged(viewModel: self)
-			self.delegate?.viewModelHelpChanged(viewModel: self)
-		}
-	}
-	
 	private var _textComponentMode: TextComponentMode = .textField
 	public var textComponentMode: TextComponentMode {
 		get { return _textComponentMode }
@@ -286,7 +304,7 @@ public final class MaterialTextViewModel {
 			delegate?.viewModelTextComponentModeChanged(viewModel: self)
 		}
 	}
-	
+
 	public var rightButtonInfo: ButtonInfo? {
 		didSet {
 			view?.viewModelRightButtonChanged(viewModel: self)
@@ -299,11 +317,11 @@ public final class MaterialTextViewModel {
 			delegate?.viewModelFormatsChanged(viewModel: self)
 		}
 	}
-	
+
 	public var currentFormat: String? {
 		view?.currentFormat
 	}
-	
+
 	public var formatSelectionStrategy: FormatSelectionStrategy {
 		get {
 			guard let view = view else { return .startFromCurrent }
@@ -315,7 +333,7 @@ public final class MaterialTextViewModel {
 			view.formatSelectionStrategy = newValue
 		}
 	}
-	
+
 	public var formattedText: String? {
 		view?.formattedText
 	}
@@ -331,7 +349,7 @@ public final class MaterialTextViewModel {
 				  formatSymbols: [Character: CharacterSet]? = nil,
 				  rightButtonInfo: ButtonInfo? = nil) {
 		self._text = text
-		self.help = help
+		self.helpInfo.text = help
 		_textComponentMode = textComponentMode
 		self.actionValidator = actionValidator
 		self.inputValidator = inputValidator
@@ -345,6 +363,17 @@ public final class MaterialTextViewModel {
 		_styleWithoutTintColor = style
 		didUpdateStyle()
 	}
+
+
+	public func updateHelp(helpText: String) {
+		helpInfo.text = helpText
+	}
+
+    public func updateHelp(helpText: String, linkText: String, urlString: String) {
+        helpInfo.text = helpText
+        helpInfo.linkText = linkText
+        helpInfo.urlString = urlString
+    }
 }
 
 extension MaterialTextViewModel: Validatable {
@@ -363,44 +392,48 @@ extension MaterialTextViewModel: Validatable {
 		case .valid:
 			return .normal
 		case .invalid(let text):
-			return .error(text)
+			return .error(text: text)
 		}
 	}
 }
 
 public extension MaterialTextViewModel {
-	
+
 	struct VisualState: Equatable {
-		
+
 		public static func == (lhs: VisualState, rhs: VisualState) -> Bool {
 			return lhs.lineHeight == rhs.lineHeight &&
 			lhs.lineColor == rhs.lineColor &&
 			lhs.backgroundColor == rhs.backgroundColor &&
 			areAttributesEqual(lhs.titleAttributes, rhs.titleAttributes) &&
-			areAttributesEqual(lhs.helpAttributes, rhs.helpAttributes)
+			areAttributesEqual(lhs.helpAttributes, rhs.helpAttributes) &&
+            areAttributesEqual(lhs.linkAttributes, rhs.linkAttributes)
 		}
-		
+
 		public var helpAttributes: [NSAttributedString.Key: Any]
 		public var titleAttributes: [NSAttributedString.Key: Any]
+        public var linkAttributes: [NSAttributedString.Key: Any]
 		public var backgroundColor: UIColor
 		public var lineColor: UIColor
 		public var lineHeight: CGFloat
-		
+
 		public init(helpAttributes: [NSAttributedString.Key: Any],
 					titleAttributes: [NSAttributedString.Key: Any],
+                    linkAttributes: [NSAttributedString.Key: Any],
 					backgroundColor: UIColor,
 					lineColor: UIColor,
 					lineHeight: CGFloat) {
 			self.helpAttributes = helpAttributes
 			self.titleAttributes = titleAttributes
+            self.linkAttributes = linkAttributes
 			self.backgroundColor = backgroundColor
 			self.lineColor = lineColor
 			self.lineHeight = lineHeight
 		}
 	}
-	
+
 	struct Style: Equatable {
-		
+
 		public static func == (lhs: Style, rhs: Style) -> Bool {
 			return lhs.normalActive == rhs.normalActive &&
 				lhs.normalInactive == rhs.normalInactive &&
@@ -409,14 +442,14 @@ public extension MaterialTextViewModel {
 				areAttributesEqual(lhs.textAttributes, rhs.textAttributes) &&
 				areAttributesEqual(lhs.placeholderAttributes, rhs.placeholderAttributes)
 		}
-		
+
 		public var normalActive: VisualState
 		public var normalInactive: VisualState
 		public var errorActive: VisualState
 		public var errorInactive: VisualState
 		public var textAttributes: [NSAttributedString.Key: Any]
 		public var placeholderAttributes: [NSAttributedString.Key: Any]
-		
+
 		public init(normalActive: VisualState,
 					normalInactive: VisualState,
 					errorActive: VisualState,
@@ -430,33 +463,41 @@ public extension MaterialTextViewModel {
 			self.textAttributes = textAttributes
 			self.placeholderAttributes = placeholderAttributes
 		}
-		
+
 		public static var defaultStyle =
 			Style(normalActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															 .foregroundColor: UIColor.darkGray],
 											titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
-															  .foregroundColor: UIColor.black],
+                                                              .foregroundColor: UIColor.black],
+                                            linkAttributes: [.font: UIFont.systemFont(ofSize: 12),
+                                                             .foregroundColor: UIColor.linkColor],
 											backgroundColor: UIColor.white,
 											lineColor: UIColor.blue,
 											lineHeight: 2),
 				  normalInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															   .foregroundColor: UIColor.darkGray],
 											  titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
-																.foregroundColor: UIColor.gray],
+                                                                .foregroundColor: UIColor.gray],
+                                              linkAttributes: [.font: UIFont.systemFont(ofSize: 12),
+                                                               .foregroundColor: UIColor.linkColor],
 											  backgroundColor: UIColor.white,
 											  lineColor: UIColor.black,
 											  lineHeight: 1),
 				  errorActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															.foregroundColor: UIColor.red],
 										   titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
-															 .foregroundColor: UIColor.red],
+                                                             .foregroundColor: UIColor.red],
+                                           linkAttributes: [.font: UIFont.systemFont(ofSize: 12),
+                                                            .foregroundColor: UIColor.linkColor],
 										   backgroundColor: UIColor.white,
 										   lineColor: UIColor.red,
 										   lineHeight: 2),
 				  errorInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															  .foregroundColor: UIColor.red],
 											 titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
-															   .foregroundColor: UIColor.red],
+                                                               .foregroundColor: UIColor.red],
+                                             linkAttributes: [.font: UIFont.systemFont(ofSize: 12),
+                                                              .foregroundColor: UIColor.linkColor],
 											 backgroundColor: UIColor.white,
 											 lineColor: UIColor.red,
 											 lineHeight: 1),
@@ -485,6 +526,6 @@ private func areAttributesEqual(_ left: [NSAttributedString.Key: Any], _ right: 
 
 extension MaterialTextViewModel: Equatable {
 	public static func == (lhs: MaterialTextViewModel, rhs: MaterialTextViewModel) -> Bool {
-		lhs.style == rhs.style && lhs.text == rhs.text && lhs.help == rhs.help && lhs.placeholder == rhs.placeholder && lhs.useTintColorForActiveLine == rhs.useTintColorForActiveLine && lhs.useTintColorForActiveTitle == rhs.useTintColorForActiveTitle
+        lhs.style == rhs.style && lhs.text == rhs.text && lhs.helpInfo.text == rhs.helpInfo.text && lhs.helpInfo.linkText == rhs.helpInfo.linkText && lhs.helpInfo.urlString == rhs.helpInfo.urlString && lhs.placeholder == rhs.placeholder && lhs.useTintColorForActiveLine == rhs.useTintColorForActiveLine && lhs.useTintColorForActiveTitle == rhs.useTintColorForActiveTitle
 	}
 }

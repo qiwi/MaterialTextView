@@ -81,7 +81,7 @@ class ViewController: UIViewController {
 	}
 	
 	@IBAction func helpChanged(_ sender: UITextField) {
-		fields.forEach { $0.viewModel.help = sender.text! }
+		fields.forEach { $0.viewModel.updateHelp(helpText: sender.text!) }
 	}
 	
 	private func updateInputValidator() {

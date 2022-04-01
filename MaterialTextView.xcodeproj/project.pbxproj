@@ -30,6 +30,9 @@
 		7CA67A0827AABD510018F7E1 /* MaterialTextView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C2110F4222FFC5A00D74B90 /* MaterialTextView.framework */; platformFilter = ios; };
 		7CA67A1027AABD820018F7E1 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 7CA67A0F27AABD820018F7E1 /* SnapshotTesting */; };
 		7CA67A1227AABFFB0018F7E1 /* SnapshotTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA67A1127AABFFB0018F7E1 /* SnapshotTestHelper.swift */; };
+		C7EAAF7927F347B2003B376F /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EAAF7827F347B2003B376F /* UIColor+Extensions.swift */; };
+		C7EAAF8127F34F58003B376F /* ClickableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EAAF8027F34F58003B376F /* ClickableLabel.swift */; };
+		C7EAAF8327F34F7F003B376F /* ClickableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EAAF8227F34F7F003B376F /* ClickableText.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +91,9 @@
 		7CA67A0427AABD500018F7E1 /* MaterialTextViewSnapshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MaterialTextViewSnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA67A0627AABD510018F7E1 /* MaterialTextViewSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialTextViewSnapshotTests.swift; sourceTree = "<group>"; };
 		7CA67A1127AABFFB0018F7E1 /* SnapshotTestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotTestHelper.swift; sourceTree = "<group>"; };
+		C7EAAF7827F347B2003B376F /* UIColor+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
+		C7EAAF8027F34F58003B376F /* ClickableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickableLabel.swift; sourceTree = "<group>"; };
+		C7EAAF8227F34F7F003B376F /* ClickableText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickableText.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +160,9 @@
 				7C1003B7223955AA007C0D50 /* NSParagraphStyle+Extensions.swift */,
 				7C7C07B42281762300E50181 /* MaterialTextComponent.swift */,
 				7C33246E26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift */,
+				C7EAAF7827F347B2003B376F /* UIColor+Extensions.swift */,
+				C7EAAF8027F34F58003B376F /* ClickableLabel.swift */,
+				C7EAAF8227F34F7F003B376F /* ClickableText.swift */,
 			);
 			path = MaterialTextView;
 			sourceTree = "<group>";
@@ -339,12 +348,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C1003B8223955AA007C0D50 /* NSParagraphStyle+Extensions.swift in Sources */,
+				C7EAAF8327F34F7F003B376F /* ClickableText.swift in Sources */,
+				C7EAAF8127F34F58003B376F /* ClickableLabel.swift in Sources */,
 				7C211109222FFC8B00D74B90 /* MaterialTextView.swift in Sources */,
 				7C7C07B52281762300E50181 /* MaterialTextComponent.swift in Sources */,
 				7C21112922311D5500D74B90 /* Imports.swift in Sources */,
 				7C3DDA1826C67B3D005F1691 /* MaterialTextView+Extensions.swift in Sources */,
 				7C33246F26CE59C500E69DB4 /* CGAffineTransform+Extensions.swift in Sources */,
 				7C3324A326E23EA800E69DB4 /* MaterialTextViewModel.swift in Sources */,
+				C7EAAF7927F347B2003B376F /* UIColor+Extensions.swift in Sources */,
 				7C211105222FFC8B00D74B90 /* Validator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
