@@ -62,12 +62,12 @@ public struct ButtonInfo {
 struct HelpInfo {
 	var text: String
 	var linkText: String?
-	var urlString: String?
+	var linkAction: EmptyClosure?
 
-	init(text: String, linkText: String? = nil, urlSting: String? = nil) {
+	init(text: String, linkText: String? = nil, linkAction: EmptyClosure? = nil) {
 		self.text = text
 		self.linkText = linkText
-		self.urlString = urlSting
+		self.linkAction = linkAction
 	}
 }
 
@@ -88,7 +88,7 @@ public final class MaterialTextViewModel {
 	public enum ErrorState: Equatable {
 		case normal
 		case error(text: String)
-		case linkError(text: String, linkText: String, url: String)
+		case linkError(text: String, linkText: String)
 
 		var isError: Bool {
 			switch self {
@@ -96,7 +96,7 @@ public final class MaterialTextViewModel {
 				return false
 			case .error(_):
 				return true
-			case .linkError(_, _, _):
+			case .linkError(_, _):
 				return true
 			}
 		}
@@ -123,6 +123,7 @@ public final class MaterialTextViewModel {
 	public var didEndEditing: EmptyClosure?
 	public var shouldChangeText: ((NSRange, String) -> Bool)?
 	public var stateDidChange: ((ErrorState) -> Void)?
+    public var linkAction: EmptyClosure?
 
 	private var _placeholder: Placeholder
 	public var placeholder: Placeholder {
@@ -240,7 +241,7 @@ public final class MaterialTextViewModel {
 			return isActive ? style.normalActive : style.normalInactive
 		case .error(_):
 			return isActive ? style.errorActive : style.errorInactive
-		case .linkError(_, _, _):
+		case .linkError(_, _):
 			return isActive ? style.errorActive : style.errorInactive
 		}
 	}
@@ -368,10 +369,17 @@ public final class MaterialTextViewModel {
 		helpInfo.text = helpText
 	}
 
-	public func updateHelp(helpText: String, linkText: String, urlString: String) {
-		helpInfo.text = helpText
-		helpInfo.linkText = linkText
-		helpInfo.urlString = urlString
+    public func updateHelp(errorState: ErrorState, helpText: String, linkText: String?, linkAction: EmptyClosure?) {
+        switch errorState {
+        case .normal:
+            helpInfo.text = helpText
+            self.errorState = .normal
+        case .error(_):
+            self.errorState = .error(text: helpText)
+        case .linkError(_, _):
+            self.errorState = .linkError(text: helpText, linkText: linkText ?? "")
+            self.linkAction = linkAction
+        }
 	}
 }
 
@@ -525,6 +533,6 @@ private func areAttributesEqual(_ left: [NSAttributedString.Key: Any], _ right: 
 
 extension MaterialTextViewModel: Equatable {
 	public static func == (lhs: MaterialTextViewModel, rhs: MaterialTextViewModel) -> Bool {
-        lhs.style == rhs.style && lhs.text == rhs.text && lhs.helpInfo.text == rhs.helpInfo.text && lhs.helpInfo.linkText == rhs.helpInfo.linkText && lhs.helpInfo.urlString == rhs.helpInfo.urlString && lhs.placeholder == rhs.placeholder && lhs.useTintColorForActiveLine == rhs.useTintColorForActiveLine && lhs.useTintColorForActiveTitle == rhs.useTintColorForActiveTitle
+        lhs.style == rhs.style && lhs.text == rhs.text && lhs.helpInfo.text == rhs.helpInfo.text && lhs.helpInfo.linkText == rhs.helpInfo.linkText && lhs.placeholder == rhs.placeholder && lhs.useTintColorForActiveLine == rhs.useTintColorForActiveLine && lhs.useTintColorForActiveTitle == rhs.useTintColorForActiveTitle
 	}
 }
