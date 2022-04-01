@@ -82,10 +82,10 @@ public final class MaterialTextView: UIView {
 		case .error(let text):
 			helpInfo.text = text
 			isError = true
-		case .linkError(let text, let linkText):
+        case .linkError(let text, let linkText, let urlString):
 			helpInfo.text = text
 			helpInfo.linkText = linkText
-            helpInfo.linkAction = viewModel.linkAction
+            helpInfo.urlString = urlString
 			isError = true
 		default:
 			break
@@ -197,12 +197,15 @@ public final class MaterialTextView: UIView {
 	internal func helpChanged(newHelp: HelpInfo) {
 		let attributedText = NSAttributedString(string: newHelp.text, attributes: viewModel.visualState.helpAttributes)
 
-		if let linkText = newHelp.linkText {
+		if let linkText = newHelp.linkText, let url = URL(string: newHelp.urlString ?? "")  {
 			let linkAttributedText = NSAttributedString(string: linkText, attributes: viewModel.visualState.linkAttributes)
 
 			helpLabel.clickableText = ClickableText(title: attributedText, links: [
-				Link(text: linkAttributedText, highlightColor: nil, action: {
-                    newHelp.linkAction?()
+				Link(text: linkAttributedText, highlightColor: nil, action: { [weak self] in
+                    if #available(iOS 10.0, *) {
+                        UIApplication.shared.open(url)
+                    }
+                    self?.viewModel.linkAction?()
 				}),
 			])
 		} else {

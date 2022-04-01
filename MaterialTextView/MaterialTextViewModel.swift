@@ -62,12 +62,12 @@ public struct ButtonInfo {
 struct HelpInfo {
 	var text: String
 	var linkText: String?
-	var linkAction: EmptyClosure?
+	var urlString: String?
 
-	init(text: String, linkText: String? = nil, linkAction: EmptyClosure? = nil) {
+	init(text: String, linkText: String? = nil, urlString: String? = nil) {
 		self.text = text
 		self.linkText = linkText
-		self.linkAction = linkAction
+		self.urlString = urlString
 	}
 }
 
@@ -88,7 +88,7 @@ public final class MaterialTextViewModel {
 	public enum ErrorState: Equatable {
 		case normal
 		case error(text: String)
-		case linkError(text: String, linkText: String)
+        case linkError(text: String, linkText: String?, urlString: String?)
 
 		var isError: Bool {
 			switch self {
@@ -96,7 +96,7 @@ public final class MaterialTextViewModel {
 				return false
 			case .error(_):
 				return true
-			case .linkError(_, _):
+			case .linkError(_, _, _):
 				return true
 			}
 		}
@@ -241,7 +241,7 @@ public final class MaterialTextViewModel {
 			return isActive ? style.normalActive : style.normalInactive
 		case .error(_):
 			return isActive ? style.errorActive : style.errorInactive
-		case .linkError(_, _):
+		case .linkError(_, _, _):
 			return isActive ? style.errorActive : style.errorInactive
 		}
 	}
@@ -369,18 +369,11 @@ public final class MaterialTextViewModel {
 		helpInfo.text = helpText
 	}
 
-    public func updateHelp(errorState: ErrorState, helpText: String, linkText: String?, linkAction: EmptyClosure?) {
-        switch errorState {
-        case .normal:
-            helpInfo.text = helpText
-            self.errorState = .normal
-        case .error(_):
-            self.errorState = .error(text: helpText)
-        case .linkError(_, _):
-            self.errorState = .linkError(text: helpText, linkText: linkText ?? "")
-            self.linkAction = linkAction
-        }
-	}
+    public func updateHelp(helpText: String, linkText: String, urlString: String) {
+        helpInfo.text = helpText
+        helpInfo.linkText = linkText
+        helpInfo.urlString = urlString
+    }
 }
 
 extension MaterialTextViewModel: Validatable {
@@ -533,6 +526,6 @@ private func areAttributesEqual(_ left: [NSAttributedString.Key: Any], _ right: 
 
 extension MaterialTextViewModel: Equatable {
 	public static func == (lhs: MaterialTextViewModel, rhs: MaterialTextViewModel) -> Bool {
-        lhs.style == rhs.style && lhs.text == rhs.text && lhs.helpInfo.text == rhs.helpInfo.text && lhs.helpInfo.linkText == rhs.helpInfo.linkText && lhs.placeholder == rhs.placeholder && lhs.useTintColorForActiveLine == rhs.useTintColorForActiveLine && lhs.useTintColorForActiveTitle == rhs.useTintColorForActiveTitle
+        lhs.style == rhs.style && lhs.text == rhs.text && lhs.helpInfo.text == rhs.helpInfo.text && lhs.helpInfo.linkText == rhs.helpInfo.linkText && lhs.helpInfo.urlString == rhs.helpInfo.urlString && lhs.placeholder == rhs.placeholder && lhs.useTintColorForActiveLine == rhs.useTintColorForActiveLine && lhs.useTintColorForActiveTitle == rhs.useTintColorForActiveTitle
 	}
 }
