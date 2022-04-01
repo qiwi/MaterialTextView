@@ -82,7 +82,7 @@ public final class MaterialTextView: UIView {
 		case .error(let text):
 			helpInfo.text = text
 			isError = true
-		case .linkEror(let text, let linkText, let urlString):
+		case .linkError(let text, let linkText, let urlString):
 			helpInfo.text = text
 			helpInfo.linkText = linkText
 			helpInfo.urlString = urlString
@@ -198,7 +198,7 @@ public final class MaterialTextView: UIView {
 		let attributedText = NSAttributedString(string: newHelp.text, attributes: viewModel.visualState.helpAttributes)
 
 		if let linkText = newHelp.linkText, let url = URL(string: newHelp.urlString ?? "") {
-			let linkAttributedText = NSAttributedString(string: linkText, attributes: viewModel.style.linkAttributes)
+			let linkAttributedText = NSAttributedString(string: linkText, attributes: viewModel.visualState.linkAttributes)
 
 			helpLabel.clickableText = ClickableText(title: attributedText, links: [
 				Link(text: linkAttributedText, highlightColor: nil, action: {

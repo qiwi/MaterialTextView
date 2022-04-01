@@ -88,7 +88,7 @@ public final class MaterialTextViewModel {
 	public enum ErrorState: Equatable {
 		case normal
 		case error(text: String)
-		case linkEror(text: String, linkText: String, url: String)
+		case linkError(text: String, linkText: String, url: String)
 
 		var isError: Bool {
 			switch self {
@@ -96,7 +96,7 @@ public final class MaterialTextViewModel {
 				return false
 			case .error(_):
 				return true
-			case .linkEror(_, _, _):
+			case .linkError(_, _, _):
 				return true
 			}
 		}
@@ -123,11 +123,6 @@ public final class MaterialTextViewModel {
 	public var didEndEditing: EmptyClosure?
 	public var shouldChangeText: ((NSRange, String) -> Bool)?
 	public var stateDidChange: ((ErrorState) -> Void)?
-	public var linkAction: EmptyClosure? {
-		didSet {
-			print("linked")
-		}
-	}
 
 	private var _placeholder: Placeholder
 	public var placeholder: Placeholder {
@@ -245,7 +240,7 @@ public final class MaterialTextViewModel {
 			return isActive ? style.normalActive : style.normalInactive
 		case .error(_):
 			return isActive ? style.errorActive : style.errorInactive
-		case .linkEror(_, _, _):
+		case .linkError(_, _, _):
 			return isActive ? style.errorActive : style.errorInactive
 		}
 	}
@@ -410,22 +405,26 @@ public extension MaterialTextViewModel {
 			lhs.lineColor == rhs.lineColor &&
 			lhs.backgroundColor == rhs.backgroundColor &&
 			areAttributesEqual(lhs.titleAttributes, rhs.titleAttributes) &&
-			areAttributesEqual(lhs.helpAttributes, rhs.helpAttributes)
+			areAttributesEqual(lhs.helpAttributes, rhs.helpAttributes) &&
+            areAttributesEqual(lhs.linkAttributes, rhs.linkAttributes)
 		}
 
 		public var helpAttributes: [NSAttributedString.Key: Any]
 		public var titleAttributes: [NSAttributedString.Key: Any]
+        public var linkAttributes: [NSAttributedString.Key: Any]
 		public var backgroundColor: UIColor
 		public var lineColor: UIColor
 		public var lineHeight: CGFloat
 
 		public init(helpAttributes: [NSAttributedString.Key: Any],
 					titleAttributes: [NSAttributedString.Key: Any],
+                    linkAttributes: [NSAttributedString.Key: Any],
 					backgroundColor: UIColor,
 					lineColor: UIColor,
 					lineHeight: CGFloat) {
 			self.helpAttributes = helpAttributes
 			self.titleAttributes = titleAttributes
+            self.linkAttributes = linkAttributes
 			self.backgroundColor = backgroundColor
 			self.lineColor = lineColor
 			self.lineHeight = lineHeight
@@ -447,7 +446,6 @@ public extension MaterialTextViewModel {
 		public var normalInactive: VisualState
 		public var errorActive: VisualState
 		public var errorInactive: VisualState
-		public var linkAttributes: [NSAttributedString.Key: Any]
 		public var textAttributes: [NSAttributedString.Key: Any]
 		public var placeholderAttributes: [NSAttributedString.Key: Any]
 
@@ -455,14 +453,12 @@ public extension MaterialTextViewModel {
 					normalInactive: VisualState,
 					errorActive: VisualState,
 					errorInactive: VisualState,
-					linkAttributes: [NSAttributedString.Key: Any],
 					textAttributes: [NSAttributedString.Key: Any],
 					placeholderAttributes: [NSAttributedString.Key: Any]) {
 			self.normalActive = normalActive
 			self.normalInactive = normalInactive
 			self.errorActive = errorActive
 			self.errorInactive = errorInactive
-			self.linkAttributes = linkAttributes
 			self.textAttributes = textAttributes
 			self.placeholderAttributes = placeholderAttributes
 		}
@@ -471,33 +467,39 @@ public extension MaterialTextViewModel {
 			Style(normalActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															 .foregroundColor: UIColor.darkGray],
 											titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
-															  .foregroundColor: UIColor.black],
+                                                              .foregroundColor: UIColor.black],
+                                            linkAttributes: [.font: UIFont.systemFont(ofSize: 12),
+                                                             .foregroundColor: UIColor.linkColor],
 											backgroundColor: UIColor.white,
 											lineColor: UIColor.blue,
 											lineHeight: 2),
 				  normalInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															   .foregroundColor: UIColor.darkGray],
 											  titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
-																.foregroundColor: UIColor.gray],
+                                                                .foregroundColor: UIColor.gray],
+                                              linkAttributes: [.font: UIFont.systemFont(ofSize: 12),
+                                                               .foregroundColor: UIColor.linkColor],
 											  backgroundColor: UIColor.white,
 											  lineColor: UIColor.black,
 											  lineHeight: 1),
 				  errorActive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															.foregroundColor: UIColor.red],
 										   titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
-															 .foregroundColor: UIColor.red],
+                                                             .foregroundColor: UIColor.red],
+                                           linkAttributes: [.font: UIFont.systemFont(ofSize: 12),
+                                                            .foregroundColor: UIColor.linkColor],
 										   backgroundColor: UIColor.white,
 										   lineColor: UIColor.red,
 										   lineHeight: 2),
 				  errorInactive: VisualState(helpAttributes: [.font: UIFont.systemFont(ofSize: 12),
 															  .foregroundColor: UIColor.red],
 											 titleAttributes: [.font: UIFont.systemFont(ofSize: 10),
-															   .foregroundColor: UIColor.red],
+                                                               .foregroundColor: UIColor.red],
+                                             linkAttributes: [.font: UIFont.systemFont(ofSize: 12),
+                                                              .foregroundColor: UIColor.linkColor],
 											 backgroundColor: UIColor.white,
 											 lineColor: UIColor.red,
 											 lineHeight: 1),
-				  linkAttributes: [.font: UIFont.systemFont(ofSize: 12),
-								   .foregroundColor: UIColor.linkColor],
 				  textAttributes: [.font: UIFont.systemFont(ofSize: 16),
 								   .foregroundColor: UIColor.black],
 				  placeholderAttributes: [.font: UIFont.systemFont(ofSize: 16),
@@ -523,6 +525,6 @@ private func areAttributesEqual(_ left: [NSAttributedString.Key: Any], _ right: 
 
 extension MaterialTextViewModel: Equatable {
 	public static func == (lhs: MaterialTextViewModel, rhs: MaterialTextViewModel) -> Bool {
-		lhs.style == rhs.style && lhs.text == rhs.text && lhs.helpInfo.text == rhs.helpInfo.text && lhs.placeholder == rhs.placeholder && lhs.useTintColorForActiveLine == rhs.useTintColorForActiveLine && lhs.useTintColorForActiveTitle == rhs.useTintColorForActiveTitle
+        lhs.style == rhs.style && lhs.text == rhs.text && lhs.helpInfo.text == rhs.helpInfo.text && lhs.helpInfo.linkText == rhs.helpInfo.linkText && lhs.helpInfo.urlString == rhs.helpInfo.urlString && lhs.placeholder == rhs.placeholder && lhs.useTintColorForActiveLine == rhs.useTintColorForActiveLine && lhs.useTintColorForActiveTitle == rhs.useTintColorForActiveTitle
 	}
 }
