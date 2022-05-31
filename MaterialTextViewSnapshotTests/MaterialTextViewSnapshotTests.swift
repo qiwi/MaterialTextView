@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import MaterialTextView
+@testable import MaterialTextView
 import SnapshotTesting
 
 class MaterialTextViewSnapshotTests: XCTestCase {
