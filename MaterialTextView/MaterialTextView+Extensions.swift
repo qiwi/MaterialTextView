@@ -107,8 +107,11 @@ extension MaterialTextView: Validatable {
 		switch validator(viewModel.text) {
 		case .valid:
 			return .normal
-		case .invalid(let text):
-			return .error(text: text)
+		case .invalid(let info):
+			if info.linkText != nil || info.urlString != nil {
+				return .linkError(text: info.text, linkText: info.linkText, urlString: info.urlString)
+			}
+			return .error(text: info.text)
 		}
 	}
 }

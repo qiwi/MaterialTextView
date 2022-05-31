@@ -35,7 +35,7 @@ class MaterialTextViewSnapshotTests: XCTestCase {
 	
 	func testValidation() throws {
 		let tv = MaterialTextView(.init(text: "Text", help: "Help", style: .defaultStyle, actionValidator: { text in
-			return text.count < 3 ? .valid : .invalid(text: "Max allowed number of symbols is 3. Very long text")
+			return text.count < 3 ? .valid : .invalid(info: HelpInfo(text:"Max allowed number of symbols is 3. Very long text"))
 		}))
 		tv.helpLabel.numberOfLines = 0
 		NSLayoutConstraint.activate([

@@ -59,7 +59,7 @@ public struct ButtonInfo {
 	}
 }
 
-struct HelpInfo {
+public struct HelpInfo {
 	var text: String
 	var linkText: String?
 	var urlString: String?
@@ -391,8 +391,11 @@ extension MaterialTextViewModel: Validatable {
 		switch validator(text) {
 		case .valid:
 			return .normal
-		case .invalid(let text):
-			return .error(text: text)
+		case .invalid(let info):
+			if info.linkText != nil || info.urlString != nil{
+				return .linkError(text: info.text, linkText: info.linkText, urlString: info.urlString)
+			}
+			return .error(text: info.text)
 		}
 	}
 }
