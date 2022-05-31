@@ -22,16 +22,18 @@ public final class MaterialTextView: UIView {
 		}
 	}
 	
-	internal var helpLabel = ClickableLabel()
-	internal var rightButton = UIButton(type: .system)
-	internal var placeholderLabel = UILabel()
-	internal var titleLabel = UILabel()
-	internal var line = UIView()
+	internal let helpLabel = ClickableLabel()
+	internal let rightButton = UIButton(type: .system)
+	internal let placeholderLabel = UILabel()
+	internal let titleLabel = UILabel()
+	internal let line = UIView()
+	
 	internal var shouldUpdate: Bool = true
 	internal var hadInput: Bool = false
-	private let textFieldHeightOffset: CGFloat = 1
+	
 	private var attributedPlaceholder: NSAttributedString!
 	private var isFirstInput: Bool = true
+	private let textFieldHeightOffset: CGFloat = 1
 	
 	internal var textViewToRightConstraint: NSLayoutConstraint!
 	internal var textViewToRightButtonConstraint: NSLayoutConstraint!
@@ -361,38 +363,40 @@ public final class MaterialTextView: UIView {
 	}
 	
 	private func makeLayout() {
-		[self, titleLabel, rightButton, line, helpLabel].forEach { view in
+		self.translatesAutoresizingMaskIntoConstraints = false
+		
+		[titleLabel, rightButton, line, helpLabel].forEach { view in
 			view.translatesAutoresizingMaskIntoConstraints = false
+			self.addSubview(view)
 		}
-		addSubview(titleLabel)
-		NSLayoutConstraint.activate([titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-									 titleLabel.topAnchor.constraint(equalTo: self.topAnchor)])
+		
 		titleLabel.setContentHuggingPriority(.init(249), for: .horizontal)
 		titleLabel.setContentHuggingPriority(.init(249), for: .vertical)
 		
-		addSubview(rightButton)
-		NSLayoutConstraint.activate([rightButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 8),
-									 rightButton.widthAnchor.constraint(equalToConstant: 40),
-									 rightButton.heightAnchor.constraint(equalToConstant: 40)])
-		addSubview(line)
 		lineHeightConstraint = line.heightAnchor.constraint(equalToConstant: 1)
-		NSLayoutConstraint.activate([line.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-									 line.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-									 lineHeightConstraint])
-		addSubview(helpLabel)
 		helpLabelTopConstraint = helpLabel.topAnchor.constraint(equalTo: line.bottomAnchor, constant: 8)
 		helpLabelBottomConstraint = helpLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-		NSLayoutConstraint.activate([helpLabelTopConstraint,
-									 helpLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-									 helpLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-									 helpLabelBottomConstraint])
+
 		helpLabel.setContentHuggingPriority(.init(251), for: .horizontal)
 		helpLabel.setContentHuggingPriority(.init(251), for: .vertical)
 		helpLabel.setContentCompressionResistancePriority(.required, for: .vertical)
 		
 		placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
 		insertSubview(placeholderLabel, at: 1)
+		
 		NSLayoutConstraint.activate([
+			titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+			titleLabel.topAnchor.constraint(equalTo: self.topAnchor),
+			rightButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 8),
+			rightButton.widthAnchor.constraint(equalToConstant: 40),
+			rightButton.heightAnchor.constraint(equalToConstant: 40),
+			line.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+			line.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+			lineHeightConstraint,
+			helpLabelTopConstraint,
+			helpLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+			helpLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+			helpLabelBottomConstraint,
 			placeholderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
 			placeholderLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3)
 		])
@@ -401,17 +405,17 @@ public final class MaterialTextView: UIView {
 	private func addTextComponent() {
 		textComponentInternal.translatesAutoresizingMaskIntoConstraints = false
 		insertSubview(textComponentInternal, at: 0)
+		
 		textViewToRightConstraint = textComponentInternal.trailingAnchor.constraint(equalTo: self.trailingAnchor)
 		textViewToRightConstraint.priority = .required
 		textViewHeightConstraint = textComponentInternal.heightAnchor.constraint(equalToConstant: 44)
-
-		NSLayoutConstraint.activate([textComponentInternal.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-									 textViewToRightConstraint,
-									 textViewHeightConstraint,
-									 textComponentInternal.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3)])
-		
 		textViewToRightButtonConstraint = rightButton.leadingAnchor.constraint(equalTo: textComponentInternal.trailingAnchor)
+		
 		NSLayoutConstraint.activate([
+			textComponentInternal.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+			textViewToRightConstraint,
+			textViewHeightConstraint,
+			textComponentInternal.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3),
 			rightButton.centerYAnchor.constraint(equalTo: textComponentInternal.centerYAnchor),
 			line.bottomAnchor.constraint(equalTo: textComponentInternal.bottomAnchor, constant: 6 - (textComponentInternal is UITextField ? textFieldHeightOffset : 0))
 		])
