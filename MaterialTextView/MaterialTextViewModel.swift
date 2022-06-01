@@ -64,7 +64,7 @@ public struct HelpInfo {
 	var linkText: String?
 	var urlString: String?
 
-	init(text: String, linkText: String? = nil, urlString: String? = nil) {
+	public init(text: String, linkText: String? = nil, urlString: String? = nil) {
 		self.text = text
 		self.linkText = linkText
 		self.urlString = urlString

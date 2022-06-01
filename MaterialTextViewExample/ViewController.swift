@@ -87,7 +87,7 @@ class ViewController: UIViewController {
 	private func updateInputValidator() {
 		fields.forEach {
 			$0.viewModel.inputValidator = { text in
-				return text.count > 4 ? .invalid(text: "Text is too long") : .valid
+				return text.count > 4 ? .invalid(info: HelpInfo(text: "Text is too long")) : .valid
 			}
 		}
 	}

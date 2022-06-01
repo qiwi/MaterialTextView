@@ -24,7 +24,7 @@ class FormatsViewController: UIViewController {
 			style: .defaultStyle,
 			textComponentMode: .textView,
 			placeholder: .init(type: .animated, text: "Digits (TextView, animated)"),
-			inputValidator: { $0.count > 5 ? .invalid(text: "Too long") : .valid },
+			inputValidator: { $0.count > 5 ? .invalid(info: HelpInfo(text: "Too long")) : .valid },
 			formats: ["ddddddd"],
 			rightButtonInfo: .init(imageName: "icon", action: nil)
 		)
@@ -33,7 +33,7 @@ class FormatsViewController: UIViewController {
 			style: .defaultStyle,
 			textComponentMode: .textField,
 			placeholder: .init(type: .normal, text: "Alphabet symbols only (TextField)"),
-			inputValidator: { $0.count > 5 ? .invalid(text: "Too long") : .valid },
+			inputValidator: { $0.count > 5 ? .invalid(info: HelpInfo(text: "Too long")) : .valid },
 			formats: ["wwwwwwwwwwwwwwwwww"],
 			rightButtonInfo: .init(imageName: "icon", action: nil)
 		)
@@ -54,7 +54,7 @@ class FormatsViewController: UIViewController {
 			text: "Error",
 			style: .defaultStyle,
 			placeholder: .init(type: .animated, text: "Animated"),
-			inputValidator: { text in return text.count < 4 ? .valid : .invalid(text: "Max length is 3") }
+			inputValidator: { text in return text.count < 4 ? .valid : .invalid(info: HelpInfo(text: "Max length is 3")) }
 		)
 		let tv2 = MaterialTextView(viewModel2)
 		tv2.translatesAutoresizingMaskIntoConstraints = false
