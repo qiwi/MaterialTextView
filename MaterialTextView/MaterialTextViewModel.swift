@@ -43,7 +43,10 @@ public extension MaterialTextViewModelDelegate {
 	func viewModelRightButtonChanged(viewModel: MaterialTextViewModel) {}
 }
 
-public struct ButtonInfo {
+public struct ButtonInfo: Equatable {
+	public static func == (lhs: ButtonInfo, rhs: ButtonInfo) -> Bool {
+		lhs.image == rhs.image
+	}
 
 	let image: UIImage?
 	let action: EmptyClosure?
@@ -213,8 +216,12 @@ public final class MaterialTextViewModel {
 		}
 	}
 
-	public var isActive: Bool = false {
-		didSet {
+	private var _isActive: Bool = false
+	public var isActive: Bool {
+		get { _isActive }
+		set {
+			if _isActive == newValue { return }
+			_isActive = newValue
 			view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
 			delegate?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
 		}
@@ -257,8 +264,12 @@ public final class MaterialTextViewModel {
 	fileprivate weak var view: (UIView & MaterialTextViewViewModelDelegate)?
 	public weak var delegate: MaterialTextViewModelDelegate?
 
-	public var maxNumberOfLinesWithoutScrolling: CGFloat = 3 {
-		didSet {
+	private var _maxNumberOfLinesWithoutScrolling: CGFloat = 3
+	public var maxNumberOfLinesWithoutScrolling: CGFloat {
+		get { _maxNumberOfLinesWithoutScrolling }
+		set {
+			if _maxNumberOfLinesWithoutScrolling == newValue { return }
+			_maxNumberOfLinesWithoutScrolling = newValue
 			view?.viewModelStateChanged(viewModel: self, placeholderTypeIsChanged: false)
 		}
 	}
@@ -305,14 +316,23 @@ public final class MaterialTextViewModel {
 		}
 	}
 
+	private var _rightButtonInfo: ButtonInfo?
 	public var rightButtonInfo: ButtonInfo? {
-		didSet {
+		get { _rightButtonInfo }
+		set {
+			if _rightButtonInfo == newValue { return }
+			_rightButtonInfo = newValue
 			view?.viewModelRightButtonChanged(viewModel: self)
 			delegate?.viewModelRightButtonChanged(viewModel: self)
 		}
 	}
+	
+	private var _formats: [String]
 	public var formats: [String] {
-		didSet {
+		get { _formats }
+		set {
+			if _formats == newValue { return }
+			_formats = newValue
 			view?.viewModelFormatsChanged(viewModel: self)
 			delegate?.viewModelFormatsChanged(viewModel: self)
 		}
@@ -354,11 +374,11 @@ public final class MaterialTextViewModel {
 		self.actionValidator = actionValidator
 		self.inputValidator = inputValidator
 		self._placeholder = placeholder
-		self.formats = formats
+		self._formats = formats
 		if let formatSymbols = formatSymbols {
-			self.formatSymbols = formatSymbols
+			self._formatSymbols = formatSymbols
 		}
-		self.rightButtonInfo = rightButtonInfo
+		self._rightButtonInfo = rightButtonInfo
 		_style = style
 		_styleWithoutTintColor = style
 		didUpdateStyle()
